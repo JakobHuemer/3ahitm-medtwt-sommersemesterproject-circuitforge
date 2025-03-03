@@ -1,0 +1,103 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="8EB45CC4-D39C-8E64-6BED-DCAF49426F50" name="user">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:34:22 UTC</createdTime>
+<generatorID>726E4FCD-5FAB-ADE1-FE8D-BECBC7E45FB1</generatorID>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<engineerTo>
+<item key="94B30C80-77B8-838E-252F-E67F7B35D978" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="user id" id="63F3BE0F-EB9A-9424-4F5E-E7A5255ECFB3">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:34:22 UTC</createdTime>
+<generatorID>13B5A34D-3010-604D-D1AB-FE42778A4EDE</generatorID>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<engineerTo>
+<item key="94B30C80-77B8-838E-252F-E67F7B35D978" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT027</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="username" id="BD2D68C8-0C63-C21F-5CA1-C735B0A628D8">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:34:22 UTC</createdTime>
+<generatorID>C6792B68-ADB6-6870-8854-0C6734338368</generatorID>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<engineerTo>
+<item key="94B30C80-77B8-838E-252F-E67F7B35D978" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>50,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="email" id="DC422190-47D7-4A6B-4304-F7C276D1FA6F">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:34:22 UTC</createdTime>
+<generatorID>D7B1119D-6877-2316-1CF1-5C3120AEF249</generatorID>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<engineerTo>
+<item key="94B30C80-77B8-838E-252F-E67F7B35D978" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>50,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="password" id="B6876AC8-F7A1-B84C-C119-5583ACEE123B">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:34:22 UTC</createdTime>
+<generatorID>22AAB939-F18C-CCC6-CCDE-07AAC30B61BC</generatorID>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<engineerTo>
+<item key="94B30C80-77B8-838E-252F-E67F7B35D978" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT025</logicalDatatype>
+<dataTypeSize>100</dataTypeSize>
+<ownDataTypeParameters>100,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="created at" id="8C0D9034-182D-EEE3-C76F-56AA43D932DA">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:34:22 UTC</createdTime>
+<generatorID>EE1479A1-334F-4FBD-B3D3-3F07BC659FB9</generatorID>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<engineerTo>
+<item key="94B30C80-77B8-838E-252F-E67F7B35D978" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="2501A5BA-E1FA-EE7E-4507-809BEC26C701" name="user PK">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:34:22 UTC</createdTime>
+<generatorID>C8332F51-B969-5A29-9AB4-B781B699539C</generatorID>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<engineerTo>
+<item key="94B30C80-77B8-838E-252F-E67F7B35D978" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>63F3BE0F-EB9A-9424-4F5E-E7A5255ECFB3</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

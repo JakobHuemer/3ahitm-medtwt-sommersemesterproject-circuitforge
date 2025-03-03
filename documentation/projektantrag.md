@@ -95,6 +95,7 @@ Darunter folgen dann andere Kommentare wie bei Posts.
 
 User können Editieränderungen für _einen Post_ / _eine Diskussion_ vorschlagen,
 der vom OP akzeptiert werden kann.
+Ein User kann eine Editierübungsänderung pro Post vorschlagen.
 
 
 **Markdown Styling**

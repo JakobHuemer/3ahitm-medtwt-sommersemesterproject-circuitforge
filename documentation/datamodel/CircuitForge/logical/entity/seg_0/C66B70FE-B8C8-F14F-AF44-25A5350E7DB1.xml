@@ -1,0 +1,76 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="C66B70FE-B8C8-F14F-AF44-25A5350E7DB1" name="post">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:34:22 UTC</createdTime>
+<generatorID>8AC6A239-1475-922C-C07A-9C411F3FA001</generatorID>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<engineerTo>
+<item key="94B30C80-77B8-838E-252F-E67F7B35D978" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="post id" id="A92929C8-2E93-93BA-123C-799E262AE85E">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:34:22 UTC</createdTime>
+<generatorID>ACE0D9B6-E893-0AAC-A13E-2C51BD4D7D4D</generatorID>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<engineerTo>
+<item key="94B30C80-77B8-838E-252F-E67F7B35D978" value="true"/>
+</engineerTo>
+<referedAttribute>E7908EEB-18F9-A2FB-F0FA-C69EBFAAAC5D</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT027</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="title" id="C5E58E46-37B4-DB89-2831-323E0227B9C9">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:34:22 UTC</createdTime>
+<generatorID>3BF27A36-605E-5AA5-32E1-A8779DA9264E</generatorID>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<engineerTo>
+<item key="94B30C80-77B8-838E-252F-E67F7B35D978" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="content" id="51D14B6C-E314-DE36-EC89-10C73227F767">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:34:22 UTC</createdTime>
+<generatorID>363EDD4F-534A-BE8E-A7FC-904E11D2ACFA</generatorID>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<engineerTo>
+<item key="94B30C80-77B8-838E-252F-E67F7B35D978" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT040</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="24C7AA43-A5A1-0F67-0AE9-D384AF405BF5" name="post PK">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:34:22 UTC</createdTime>
+<generatorID>FDAD8EE8-D883-E1A1-0C94-4E47B996DE29</generatorID>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<engineerTo>
+<item key="94B30C80-77B8-838E-252F-E67F7B35D978" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>A92929C8-2E93-93BA-123C-799E262AE85E</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

@@ -1,16 +1,16 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="9EF58518-0FC6-87BC-0BDD-57A4AF91DCA9" name="rating">
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="F9509F30-9AD9-9E81-0548-DD6328FC7CFF" name="edit_request">
 <createdBy>jakki</createdBy>
-<createdTime>2025-03-03 20:25:48 UTC</createdTime>
+<createdTime>2025-03-03 21:54:32 UTC</createdTime>
 <ownerDesignName>CircuitForge</ownerDesignName>
-<ordsAlias>table_5</ordsAlias>
+<ordsAlias>table_8</ordsAlias>
 <allowColumnReorder>false</allowColumnReorder>
 <existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
 <parsed>true</parsed>
 <columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
-<Column name="user_id" id="E2EF6CD5-26D0-3B7B-A6D6-C4CAC1D397FF">
+<Column name="user_id" id="FC7E6DA3-1971-F7B2-CA15-9B82A1A97F4E">
 <createdBy>jakki</createdBy>
-<createdTime>2025-03-03 20:28:44 UTC</createdTime>
+<createdTime>2025-03-03 21:55:07 UTC</createdTime>
 <ownerDesignName>CircuitForge</ownerDesignName>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
@@ -19,12 +19,12 @@
 <previousColumn>false</previousColumn>
 <autoIncrementCycle>false</autoIncrementCycle>
 <associations>
-<colAssociation fkAssociation="CC70BEC2-A590-2341-178E-C85C18054CE4" referredColumn="13B5A34D-3010-604D-D1AB-FE42778A4EDE"/>
+<colAssociation fkAssociation="10D2BFEE-A812-5F9E-B904-88DEED2BCCD9" referredColumn="13B5A34D-3010-604D-D1AB-FE42778A4EDE"/>
 </associations>
 </Column>
-<Column name="entity_id" id="89775F5A-B354-0541-EA80-7AE0D67CA4DD">
+<Column name="entity_id" id="AB5D9C11-1A3C-0FCE-0A51-D35D2592F008">
 <createdBy>jakki</createdBy>
-<createdTime>2025-03-03 20:29:09 UTC</createdTime>
+<createdTime>2025-03-03 21:55:26 UTC</createdTime>
 <ownerDesignName>CircuitForge</ownerDesignName>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
@@ -33,24 +33,25 @@
 <previousColumn>false</previousColumn>
 <autoIncrementCycle>false</autoIncrementCycle>
 <associations>
-<colAssociation fkAssociation="FF3CDF2D-C136-5C4C-5E49-9DDDAE9518E5" referredColumn="9BB8868E-4FBD-019D-012A-769D37A3DBCC"/>
+<colAssociation fkAssociation="503B14CA-ABCB-ABEA-C762-3209C5068A62" referredColumn="9BB8868E-4FBD-019D-012A-769D37A3DBCC"/>
 </associations>
 </Column>
-<Column name="rating" id="1110F4DC-6E4D-B0B8-DAFC-BA1CDBC04129">
+<Column name="content" id="AC435CB1-F5F9-FC90-3582-DC837EBD607B">
 <createdBy>jakki</createdBy>
-<createdTime>2025-03-03 20:26:23 UTC</createdTime>
+<createdTime>2025-03-03 21:54:59 UTC</createdTime>
 <ownerDesignName>CircuitForge</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
-<logicalDatatype>LOGDT006</logicalDatatype>
-<dataTypeSize>1</dataTypeSize>
-<ownDataTypeParameters>1,,</ownDataTypeParameters>
+<logicalDatatype>LOGDT040</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="created_at" id="42A919B9-92B6-6A63-BDC1-5FF52B0A10FC">
+<Column name="created_at" id="C49CD537-273B-3B24-BAA3-4A0AB2ED0D61">
 <createdBy>jakki</createdBy>
-<createdTime>2025-03-03 20:26:23 UTC</createdTime>
+<createdTime>2025-03-03 21:54:59 UTC</createdTime>
 <ownerDesignName>CircuitForge</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
 <logicalDatatype>LOGDT015</logicalDatatype>
@@ -59,36 +60,36 @@
 </Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
-<ind_PK_UK id="6F6189E1-840F-46AF-3F33-2725E4DC0ADD" name="rating_PK">
+<ind_PK_UK id="62A6DA86-B08B-884A-A2EF-118386EA75B0" name="edit_request_PK">
 <createdBy>jakki</createdBy>
-<createdTime>2025-03-03 20:26:23 UTC</createdTime>
+<createdTime>2025-03-03 21:55:20 UTC</createdTime>
 <ownerDesignName>CircuitForge</ownerDesignName>
 <pk>true</pk>
 <indexState>Primary Constraint</indexState>
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
-<colUsage columnID="E2EF6CD5-26D0-3B7B-A6D6-C4CAC1D397FF"/>
-<colUsage columnID="89775F5A-B354-0541-EA80-7AE0D67CA4DD"/>
+<colUsage columnID="FC7E6DA3-1971-F7B2-CA15-9B82A1A97F4E"/>
+<colUsage columnID="AB5D9C11-1A3C-0FCE-0A51-D35D2592F008"/>
 </indexColumnUsage>
 </ind_PK_UK>
-<ind_PK_UK id="214CA337-A8FE-4749-3428-4834E3595647" name="user_id">
+<ind_PK_UK id="249B5612-DB2B-994A-B805-0DE1EF0146AC" name="user_idv2">
 <createdBy>jakki</createdBy>
-<createdTime>2025-03-03 20:28:44 UTC</createdTime>
+<createdTime>2025-03-03 21:55:07 UTC</createdTime>
 <ownerDesignName>CircuitForge</ownerDesignName>
 <indexState>Foreign Key</indexState>
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
-<colUsage columnID="E2EF6CD5-26D0-3B7B-A6D6-C4CAC1D397FF"/>
+<colUsage columnID="FC7E6DA3-1971-F7B2-CA15-9B82A1A97F4E"/>
 </indexColumnUsage>
 </ind_PK_UK>
-<ind_PK_UK id="9192A6B1-5C56-D3DA-F088-B1EC0444F03B" name="entity_id">
+<ind_PK_UK id="132A14AD-5B35-D4BF-E73F-2B71B52D2F87" name="entity_idv2">
 <createdBy>jakki</createdBy>
-<createdTime>2025-03-03 20:29:09 UTC</createdTime>
+<createdTime>2025-03-03 21:55:26 UTC</createdTime>
 <ownerDesignName>CircuitForge</ownerDesignName>
 <indexState>Foreign Key</indexState>
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
-<colUsage columnID="89775F5A-B354-0541-EA80-7AE0D67CA4DD"/>
+<colUsage columnID="AB5D9C11-1A3C-0FCE-0A51-D35D2592F008"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>

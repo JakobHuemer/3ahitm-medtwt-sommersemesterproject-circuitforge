@@ -1,0 +1,21 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="post_id" directorySegmentName="seg_0" id="ACE0D9B6-E893-0AAC-A13E-2C51BD4D7D4D">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:34:22 UTC</createdTime>
+<generatorID>FC01DB7F-378B-A775-C120-9B398B720D5A</generatorID>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<engineerTo>
+<item key="94B30C80-77B8-838E-252F-E67F7B35D978" value="true"/>
+</engineerTo>
+<sourcePk>1B234E3C-B48F-3710-6B02-493716098CA2</sourcePk>
+<dominantRole>D7804010-38D9-EED3-ECB3-EF3389B3B880</dominantRole>
+<identifying>true</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>false</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>D7804010-38D9-EED3-ECB3-EF3389B3B880</sourceEntity>
+<targetCardinalityString>1</targetCardinalityString>
+<targetEntity>C66B70FE-B8C8-F14F-AF44-25A5350E7DB1</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

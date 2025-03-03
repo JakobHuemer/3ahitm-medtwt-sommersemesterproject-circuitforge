@@ -18,6 +18,20 @@
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
+<Column name="author_id" id="1648390A-84FB-6438-0338-E563C3413B79">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:35:27 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT027</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="56061054-93E6-7939-5059-74A2A5B3007D" referredColumn="13B5A34D-3010-604D-D1AB-FE42778A4EDE"/>
+</associations>
+</Column>
 <Column name="created_at" id="E6673671-2CBE-A3E5-9912-F4976175D92E">
 <createdBy>jakki</createdBy>
 <createdTime>2025-03-03 19:56:31 UTC</createdTime>
@@ -34,9 +48,8 @@
 <ownerDesignName>CircuitForge</ownerDesignName>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
-<logicalDatatype>LOGDT024</logicalDatatype>
-<dataTypeSize>20</dataTypeSize>
-<ownDataTypeParameters>20,,</ownDataTypeParameters>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
 </columns>
@@ -50,6 +63,16 @@
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
 <colUsage columnID="9BB8868E-4FBD-019D-012A-769D37A3DBCC"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="DBBFFB97-6C42-33B4-0177-2ED4E7D15EE7" name="author_id">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:35:27 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="1648390A-84FB-6438-0338-E563C3413B79"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>

@@ -1,7 +1,7 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="CC70BEC2-A590-2341-178E-C85C18054CE4" containerWithKeyObject="9EF58518-0FC6-87BC-0BDD-57A4AF91DCA9" localFKIndex="214CA337-A8FE-4749-3428-4834E3595647" name="user_id">
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="10D2BFEE-A812-5F9E-B904-88DEED2BCCD9" containerWithKeyObject="F9509F30-9AD9-9E81-0548-DD6328FC7CFF" localFKIndex="249B5612-DB2B-994A-B805-0DE1EF0146AC" name="user_idv2">
 <createdBy>jakki</createdBy>
-<createdTime>2025-03-03 20:28:44 UTC</createdTime>
+<createdTime>2025-03-03 21:55:07 UTC</createdTime>
 <ownerDesignName>CircuitForge</ownerDesignName>
 <referredTableLongName>user</referredTableLongName>
 <deleteRule>NO ACTION</deleteRule>

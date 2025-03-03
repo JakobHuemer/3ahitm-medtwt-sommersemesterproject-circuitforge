@@ -60,6 +60,16 @@ entity user {
   * created_at: TIMESTAMP <<default: now()>>
 }
 
+
+entity edit_request {
+  * edit_id: BIGINT <<PK>>
+  * user_id: BIGINT <<PK>>
+  --
+  * content: TEXT
+  * created_at: TIMESTAMP
+}
+
+
 entity ||--o| post : is
 entity ||--o| discussion : is
 entity ||--o| comment : is
@@ -67,6 +77,9 @@ entity ||--o{ bookmark : references
 entity ||--o{ rating : has
 entity }o--|| user : publishes
 entity ||--|| comment : references
+
+edit_request }o--|| entity : edit_request
+edit_request }o--|| user : requests
 
 rating }o--|| user : rates
 bookmark }o--|| user : references
