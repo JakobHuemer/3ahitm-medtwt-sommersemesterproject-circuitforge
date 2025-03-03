@@ -52,6 +52,7 @@ Andere:
   - Kommentare
   - Posts
   - mögliche Verbesserungsvorschläge
+- Freundlich gegenüber Anfängern mit Redstone
 
 ## UI/UX
 
@@ -90,10 +91,16 @@ Diskussionen haben als Main-Sektion nur einen Start kommentar.
 Darunter folgen dann andere Kommentare wie bei Posts.
 
 
-**Editierbarer Kontent**
+**Editierbarer Content**
 
 User können Editieränderungen für _einen Post_ / _eine Diskussion_ vorschlagen,
 der vom OP akzeptiert werden kann.
+
+
+**Markdown Styling**
+
+Textinput in Posts, Kommentare, etc. unterstützt 
+markdown Styling wie fett, kursiv, überschrift, liste, etc.
 
 
 **User**
@@ -101,6 +108,10 @@ der vom OP akzeptiert werden kann.
 Nutzer können sich Posts, Diskussionen und Kommentare
 speichern und in ihrem Profil anschauen.
 
+
+### Grober Wireframe
+
+![Image](wireframe.svg)
 
 ## Coder Plan
 
@@ -139,6 +150,12 @@ Liken und Disliken kann.
 Eine Kommentar Component erhält ein level und die entity ID
 des Kommentars. Der Kommentar kümmert sich selbst darum, alle
 Unter-Kommentare vom Server zu besorgen. (Rekursiv)
+
+
+**Markdown Styling**
+
+Markdown wird mit einer Library wie [TipTap](https://tiptap.dev/product/editor),
+[Lexical](https://playground.lexical.dev/) oder ähnlichem implementiert.
 
 
 ## Datenmodell
