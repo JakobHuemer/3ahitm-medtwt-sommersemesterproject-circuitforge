@@ -1,0 +1,8 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="CircuitForge" id="1BDDBA26-E643-A697-3B83-875107146F66" version="3.5">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 19:52:33 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>1BDDBA26-E643-A697-3B83-875107146F66</designId>
+</OSDM_Design>

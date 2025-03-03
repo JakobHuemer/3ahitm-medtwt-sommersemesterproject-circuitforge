@@ -1,0 +1,78 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="726E4FCD-5FAB-ADE1-FE8D-BECBC7E45FB1" name="user">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:26:34 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<ordsAlias>table_6</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="user_id" id="13B5A34D-3010-604D-D1AB-FE42778A4EDE">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:28:02 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT027</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="username" id="C6792B68-ADB6-6870-8854-0C6734338368">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:28:02 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>50,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="email" id="D7B1119D-6877-2316-1CF1-5C3120AEF249">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:28:02 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>50,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="password" id="22AAB939-F18C-CCC6-CCDE-07AAC30B61BC">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:28:02 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT025</logicalDatatype>
+<dataTypeSize>100</dataTypeSize>
+<ownDataTypeParameters>100,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="created_at" id="EE1479A1-334F-4FBD-B3D3-3F07BC659FB9">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:28:02 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="C8332F51-B969-5A29-9AB4-B781B699539C" name="user_PK">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:28:02 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="13B5A34D-3010-604D-D1AB-FE42778A4EDE"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

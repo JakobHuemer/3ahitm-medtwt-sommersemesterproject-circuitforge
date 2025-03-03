@@ -77,17 +77,17 @@ Es gibt folgende Reiter im Header:
    - Registrieren
 
 
-**Posts**
+**1 Post Ansicht**
 
-Posts haben eine Main-Sektion mit der Galerie, Beschreibung,
+Ein Post hat eine Main-Sektion mit der Galerie, Beschreibung,
 Downloads, etc.
 
 Darunter sind dann die Kommentare.
 
 
-**Diskussionen**
+**1 Diskussion Ansicht**
 
-Diskussionen haben als Main-Sektion nur einen Start kommentar.
+Eine Diskussion hat als Main-Sektion nur einen speziellen Start-Kommentar.
 Darunter folgen dann andere Kommentare wie bei Posts.
 
 
@@ -103,15 +103,16 @@ Textinput in Posts, Kommentare, etc. unterstützt
 markdown Styling wie fett, kursiv, überschrift, liste, etc.
 
 
-**User**
+**Lesezeichen**
 
 Nutzer können sich Posts, Diskussionen und Kommentare
-speichern und in ihrem Profil anschauen.
+speichern und in ihrem Profil unter Lesezeichen anschauen.
 
 
 ### Grober Wireframe
 
-![Image](wireframe.svg)
+![Wireframe](wireframe.svg)
+
 
 ## Coder Plan
 
@@ -120,7 +121,7 @@ speichern und in ihrem Profil anschauen.
 **Überblick**
 
 Ein REST-Service stellt endpoints für das Frontend bereit.
-Die Filterung läuft hauptsächlich am Server ab
+Die Filterung von posts läuft hauptsächlich am Server ab
 
 - Login System mit Session Management
 - Posts, Kommentare, Diskussionen
@@ -128,7 +129,7 @@ Die Filterung läuft hauptsächlich am Server ab
 
 **Kommentare**
 
-Posts, Diskussionsposts und Kommentare haben alle eine eigene
+Posts, Diskussionen und Kommentare haben alle eine eigene
 entity ID welche UNIQUE ist.\
 Wird im Datenmodell näher erläutert.
 
@@ -137,7 +138,7 @@ So wird das Nesten einfacher und mehr modular.
 
 **Likes/Dislikes**
 
-Tabelle Ratings besteht aus PostID (PK,FK), UserID (PK,FK) und 
+Tabelle Ratings besteht aus EntityID (PK,FK), UserID (PK,FK) und 
 rating.
 So wird sichergegangen, dass ein Nutzer nicht gleichzeitig
 Liken und Disliken kann.
@@ -145,67 +146,23 @@ Liken und Disliken kann.
 
 ### Vue.js (Frontend)
 
-**Kommentar Komponente**
+**Kommentar-Komponente**
 
-Eine Kommentar Component erhält ein level und die entity ID
+Eine Kommentar-Komponente erhält ein level und die entity ID
 des Kommentars. Der Kommentar kümmert sich selbst darum, alle
-Unter-Kommentare vom Server zu besorgen. (Rekursiv)
+Unter-Kommentare vom Server zu fetchen. (Rekursiv)
 
 
 **Markdown Styling**
 
-Markdown wird mit einer Library wie [TipTap](https://tiptap.dev/product/editor),
-[Lexical](https://playground.lexical.dev/) oder ähnlichem implementiert.
+Markdown in Posts, Diskussionen und Kommentaren wird mit einer 
+Library wie
+[TipTap](https://tiptap.dev/product/editor),
+[Lexical](https://playground.lexical.dev/) 
+oder ähnlichem implementiert.
 
 
-## Datenmodell
+# Datenmodell
 
-**Post**
-
-- Title
-- Beschreibung
-- Kategorie: CREATIVE, SURVIVAL, ...
-- Schwierigkeit: EASY, MEDIUM, HARD ㅤㅤㅤ // Vielleicht anderes Rating
-- Tags
-- Autor
-- Download Resourcen
-- Likes -> List of Users
-- Dislikes -> List of Users
-- Kommentare
-- entity ID
-
-
-**Diskussion**
-
-- Title
-- Beschreibung
-- Tags
-- Autor
-- Status: OFFEN, 
-- Likes -> List of Users
-- Dislikes -> List of Users
-- Kommentare
-- entity ID
-
-
-**Kommentar**
-
-- Autor
-- Inhalt
-- Likes -> List of Users
-- Dislikes -> List of Users
-- Parent -> entity ID
-- entity ID
-
-
-**User**
-
-- user ID
-- Username
-- Email
-- Passwort
-- Profilbild
-- Kommentare
-- Gespeichert
-
+![ERD](datamodel/datamodel.png)
 

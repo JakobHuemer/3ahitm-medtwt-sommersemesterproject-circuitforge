@@ -1,0 +1,95 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="9EF58518-0FC6-87BC-0BDD-57A4AF91DCA9" name="rating">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:25:48 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<ordsAlias>table_5</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="user_id" id="E2EF6CD5-26D0-3B7B-A6D6-C4CAC1D397FF">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:28:44 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT027</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="CC70BEC2-A590-2341-178E-C85C18054CE4" referredColumn="13B5A34D-3010-604D-D1AB-FE42778A4EDE"/>
+</associations>
+</Column>
+<Column name="entity_id" id="89775F5A-B354-0541-EA80-7AE0D67CA4DD">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:29:09 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT027</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="FF3CDF2D-C136-5C4C-5E49-9DDDAE9518E5" referredColumn="9BB8868E-4FBD-019D-012A-769D37A3DBCC"/>
+</associations>
+</Column>
+<Column name="rating" id="1110F4DC-6E4D-B0B8-DAFC-BA1CDBC04129">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:26:23 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="created_at" id="42A919B9-92B6-6A63-BDC1-5FF52B0A10FC">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:26:23 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="6F6189E1-840F-46AF-3F33-2725E4DC0ADD" name="rating_PK">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:26:23 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="E2EF6CD5-26D0-3B7B-A6D6-C4CAC1D397FF"/>
+<colUsage columnID="89775F5A-B354-0541-EA80-7AE0D67CA4DD"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="214CA337-A8FE-4749-3428-4834E3595647" name="user_id">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:28:44 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="E2EF6CD5-26D0-3B7B-A6D6-C4CAC1D397FF"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="9192A6B1-5C56-D3DA-F088-B1EC0444F03B" name="entity_id">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 20:29:09 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="89775F5A-B354-0541-EA80-7AE0D67CA4DD"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

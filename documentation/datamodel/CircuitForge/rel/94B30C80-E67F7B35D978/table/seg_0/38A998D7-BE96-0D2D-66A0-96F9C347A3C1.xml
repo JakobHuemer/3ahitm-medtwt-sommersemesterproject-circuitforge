@@ -1,0 +1,56 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="38A998D7-BE96-0D2D-66A0-96F9C347A3C1" name="entity">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 19:54:52 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<ordsAlias>table_1</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="entity_id" id="9BB8868E-4FBD-019D-012A-769D37A3DBCC">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 19:55:57 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT027</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="created_at" id="E6673671-2CBE-A3E5-9912-F4976175D92E">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 19:56:31 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="entity_type" id="9BCA31AE-E444-63BA-A70B-558C353FCA28">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 19:57:01 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>20</dataTypeSize>
+<ownDataTypeParameters>20,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="902BE1C7-FD87-5407-7CD1-D2B5D1C391C2" name="entity_PK">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 19:55:57 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="9BB8868E-4FBD-019D-012A-769D37A3DBCC"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

@@ -24,7 +24,7 @@ entity discussion {
   --
   * title: VARCHAR(255)
   * status: ENUM
-  * description: TEXT
+  * content: TEXT
   * updated_at: TIMESTAMP <<default: now()>>
 }
 
@@ -58,16 +58,15 @@ entity user {
   * email: VARCHAR(255) <<not null>>
   * password: VARCHAR(255) <<not null>>
   * created_at: TIMESTAMP <<default: now()>>
-  * updated_at: TIMESTAMP <<default: now()>>
 }
 
-entity ||--o{ post : is
-entity ||--o{ discussion : is
-entity ||--o{ comment : is
+entity ||--o| post : is
+entity ||--o| discussion : is
+entity ||--o| comment : is
 entity ||--o{ bookmark : references
 entity ||--o{ rating : has
 entity }o--|| user : publishes
-entity ||--o{ comment : references
+entity ||--|| comment : references
 
 rating }o--|| user : rates
 bookmark }o--|| user : references
