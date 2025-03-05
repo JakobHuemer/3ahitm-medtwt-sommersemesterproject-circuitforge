@@ -161,6 +161,20 @@ Library wie
 [Lexical](https://playground.lexical.dev/) 
 oder ähnlichem implementiert.
 
+## 3D-Rendering Schematic
+
+**SchematicWebViewer:**
+[GitHub](https://github.com/EngineHub/SchematicWebViewer?utm_source=chatgpt.com)
+
+Kann mithilfe einer Client-Jar folgende Files in 3D Rendern:
+
+- .schem
+- .schematic
+- .nbt
+
+SchematicWebViewer unterstützt aber keine Block Entities.
+
+## Datenbank: MySQL
 
 # Datenmodell
 
