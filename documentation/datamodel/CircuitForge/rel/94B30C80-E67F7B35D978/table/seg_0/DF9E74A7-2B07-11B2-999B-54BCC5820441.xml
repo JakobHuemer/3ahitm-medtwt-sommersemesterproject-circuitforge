@@ -36,26 +36,6 @@
 <colAssociation fkAssociation="EC152C2B-DFDE-ADB5-11C8-1741659B688D" referredColumn="9BB8868E-4FBD-019D-012A-769D37A3DBCC"/>
 </associations>
 </Column>
-<Column name="content" id="0D13BD64-BE74-1612-30F8-AEB5CDE014A0">
-<createdBy>jakki</createdBy>
-<createdTime>2025-03-03 20:06:58 UTC</createdTime>
-<ownerDesignName>CircuitForge</ownerDesignName>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT040</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<autoIncrementCycle>false</autoIncrementCycle>
-</Column>
-<Column name="updated_at" id="16F50073-3D16-02DA-D53A-7E590CE2CA5D">
-<createdBy>jakki</createdBy>
-<createdTime>2025-03-03 20:06:58 UTC</createdTime>
-<ownerDesignName>CircuitForge</ownerDesignName>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT015</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<autoIncrementCycle>false</autoIncrementCycle>
-</Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
 <ind_PK_UK id="0EE168B7-D508-BB56-2479-24ACC09DDDCE" name="comment_PK">

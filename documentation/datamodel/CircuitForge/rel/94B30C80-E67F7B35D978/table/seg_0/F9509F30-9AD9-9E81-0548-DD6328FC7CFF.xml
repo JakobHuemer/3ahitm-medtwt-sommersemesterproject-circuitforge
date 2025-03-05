@@ -40,7 +40,6 @@
 <createdBy>jakki</createdBy>
 <createdTime>2025-03-03 21:54:59 UTC</createdTime>
 <ownerDesignName>CircuitForge</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
 <logicalDatatype>LOGDT040</logicalDatatype>
@@ -51,7 +50,6 @@
 <createdBy>jakki</createdBy>
 <createdTime>2025-03-03 21:54:59 UTC</createdTime>
 <ownerDesignName>CircuitForge</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
 <logicalDatatype>LOGDT015</logicalDatatype>

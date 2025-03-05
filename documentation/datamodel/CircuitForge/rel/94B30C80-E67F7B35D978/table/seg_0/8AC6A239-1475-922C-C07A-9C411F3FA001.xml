@@ -33,16 +33,6 @@
 <ownDataTypeParameters>255,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="content" id="363EDD4F-534A-BE8E-A7FC-904E11D2ACFA">
-<createdBy>jakki</createdBy>
-<createdTime>2025-03-03 19:58:31 UTC</createdTime>
-<ownerDesignName>CircuitForge</ownerDesignName>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT040</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<autoIncrementCycle>false</autoIncrementCycle>
-</Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
 <ind_PK_UK id="FDAD8EE8-D883-E1A1-0C94-4E47B996DE29" name="post_PK">

@@ -43,26 +43,6 @@
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="content" id="491062C3-350D-F1BC-72D9-9A340AC326B2">
-<createdBy>jakki</createdBy>
-<createdTime>2025-03-03 20:03:13 UTC</createdTime>
-<ownerDesignName>CircuitForge</ownerDesignName>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT040</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<autoIncrementCycle>false</autoIncrementCycle>
-</Column>
-<Column name="updated_at" id="6FE55BA8-7930-4B60-C2EC-FC6A8274F73A">
-<createdBy>jakki</createdBy>
-<createdTime>2025-03-03 20:03:13 UTC</createdTime>
-<ownerDesignName>CircuitForge</ownerDesignName>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT015</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<autoIncrementCycle>false</autoIncrementCycle>
-</Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
 <ind_PK_UK id="C1B6F2B9-1AD4-F5AD-D66C-5DB87F0F3278" name="discussion_PK">

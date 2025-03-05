@@ -32,6 +32,26 @@
 <colAssociation fkAssociation="56061054-93E6-7939-5059-74A2A5B3007D" referredColumn="13B5A34D-3010-604D-D1AB-FE42778A4EDE"/>
 </associations>
 </Column>
+<Column name="entity_type" id="9BCA31AE-E444-63BA-A70B-558C353FCA28">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-03 19:57:01 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="content" id="D2CC4734-FF96-DA1A-F10E-B63B10214DD9">
+<createdBy>jakki</createdBy>
+<createdTime>2025-03-05 17:30:41 UTC</createdTime>
+<ownerDesignName>CircuitForge</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT040</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
 <Column name="created_at" id="E6673671-2CBE-A3E5-9912-F4976175D92E">
 <createdBy>jakki</createdBy>
 <createdTime>2025-03-03 19:56:31 UTC</createdTime>
@@ -42,13 +62,14 @@
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="entity_type" id="9BCA31AE-E444-63BA-A70B-558C353FCA28">
+<Column name="updated_at" id="CDEFE01A-0B4B-0616-234B-9AEF29C0F7B5">
 <createdBy>jakki</createdBy>
-<createdTime>2025-03-03 19:57:01 UTC</createdTime>
+<createdTime>2025-03-05 17:30:07 UTC</createdTime>
 <ownerDesignName>CircuitForge</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
+<logicalDatatype>LOGDT015</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
