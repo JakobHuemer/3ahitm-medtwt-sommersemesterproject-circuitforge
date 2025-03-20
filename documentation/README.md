@@ -11,3 +11,8 @@
 -   Formaler Header (Name, Klasse, Projektname, Link zu Github-Repo)
 -   Neuerungen bzw.  Änderungen seit dem letzten Sprint als Liste und in Stichworten
 -   Verpflichtende Ziele bis zum nächsten Sprint
+
+
+## Doku
+
+[Docs.md](docs.md)
