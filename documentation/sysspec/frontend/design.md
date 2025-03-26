@@ -32,39 +32,39 @@ colban {
 
 ```css
 {
-    --text: #FFFFFF;
+    --text-primary: #FFFFFF;
     --text-secondary: #D2D2D2;
 
     --background: #0a0406;
-    --background-hover: #12060a;  /* Slightly lighter for subtle interaction */
-    --background-active: #080305; /* Darker for pressed effect */
+    --background-hover: #12060a;
+    --background-active: #080305;
 
     --container: #212121;
-    --container-hover: #292929; /* Slightly brighter */
-    --container-active: #181818; /* Darker for pressed effect */
+    --container-hover: #292929;
+    --container-active: #181818;
 
     --content: #2f2f31;
-    --content-hover: #3a3a3c; /* Slightly lighter */
-    --content-active: #262628; /* Darker for pressed */
+    --content-hover: #3a3a3c;
+    --content-active: #262628;
 
     --primary: #950437;
-    --primary-hover: #b20646;    /* Slightly brighter red */
-    --primary-active: #7a032d;   /* Deeper shade for pressed state */
-    --primary-disabled: #4d021d; /* Matches primary-weak for consistency */
+    --primary-hover: #b20646;
+    --primary-active: #7a032d;
+    --primary-disabled: #4d021d;
 
     --primary-weak: #4d021d;
 
     --secondary: #3f623b;
-    --secondary-hover: #4e7a48;  /* More vibrant green */
-    --secondary-active: #2e462a; /* Darker shade for pressed state */
+    --secondary-hover: #4e7a48;
+    --secondary-active: #2e462a;
     --secondary-disabled: #1f311d;
 
     --secondary-weak: #1f311d;
 
     --accent: #e52465;
-    --accent-hover: #ff2e75;     /* More vivid pinkish-red */
-    --accent-active: #b31c50;    /* Darker shade for pressed state */
-    --accent-disabled: #731230;  /* Matches accent-weak for consistency */
+    --accent-hover: #ff2e75;
+    --accent-active: #b31c50;
+    --accent-disabled: #731230;
 
     --accent-weak: #731230;
 
