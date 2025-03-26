@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 6 8" class="bookmark-marker">
+<!--     Horizontal top bar of T (black) -->
+    <rect x="0" y="0" width="6" height="1" class="black-section" fill="black" />
+
+<!--    Sides -->
+    <rect x="1" y="1" width="1" height="5" class="black-section" fill="black" />
+    <rect x="4" y="1" width="1" height="5" class="black-section" fill="black" />
+
+<!--    Fill-->
+
+    <rect x="2" y="1" width="2" height="5" class="colored-fill" fill="#950437"/>
+
+<!--     Bottom section of vertical bar (black) -->
+    <rect x="2" y="6" width="2" height="2" class="black-section" fill="black" />
+</svg>
