@@ -3,8 +3,7 @@
 
 ## Files
 
-Datenbank export: [schema.sql](datamodel/schema.sql)\
-Als root user 
+Datenbank export: [schema.sql](datamodel/schema.sql)
 
 
 ## Sprints
@@ -21,3 +20,5 @@ Farben/Fonts: [Design.md](sysspec/frontend/design.md)
 
 
 ### Sprint 3. 
+
+In Progress ...

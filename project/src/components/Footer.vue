@@ -1,9 +1,11 @@
 <script setup lang="ts">
 
-
-let url = window.location.href
-
 </script>
 
 <template>
+
 </template>
+
+<style scoped>
+
+</style>

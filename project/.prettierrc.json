@@ -3,6 +3,6 @@
   "semi": false,
   "singleQuote": true,
   "printWidth": 100,
-  "vueIndentScriptAndStyle": true,
+  "vueIndentScriptAndStyle": false,
   "tabWidth": 4
 }
