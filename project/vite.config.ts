@@ -4,11 +4,13 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import path from 'node:path'
+import { generateHtaccessPlugin } from './htaccess_plugin'
 
 export default defineConfig({
     plugins: [
         vue(),
-        vueDevTools()
+        vueDevTools(),
+        generateHtaccessPlugin()
     ],
     resolve: {
         alias: {
