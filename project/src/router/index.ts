@@ -9,14 +9,14 @@ const router = createRouter({
             path: '/',
             name: 'home',
             component: HomeView,
-            alias: '/index.html'
+            alias: '/index.html',
         },
         {
             path: '/sub/view',
             name: 'subview',
-            component: SubView
-        }
-    ]
+            component: SubView,
+        },
+    ],
 })
 
 export default router

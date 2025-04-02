@@ -1,10 +1,8 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
     <div class="wrapper">
         <div class="container">
-
             <h1><RouterLink to="/">CircuitForge</RouterLink></h1>
             <input type="text" name="search" id="search" class="search" placeholder="Search" />
             <div class="nav-items">
@@ -19,17 +17,15 @@
 </template>
 
 <style scoped>
-
 .wrapper {
     width: 100%;
     padding: var(--gap-16);
     background: var(--col-container);
 }
 
-
 .container {
     margin-inline: auto;
-    max-width: 1000px;
+    max-width: var(--main-width);
     display: flex;
     gap: var(--gap-32);
     justify-content: space-between;
@@ -57,8 +53,6 @@
         display: flex;
         gap: var(--gap-16);
         font-family: var(--font-title);
-
     }
 }
-
 </style>
