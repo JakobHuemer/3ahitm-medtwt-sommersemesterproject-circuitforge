@@ -169,6 +169,7 @@ img:not(.img-header img) {
         .post-stats-container {
             display: flex;
             gap: var(--gap-8);
+            flex-wrap: wrap;
 
             .post-stat {
                 display: flex;
@@ -184,6 +185,7 @@ img:not(.img-header img) {
             .tags-list {
                 display: flex;
                 gap: var(--gap-4);
+                flex-wrap: wrap;
 
                 .tag {
                     padding: 6px 8px;
