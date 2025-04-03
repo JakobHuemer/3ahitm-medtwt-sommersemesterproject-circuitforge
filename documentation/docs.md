@@ -39,7 +39,7 @@ Farben/Fonts: [Design.md](sysspec/frontend/design.md)
   - .htaccess files für redirects
 
 
-**Ziele für Sprint 3**
+**Ziele für Sprint 2**
 
 - Login Management (Front- & Backend)
 - text Editor auswählen und probieren
