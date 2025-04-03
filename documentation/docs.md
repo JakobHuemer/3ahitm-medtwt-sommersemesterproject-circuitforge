@@ -3,6 +3,8 @@
 
 ## Struktur
 
+Typ: JSON API x Vue.js Frontend
+
 - Datenbank export: [schema.sql](datamodel/schema.sql)
 
 
