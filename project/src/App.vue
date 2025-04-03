@@ -9,13 +9,22 @@ let url = window.location.href
 
 <template>
     <Nav />
-    <main>
-        <RouterView />
-    </main>
+    <div class="main-wrapper">
+        <main>
+            <RouterView />
+        </main>
+    </div>
 </template>
 
 <style scoped>
+
+.main-wrapper {
+    display: grid;
+}
+
 main {
+    width: var(--main-width);
+    display: block;
     margin: var(--gap-32);
 }
 </style>

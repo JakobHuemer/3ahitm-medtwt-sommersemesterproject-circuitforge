@@ -89,7 +89,7 @@
     --font-title: Minecraftory, var(--font-body);
     --font-special: Minecraftia, var(--font-body);
 
-    --main-width: 1400px;
+    --main-width: min(1400px, 90%);
 }
 
 @font-face {

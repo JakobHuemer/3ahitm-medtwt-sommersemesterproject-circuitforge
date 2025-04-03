@@ -10,7 +10,6 @@ lerna-debug.log*
 node_modules
 .DS_Store
 dist
-frontend
 dist-ssr
 coverage
 *.local
@@ -30,3 +29,4 @@ coverage
 *.tsbuildinfo
 
 api/.htaccess
+.vite/
