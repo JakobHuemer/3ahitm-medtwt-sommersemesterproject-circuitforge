@@ -14,21 +14,20 @@ Typ: JSON API x Vue.js Frontend
 
 ## Sprints
 
-### Sprint 1. Projektantrag
+### Pre-Sprint 1: Projektantrag
 
 [Projektantrag](projektantrag.md)
 
-### Sprint 2. Figma Prototyp
+### Pre-Sprint 2: Figma Prototyp
 
 Figma: https://www.figma.com/design/My7Y1fsFgrsLZDAbdR15ZG/CircuitForge?node-id=0-1&t=yzkKsVEjpbKWpXnm-1
 
 Farben/Fonts: [Design.md](sysspec/frontend/design.md)
 
 
-### Sprint 3. Projektinitialisierung
+### Sprint 1: Projektinitialisierung
 
-**Ordner**
-
+03.04.2025
 
 **Frontend**
 
@@ -45,3 +44,7 @@ Farben/Fonts: [Design.md](sysspec/frontend/design.md)
 - Login Management (Front- & Backend)
 - text Editor auswählen und probieren
 - Laravel projekt
+
+### Sprint 2: Login Management
+
+In Progress...
