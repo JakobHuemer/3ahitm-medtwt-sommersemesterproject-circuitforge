@@ -10,7 +10,6 @@
                 <RouterLink to="/discussions">Discussions</RouterLink>
                 <RouterLink to="/register">Register</RouterLink>
                 <RouterLink to="/login">Login</RouterLink>
-                <RouterLink to="/sub/view">SubView</RouterLink>
             </div>
         </div>
     </div>
