@@ -21,20 +21,17 @@ Farben/Fonts: [Design.md](sysspec/frontend/design.md)
 
 ### Sprint 3. 
 
-In Progress ...
+**Ordner**
 
-search query for version:
+- Frontend: `project/frontend/`
+- Backend: `project/api/`
 
-```sql
-SELECT *
-FROM version
-WHERE version LIKE CONCAT('%', ?, '%')
-ORDER BY
-    -- Exact match gets highest priority
-    (version = ?) DESC,
-    -- Then prefix match
-    (version LIKE CONCAT(?, '%')) DESC,
-    -- Then by Levenshtein distance (lower is better)
-    LEVENSHTEIN(version, ?) ASC
-    LIMIT 20;
-```
+**Frontend**
+
+- Erstellung des Vue Projekts.
+- Implementiert
+  - Navigationsleiste
+  - PostCard
+- Projektstrukture
+  - .htaccess files für redirects
+
