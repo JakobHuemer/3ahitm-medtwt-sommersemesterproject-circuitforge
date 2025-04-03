@@ -1,9 +1,13 @@
 # Documentation of CircuitForge
 
 
-## Files
+## Struktur
 
-Datenbank export: [schema.sql](datamodel/schema.sql)
+- Datenbank export: [schema.sql](datamodel/schema.sql)
+
+
+- Frontend: `project/frontend/`
+- Backend: `project/api/`
 
 
 ## Sprints
@@ -19,12 +23,10 @@ Figma: https://www.figma.com/design/My7Y1fsFgrsLZDAbdR15ZG/CircuitForge?node-id=
 Farben/Fonts: [Design.md](sysspec/frontend/design.md)
 
 
-### Sprint 3. 
+### Sprint 3. Projektinitialisierung
 
 **Ordner**
 
-- Frontend: `project/frontend/`
-- Backend: `project/api/`
 
 **Frontend**
 
@@ -32,6 +34,12 @@ Farben/Fonts: [Design.md](sysspec/frontend/design.md)
 - Implementiert
   - Navigationsleiste
   - PostCard
-- Projektstrukture
+- Projektstruktur
   - .htaccess files für redirects
 
+
+**Ziele für Sprint 3**
+
+- Login Management (Front- & Backend)
+- text Editor auswählen und probieren
+- Laravel projekt
