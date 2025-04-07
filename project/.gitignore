@@ -28,5 +28,4 @@ coverage
 
 *.tsbuildinfo
 
-api/.htaccess
 .vite/
