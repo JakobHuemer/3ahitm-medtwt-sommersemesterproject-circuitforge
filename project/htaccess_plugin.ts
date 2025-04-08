@@ -28,7 +28,7 @@ export function generateHtaccessPlugin(): Plugin {
             // Second .htaccess for API (PHP)
             const apiHtaccessPath = path.resolve(distDir, '..', 'api', '.htaccess')
             const apiBaseUrl = baseUrl.replace('/frontend/', '/api/')
-            const apiHtaccessContent = `FallbackResource ${apiBaseUrl}index.php`
+            const apiHtaccessContent = `FallbackResource ${apiBaseUrl}public/index.php`
 
             // Ensure the directory exists before writing
             fs.mkdirSync(path.dirname(apiHtaccessPath), { recursive: true })
