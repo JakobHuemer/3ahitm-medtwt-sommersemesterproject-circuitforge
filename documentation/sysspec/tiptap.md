@@ -51,6 +51,10 @@ wird zu
     ...
 ```
 
+Die Anzahl der Buchstaben wird mit der
+[CharacterCount extension](https://tiptap.dev/docs/editor/extensions/functionality/character-count)
+realisiert
+
 ## Backend
 
 JSON wird vom Frontend als JSON-String empfangen
