@@ -28,7 +28,7 @@ export default defineConfig({
             throw new Error('Project must be located in an htdocs directory')
         }
 
-        return projectPath.split(path.sep).slice(htdocsIndex + 1).join('/') + '/frontend/'
+        return '/' + projectPath.split(path.sep).slice(htdocsIndex + 1).join('/') + '/frontend/'
     })()
 
 })

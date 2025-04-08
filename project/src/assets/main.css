@@ -13,3 +13,22 @@ a {
         color: var(--col-accent);
     }
 }
+
+
+.sub-title {
+    font-family: var(--font-title);
+    font-size: var(--font-size-category);
+    text-align: center;
+}
+
+.container {
+    background: var(--col-container);
+}
+
+.content {
+    background: var(--col-content);
+}
+
+.surface {
+    background: var(--col-surface);
+}

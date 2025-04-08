@@ -17,7 +17,6 @@ let url = window.location.href
 </template>
 
 <style scoped>
-
 .main-wrapper {
     display: grid;
 }

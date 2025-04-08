@@ -27,9 +27,4 @@ import PostCard from '@/components/PostCard.vue'
     </div>
 </template>
 
-<style>
-
-
-
-
-</style>
+<style></style>

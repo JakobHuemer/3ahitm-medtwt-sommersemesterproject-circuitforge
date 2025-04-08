@@ -51,7 +51,7 @@ const post = await loadPost(123)
 </script>
 
 <template>
-    <div class="post-card">
+    <div class="post-card content">
         <div class="img-header">
             <img src="../assets/img/temp/post-thumbnail-tall.png" alt="thumbnail tall" />
         </div>
