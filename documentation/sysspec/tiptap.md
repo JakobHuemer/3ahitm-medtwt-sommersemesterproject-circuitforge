@@ -1,4 +1,4 @@
-# TipTap in Database and Frontend
+# TipTap in Database und Frontend
 
 ## Frontend
 
@@ -57,7 +57,8 @@ realisiert
 
 ## Backend
 
-JSON wird vom Frontend als JSON-String empfangen
+JSON wird vom Frontend als JSON-String empfangen.
+In der Datenbank wird der Content als JSON-String gespeichert.
 
 [Laravel TipTap validation](https://github.com/JacobFitzp/laravel-tiptap-validation)
 wird am Server für die Verifizierung von TipTap JSON des 
@@ -70,7 +71,7 @@ TiptapValidation::content()
     ->marks("bold", "italic", "underline", "strike", "code");
 
 TiptapValidation::containsText()
-    ->between(0, 40);
+    ->between(0, 512);
 ```
 
 welches dann mit einem Laravel Validator validiert werden kann:
@@ -89,3 +90,81 @@ if ($validator->fails()) {
     // richtig
 }
 ```
+
+### Endpoints mit TipTap Content:
+
+#### GET
+
+**URL Parameter**
+
+| Parameter | Typ    | Beschreibung                           |
+|-----------|--------|----------------------------------------|
+| `type`    | string | Ruckgabeformat: `"json"` oder `"html"` |
+
+
+Verschiedene Formate werden mit
+[TipTap PHP utlity](https://tiptap.dev/docs/editor/api/utilities/tiptap-for-php)
+erstellt: `json`, `html`
+
+**Beispielantwort**
+
+- typ: **json**
+    
+    ```json
+    {
+      "type": "doc",
+      "content": [
+        {
+          "type": "heading",
+          "attrs": {
+            "level": 1
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "Titel"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "text"
+            }
+          ]
+        }
+      ]
+    }
+    ```
+
+- typ: **html**
+
+  ```html
+  <h1>Titel</h1><p>text</p>
+  ```
+  
+#### POST
+
+**Request Body**
+
+| Feld      | Typ  | Beschreibung              |
+|-----------|------|---------------------------|
+| `content` | JSON | TipTap-JSON zum Speichern |
+
+**Antworten**
+
+- **200 OK**: Erfolg
+
+- **422 Unprocessable Entity**
+  - Valides JSON
+  - Der Serverkonfiguration nicht entsprechender TipTap Content
+
+
+
+### Serverseitige Bereinigung von TipTap-Conent
+
+Wird mit
+[Symfony](https://symfony.com/doc/current/html_sanitizer.html)
+Bereinigt nach erfolgreicher Verifizierung vom Validator
