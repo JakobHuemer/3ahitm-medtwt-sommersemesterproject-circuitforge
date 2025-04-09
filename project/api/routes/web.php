@@ -41,13 +41,13 @@ Route::post("/sanctum", function (Request $request) {
     return "SANCTUM POST API";
 })->middleware("auth:sanctum");
 
-Route::get("auth", function (Request $request) {
+Route::get("/auth", function (Request $request) {
     echo "AUTH GET API";
 
     return "AUTH GET API";
 })->middleware("auth");
 
-Route::post("auth", function (Request $request) {
+Route::post("/auth", function (Request $request) {
     echo "AUTH POST API";
 
     return "AUTH POST API";
