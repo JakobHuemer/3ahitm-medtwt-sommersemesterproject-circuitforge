@@ -5,10 +5,8 @@ import { StarterKit } from '@tiptap/starter-kit'
 import PostEditor from '@/components/EditorWrapper.vue'
 import type PostEditorInstance from '@/types/post-editor-instance'
 
-
 const outputJson = ref('')
 const componentRef = ref<PostEditorInstance>()
-
 
 function getJson() {
     var json = componentRef.value?.getJson()
@@ -23,17 +21,16 @@ function setFromJson() {
 
     componentRef.value?.setJson(json)
 }
-
 </script>
 
 <template>
     <!--    <EditorContent :editor="editor"/>-->
     <PostEditor :editable="true" :auto-focus="true" ref="componentRef" />
 
-    <hr>
+    <hr />
     <button @click="getJson">PRINT</button>
     <button @click="setFromJson">SET</button>
-    <hr>
+    <hr />
 
     <textarea
         :value="outputJson"

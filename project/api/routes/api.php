@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use JacobFitzp\LaravelTiptapValidation\Facades\TiptapValidation;
@@ -11,8 +13,9 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get("/test", function () {
-    return "hello world";
+Route::get("/test", function (Request $request) {
+    echo "jamoin";
+    return json_encode($request->cookies->all());
 });
 
 
@@ -67,4 +70,29 @@ Route::post("/sanitize", function (Request $request, HtmlSanitizer $sanitizer) {
     $sanitized = sanitize($content, $sanitizer);
 
     return $sanitized;
+});
+
+
+Route::middleware("auth:sanctum")->group(function () {
+    Route::get("/sanctum", function (Request $request) {
+        echo "SANCTUM GET API";
+        return "SANCTUM GET API";
+    });
+
+    Route::post("/sanctum", function (Request $request) {
+        echo "SANCTUM POST API";
+        return "SANCTUM POST API";
+    });
+});
+
+Route::middleware("auth")->group(function () {
+    Route::get("auth", function (Request $request) {
+        echo "AUTH GET API";
+        return "AUTH GET API";
+    });
+
+    Route::post("auth", function (Request $request) {
+        echo "AUTH POST API";
+        return "AUTH POST API";
+    });
 });

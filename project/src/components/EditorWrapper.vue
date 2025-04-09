@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import { Editor, EditorContent, Extension, type JSONContent } from '@tiptap/vue-3'
 import { shallowRef } from 'vue'
 import { StarterKit } from '@tiptap/starter-kit'
@@ -19,29 +18,31 @@ import CodeBlock from '@tiptap/extension-code-block'
 import type PostEditorInstance from '@/types/post-editor-instance'
 
 const props = defineProps<{
-    editable: boolean,
-    autoFocus: boolean,
-    entityId?: number,
+    editable: boolean
+    autoFocus: boolean
+    entityId?: number
 }>()
 
-const editor = shallowRef<Editor>(new Editor({
-    content: "<h1>hello world</h1><p>Ja moin</p>",
-    editable: props.editable,
-    autofocus: props.autoFocus,
-    extensions: [
-        Document,
-        Paragraph,
-        Text,
-        Bold,
-        Italic,
-        Underline,
-        Strike,
-        Heading,
-        Blockquote,
-        Code,
-        CodeBlock
-    ]
-}))
+const editor = shallowRef<Editor>(
+    new Editor({
+        content: '<h1>hello world</h1><p>Ja moin</p>',
+        editable: props.editable,
+        autofocus: props.autoFocus,
+        extensions: [
+            Document,
+            Paragraph,
+            Text,
+            Bold,
+            Italic,
+            Underline,
+            Strike,
+            Heading,
+            Blockquote,
+            Code,
+            CodeBlock,
+        ],
+    }),
+)
 
 function getJson(): JSONContent {
     return { text: editor.value.getHTML() }
@@ -51,22 +52,18 @@ function setJson(json: JSONContent) {
     editor.value?.commands.setContent(json)
 }
 
-if ( props.entityId != undefined ) {
+if (props.entityId != undefined) {
     // fetch post content
 }
 
 defineExpose<PostEditorInstance>({
     getJson,
-    setJson
+    setJson,
 })
-
 </script>
 
 <template>
     <EditorContent :editor="editor" />
-
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
