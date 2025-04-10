@@ -8,7 +8,7 @@ let url = window.location.href
 </script>
 
 <template>
-    <Nav />
+    <Nav v-if="!$route.meta.hideNav" />
     <div class="main-wrapper">
         <main>
             <RouterView />
@@ -25,5 +25,14 @@ main {
     width: var(--main-width);
     display: block;
     margin: var(--gap-32);
+}
+
+.main-wrapper:has(.full-height), main:has(.full-height) {
+    min-height: 100svh;
+
+    &:is(main) {
+        display: grid;
+        place-items: center;
+    }
 }
 </style>

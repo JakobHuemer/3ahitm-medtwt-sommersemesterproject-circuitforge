@@ -35,9 +35,7 @@ class AuthController extends Controller {
             'password' => 'required',
         ]);
 
-
         $credentials = $request->only("login", "password");
-
 
         $login = $credentials["login"];
         $password = $credentials["password"];
@@ -48,10 +46,10 @@ class AuthController extends Controller {
 
             $request->session()->regenerate();
 
-            return "SUCCESS\nSUCCESS!!";
+//            return "SUCCESS\nSUCCESS!!";
         }
 
-        return "FAIL";
+//        return "FAIL";
 
     }
 

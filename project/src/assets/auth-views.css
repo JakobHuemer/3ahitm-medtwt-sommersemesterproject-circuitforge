@@ -1,0 +1,123 @@
+
+
+.auth-container {
+    width: min(90%, 600px);
+    margin-block: auto;
+    display: grid;
+    gap: var(--gap-16);
+
+    padding: var(--gap-32);
+    background: var(--col-container);
+    border-radius: var(--border-radius);
+
+    &.login-container {
+        width: min(90%, 500px);
+    }
+
+
+    .title {
+        font-weight: 600;
+        text-align: center;
+    }
+
+    *:not(input) {
+        /* https://www.w3schools.com/howto/howto_css_disable_text_selection.asp */
+        -webkit-user-select: none; /* Safari */
+        -ms-user-select: none; /* IE 10 and IE 11 */
+        user-select: none; /* Standard syntax */
+    }
+
+    .form-section {
+
+        display: grid;
+        gap: var(--gap-16);
+
+        .remember-me {
+            display: flex;
+            place-items: center;
+            gap: var(--gap-4);
+
+            #remember-me {
+                /*display: none;*/
+                position: absolute;
+                opacity: 0;
+            }
+
+            label.checkbox {
+                width: var(--font-size-body);
+                height: var(--font-size-body);
+                aspect-ratio: 1;
+                background: var(--col-surface);
+                border: 1px solid var(--col-text-secondary);
+                border-radius: var(--border-radius-s);
+            }
+
+            input[type=checkbox]:checked + label.checkbox {
+                background: var(--col-primary-hover);
+            }
+
+            input[type=checkbox]:focus + label.checkbox {
+                /*background: orange;*/
+                border: 1px solid var(--col-accent);
+            }
+        }
+
+        .input {
+            position: relative;
+
+
+            --gap-inset: var(--gap-12);
+
+
+            input {
+                margin-top: .4rem;
+                padding: var(--gap-inset);
+                background: var(--col-surface);
+                border: none;
+                width: 100%;
+
+                overflow: hidden;
+                border-radius: var(--border-radius-s);
+
+                color: var(--col-text-primary);
+            }
+
+            label {
+                margin-left: .2rem;
+            }
+
+        }
+
+    }
+
+
+    button.signup {
+        background: var(--col-primary);
+        color: var(--col-text-primary);
+        padding: var(--gap-16);
+        font-size: var(--font-size-card-title);
+        font-weight: 600;
+        border-radius: var(--border-radius);
+        border: none;
+        transition: background .1s;
+
+        cursor: pointer;
+
+        &:hover {
+            background: var(--col-primary-hover);
+        }
+
+        &:active {
+            background: var(--col-primary-active);
+        }
+    }
+
+    .footnote {
+        text-align: center;
+
+        .footnote-link {
+            color: var(--col-accent);
+
+        }
+    }
+}

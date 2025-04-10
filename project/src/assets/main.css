@@ -1,7 +1,12 @@
 @import './base.css';
+@import "auth-views.css";
 
 *:focus {
     outline: 1px solid var(--col-accent);
+}
+
+body, #app {
+    min-height: 100svh;
 }
 
 a {
