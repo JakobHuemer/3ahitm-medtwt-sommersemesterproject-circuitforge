@@ -14,11 +14,13 @@ const doPasswordsMatch = computed(() => {
     return password.value == confirmPassword.value
 })
 
-function doRegister() {}
+function doRegister() {
+    console.log('Signup Triggered')
+}
 </script>
 
 <template>
-    <div class="auth-container register-container full-height">
+    <div class="auth-container register-container full-height" role="form">
         <h1 class="title">Register on CircuitForge</h1>
         <div class="form-section">
             <div class="input input-username">
@@ -26,7 +28,13 @@ function doRegister() {}
                     <span>username</span>
                     <span class="auth-error username-error">username already exists</span>
                 </label>
-                <input type="text" name="username" id="username" v-model="username" />
+                <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    v-model="username"
+                    autocomplete="username"
+                />
             </div>
 
             <div class="input input-email">
@@ -34,15 +42,24 @@ function doRegister() {}
                     <span>email</span>
                     <span class="auth-error email-error">email is already used</span>
                 </label>
-                <input type="email" name="email" id="email" v-model="email" />
+                <input type="email" name="email" id="email" v-model="email" autocomplete="email" />
             </div>
 
             <div class="input input-password">
                 <label for="password">
                     <span>password</span>
-                    <span class="auth-error password-error auth-error-hidden" v-if="!doPasswordsMatch"></span>
+                    <span
+                        class="auth-error password-error auth-error-hidden"
+                        v-if="!doPasswordsMatch"
+                    ></span>
                 </label>
-                <input type="password" name="password" id="password" v-model="password" />
+                <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    v-model="password"
+                    autocomplete="new-password"
+                />
             </div>
 
             <div class="input input-confirm-password">
@@ -57,6 +74,7 @@ function doRegister() {}
                     name="confirm-password"
                     id="confirm-password"
                     v-model="confirmPassword"
+                    autocomplete="new-password"
                 />
             </div>
 
@@ -71,7 +89,15 @@ function doRegister() {}
             </div>
         </div>
 
-        <button class="signup">Sign Up</button>
+        <button
+            class="signup"
+            data-form-type="register"
+            :disabled="!doPasswordsMatch"
+            @click="doRegister"
+            type="submit"
+        >
+            Sign Up
+        </button>
 
         <div class="footnote">
             <span class="footnote-text">Already have an Account? </span>

@@ -45,7 +45,6 @@
             }
         }
 
-
         /* Tod overwrite the others */
         label:has(.auth-error) + input {
             outline: 2px solid var(--col-error);
@@ -92,6 +91,7 @@
                 background: var(--col-surface);
                 outline: none;
                 width: 100%;
+                border: none;
 
                 overflow: hidden;
                 border-radius: var(--border-radius-s);
@@ -111,14 +111,21 @@
         outline: none;
         transition: background 0.1s;
 
+        border: none;
+
         cursor: pointer;
 
-        &:hover {
+        &:not(:disabled):hover {
             background: var(--col-primary-hover);
         }
 
-        &:active {
+        &:not(:disabled):active {
             background: var(--col-primary-active);
+        }
+
+        &:disabled {
+            background: var(--col-primary-disabled);
+            cursor: not-allowed;
         }
     }
 
@@ -129,8 +136,6 @@
             color: var(--col-accent);
         }
     }
-
-
 }
 
 .auth-warning {

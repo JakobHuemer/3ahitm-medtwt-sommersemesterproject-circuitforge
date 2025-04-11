@@ -15,17 +15,24 @@ function doLogin() {
 </script>
 
 <template>
-    <div class="auth-container login-container full-height">
+    <div class="auth-container login-container full-height" role="form">
         <h1 class="title">Login to CircuitForge</h1>
         <div class="form-section">
             <div class="input input-login">
                 <label for="login">username or email</label>
-                <input type="text" name="login" id="login" v-model="login" />
+                <input
+                    type="text"
+                    name="login"
+                    id="login"
+                    v-model="login"
+                    autocomplete="username email"
+                />
             </div>
 
             <div class="input input-password">
                 <label for="password">password</label>
-                <input type="password" name="password" id="password" v-model="password" />
+                <input type="password" name="password" id="password" v-model="password"
+                       autocomplete="current-password password" />
             </div>
 
             <div class="remember-me">
@@ -35,7 +42,7 @@ function doLogin() {
             </div>
         </div>
 
-        <button class="signup" @click="doLogin">Login</button>
+        <button type="submit" class="signup" @click="doLogin" data-form-type="login">Login</button>
 
         <div class="footnote">
             <span class="footnote-text">Don't have an Account? </span>
