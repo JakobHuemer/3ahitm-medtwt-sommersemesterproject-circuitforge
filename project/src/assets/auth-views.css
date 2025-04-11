@@ -1,5 +1,3 @@
-
-
 .auth-container {
     width: min(90%, 600px);
     margin-block: auto;
@@ -14,7 +12,6 @@
         width: min(90%, 500px);
     }
 
-
     .title {
         font-weight: 600;
         text-align: center;
@@ -28,14 +25,36 @@
     }
 
     .form-section {
-
         display: grid;
         gap: var(--gap-16);
+
+        label {
+            --error-gap: calc(var(--font-size-body) / 2);
+
+            display: flex;
+            gap: var(--error-gap);
+
+            & > *:nth-child(2) {
+                color: var(--col-error);
+
+                &:not(.auth-error-hidden)::before {
+                    color: var(--col-text-primary);
+                    content: '-';
+                    margin-right: var(--error-gap);
+                }
+            }
+        }
+
+
+        /* Tod overwrite the others */
+        label:has(.auth-error) + input {
+            outline: 2px solid var(--col-error);
+        }
 
         .remember-me {
             display: flex;
             place-items: center;
-            gap: var(--gap-4);
+            gap: var(--gap-8);
 
             #remember-me {
                 /*display: none;*/
@@ -48,32 +67,30 @@
                 height: var(--font-size-body);
                 aspect-ratio: 1;
                 background: var(--col-surface);
-                border: 1px solid var(--col-text-secondary);
+                outline: 1px solid var(--col-text-secondary);
                 border-radius: var(--border-radius-s);
             }
 
-            input[type=checkbox]:checked + label.checkbox {
+            input[type='checkbox']:checked + label.checkbox {
                 background: var(--col-primary-hover);
             }
 
-            input[type=checkbox]:focus + label.checkbox {
+            input[type='checkbox']:focus + label.checkbox {
                 /*background: orange;*/
-                border: 1px solid var(--col-accent);
+                outline: 1px solid var(--col-accent);
             }
         }
 
         .input {
             position: relative;
 
-
             --gap-inset: var(--gap-12);
 
-
             input {
-                margin-top: .4rem;
+                margin-top: 0.4rem;
                 padding: var(--gap-inset);
                 background: var(--col-surface);
-                border: none;
+                outline: none;
                 width: 100%;
 
                 overflow: hidden;
@@ -81,25 +98,18 @@
 
                 color: var(--col-text-primary);
             }
-
-            label {
-                margin-left: .2rem;
-            }
-
         }
-
     }
-
 
     button.signup {
         background: var(--col-primary);
         color: var(--col-text-primary);
-        padding: var(--gap-16);
+        padding: var(--gap-12);
         font-size: var(--font-size-card-title);
-        font-weight: 600;
-        border-radius: var(--border-radius);
-        border: none;
-        transition: background .1s;
+        font-weight: 500;
+        border-radius: var(--border-radius-s);
+        outline: none;
+        transition: background 0.1s;
 
         cursor: pointer;
 
@@ -117,7 +127,12 @@
 
         .footnote-link {
             color: var(--col-accent);
-
         }
     }
+
+
+}
+
+.auth-warning {
+    color: var(--col-error);
 }

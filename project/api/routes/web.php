@@ -12,9 +12,10 @@ use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 Route::post("/register", [AuthController::class, 'register'])->name("register");
 Route::post("/login", [AuthController::class, "authenticate"])->name("login");
 
-Route::get("/validlogin", function (Request $request) {
+Route::get("/me", function (Request $request) {
     return $request->user();
 })->middleware("auth:sanctum");
+
 
 Route::get("/test", function (Request $request) {
     return "ALL CAN ACCESS";

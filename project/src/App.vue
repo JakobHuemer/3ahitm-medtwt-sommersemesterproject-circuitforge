@@ -25,9 +25,11 @@ main {
     width: var(--main-width);
     display: block;
     margin: var(--gap-32);
+    margin-inline: auto;
 }
 
-.main-wrapper:has(.full-height), main:has(.full-height) {
+.main-wrapper:has(.full-height),
+main:has(.full-height) {
     min-height: 100svh;
 
     &:is(main) {

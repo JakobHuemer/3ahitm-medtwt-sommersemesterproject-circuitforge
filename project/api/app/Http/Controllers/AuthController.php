@@ -6,11 +6,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use const http\Client\Curl\AUTH_ANY;
 
 class AuthController extends Controller {
 
-    public function register(Request $request): void {
+    public function register(Request $request) {
 
         $request->validate([
             "username" => 'required|min:3',
@@ -25,8 +26,9 @@ class AuthController extends Controller {
 
         Auth::login($user, true);
 
-    }
+        return Auth::user();
 
+    }
 
     public function authenticate(Request $request) {
 
@@ -46,10 +48,11 @@ class AuthController extends Controller {
 
             $request->session()->regenerate();
 
-//            return "SUCCESS\nSUCCESS!!";
+            return Auth::user();
+
         }
 
-//        return "FAIL";
+        throw new HttpException(401, 'Unauthenticated');
 
     }
 
@@ -61,4 +64,5 @@ class AuthController extends Controller {
             'password' => Hash::make($data['password'])
         ]);
     }
+
 }

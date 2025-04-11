@@ -11,30 +11,30 @@ const router = createRouter({
             path: '/',
             name: 'home',
             component: HomeView,
-            alias: '/index.html'
+            alias: '/index.html',
         },
         {
             path: '/post/create',
             name: 'create post',
-            component: CreatePostView
+            component: CreatePostView,
         },
         {
             path: '/login',
             name: 'login',
             component: LoginView,
             meta: {
-                hideNav: true
-            }
+                hideNav: true,
+            },
         },
         {
             path: '/register',
             name: 'register',
             component: RegisterView,
             meta: {
-                hideNav: true
-            }
-        }
-    ]
+                hideNav: true,
+            },
+        },
+    ],
 })
 
 export default router
