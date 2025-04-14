@@ -1,4 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+
+import { ref } from 'vue'
+import { useApi } from '@/store/useApi.ts'
+
+const api = useApi()
+
+</script>
 
 <template>
     <div class="wrapper">
@@ -8,8 +15,15 @@
             <div class="nav-items">
                 <RouterLink to="/posts">Posts</RouterLink>
                 <RouterLink to="/discussions">Discussions</RouterLink>
-                <RouterLink to="/register">Register</RouterLink>
-                <RouterLink to="/login">Login</RouterLink>
+                <template v-if="api.state.isAuthenticated">
+                    <RouterLink to="/me">
+                        {{ api.state.user?.username }}
+                    </RouterLink>
+                </template>
+                <template v-else>
+                    <RouterLink to="/register">Register</RouterLink>
+                    <RouterLink to="/login">Login</RouterLink>
+                </template>
             </div>
         </div>
     </div>

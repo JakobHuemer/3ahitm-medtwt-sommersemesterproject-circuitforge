@@ -16,6 +16,11 @@ const doPasswordsMatch = computed(() => {
 
 function doRegister() {
     console.log('Signup Triggered')
+
+    //TODO: implement error handling before making request
+
+    const result = api.register(username.value, email.value, password.value)
+
 }
 </script>
 

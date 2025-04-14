@@ -8,43 +8,27 @@ export const useApi = defineStore('api', () => {
     const api = axios.create({
         baseURL: import.meta.env.BASE_URL.replace(/frontend.*/g, 'api/public/'),
         withCredentials: true,
-        withXSRFToken: true,
+        withXSRFToken: true
     })
 
     const state = reactive<{
         isAuthenticated: boolean
         user: null | User
         hasSession: boolean
-        isLoading: boolean
     }>({
         isAuthenticated: false,
         user: null,
         hasSession: false,
-        isLoading: false,
     })
 
-    async function createSession() {
-        state.hasSession = false
-        state.isLoading = true
-
-        try {
-            const res = await api.get('/sanctum/csrf-cookie')
-
-            if (res.status == 200) {
-                state.hasSession = true
-            }
-        } catch (e) {
-            console.error('Failed to create sessions')
-        }
-    }
-
+    // interceptor to always have a session if there is none
     api.interceptors.request.use(
         async (request) => {
-            if (request.url == '/sanctum/csrf-cookie') {
+            if ( request.url == '/sanctum/csrf-cookie' ) {
                 return request
             }
 
-            if (!state.hasSession) {
+            if ( !state.hasSession ) {
                 await createSession()
             }
 
@@ -58,27 +42,76 @@ export const useApi = defineStore('api', () => {
                 router.push({ path: '/login' })
             }
             return Promise.reject(error)
-        },
+        }
     )
 
-    async function login(login: string, password: string, rememberMe: boolean) {
+    api.get<User>("/me")
+        .then(r => {
+
+            state.user = r.data
+            state.isAuthenticated = true
+
+        })
+        .catch(e => {
+            console.error('User is not authenticated')
+            state.isAuthenticated = false
+        })
+
+    async function createSession() {
+        state.hasSession = false
+
+        try {
+            const res = await api.get('/sanctum/csrf-cookie')
+
+            if ( res.status == 200 ) {
+                state.hasSession = true
+            }
+        } catch ( e ) {
+            console.error('Failed to create sessions')
+        }
+    }
+
+
+    async function login(login: string, password: string, rememberMe: boolean): Promise<boolean> {
         // TODO: Implement remember me!
 
         try {
             const res = await api.post<User>('/login', {
                 login,
-                password,
+                password
             })
 
             state.user = res.data
+            state.isAuthenticated = true
 
             router.push('/')
-        } catch (e) {
+            return true
+        } catch ( e ) {
             console.error('Failed to login user')
+            state.isAuthenticated = false
+            return false
         }
     }
 
-    async function register(username: string, email: string, password: string) {}
+    async function register(username: string, email: string, password: string): Promise<boolean> {
+        try {
+            const res = await api.post<User>('/register', {
+                username,
+                email,
+                password
+            })
+
+            state.user = res.data
+            state.isAuthenticated = true
+
+            router.push('/')
+            return true
+        } catch ( e ) {
+            console.error('Failed to register user: <' + username + ',' + email + '>')
+            state.isAuthenticated = false
+            return false
+        }
+    }
 
     async function fetch(url: string) {
         // TODO: implement and extend params
@@ -88,6 +121,6 @@ export const useApi = defineStore('api', () => {
         login,
         register,
         fetch,
-        state,
+        state
     }
 })
