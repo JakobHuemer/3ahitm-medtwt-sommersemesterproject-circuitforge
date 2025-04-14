@@ -16,7 +16,7 @@ const api = useApi()
                 <RouterLink to="/posts">Posts</RouterLink>
                 <RouterLink to="/discussions">Discussions</RouterLink>
                 <template v-if="api.state.isAuthenticated">
-                    <RouterLink class="nav-user" to="/me">
+                    <div class="nav-user">
                         <div class="nav-part">
                             <div class="nav-pb">
                                 <img
@@ -32,9 +32,10 @@ const api = useApi()
                         <div class="nav-user-dropdown">
                             <div class="nav-user-dropdown-container">
                                 <button @click="api.logout()">Logout</button>
+                                <button>Preferences</button>
                             </div>
                         </div>
-                    </RouterLink>
+                    </div>
                 </template>
                 <template v-else>
                     <RouterLink to="/register">Register</RouterLink>
@@ -86,18 +87,64 @@ const api = useApi()
     }
 }
 
-.nav-user .nav-part {
-    display: flex;
-    gap: var(--gap-4);
-    align-items: center;
+.nav-user {
+    position: relative;
 
-    .nav-pb {
-        height: calc(var(--font-size-nav-item) - 4px);
+    .nav-part {
+        display: flex;
+        gap: var(--gap-4);
+        align-items: center;
 
-        img {
-            height: 100%;
-            border-radius: 100vw;
+        .nav-pb {
+            height: calc(var(--font-size-nav-item) - 4px);
+
+            img {
+                height: 100%;
+                border-radius: 100vw;
+            }
         }
     }
+
+    &:hover .nav-user-dropdown,
+    .nav-user-dropdown:hover {
+        display: block;
+    }
+}
+
+.nav-user-dropdown {
+    z-index: 10;
+    position: absolute;
+    top: 100%;
+    display: none;
+
+
+    .nav-user-dropdown-container {
+        margin-block-start: .5rem;
+
+        border-radius: var(--border-radius-s);
+        overflow: hidden;
+
+        background: var(--col-content);
+        display: grid;
+
+        button {
+            outline: none;
+            border: 0;
+            color: white;
+            background: inherit;
+            width: 100%;
+            text-align: left;
+            font-family: var(--font-title);
+
+            padding: var(--gap-4) var(--gap-8);
+
+            transition: background .2s;
+
+            &:hover {
+                background: var(--col-surface);
+            }
+        }
+    }
+
 }
 </style>
