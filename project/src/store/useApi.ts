@@ -6,9 +6,10 @@ import type User from '@/types/user'
 
 export const useApi = defineStore('api', () => {
     const api = axios.create({
-        baseURL: import.meta.env.BASE_URL.replace(/frontend.*/g, 'api/public/'),
+        // baseURL: import.meta.env.BASE_URL.replace(/frontend.*/g, 'api/public/'),
+        baseURL: "http://localhost:8080/2425-sommerprojekt-3ahitm-JakobHuemer/project/api/public/",
         withCredentials: true,
-        withXSRFToken: true
+        withXSRFToken: true,
     })
 
     const state = reactive<{
@@ -24,11 +25,11 @@ export const useApi = defineStore('api', () => {
     // interceptor to always have a session if there is none
     api.interceptors.request.use(
         async (request) => {
-            if ( request.url == '/sanctum/csrf-cookie' ) {
+            if (request.url == '/sanctum/csrf-cookie') {
                 return request
             }
 
-            if ( !state.hasSession ) {
+            if (!state.hasSession) {
                 await createSession()
             }
 
@@ -42,17 +43,15 @@ export const useApi = defineStore('api', () => {
                 router.push({ path: '/login' })
             }
             return Promise.reject(error)
-        }
+        },
     )
 
-    api.get<User>("/me")
-        .then(r => {
-
+    api.get<User>('/me')
+        .then((r) => {
             state.user = r.data
             state.isAuthenticated = true
-
         })
-        .catch(e => {
+        .catch((e) => {
             console.error('User is not authenticated')
             state.isAuthenticated = false
         })
@@ -63,14 +62,13 @@ export const useApi = defineStore('api', () => {
         try {
             const res = await api.get('/sanctum/csrf-cookie')
 
-            if ( res.status == 200 ) {
+            if (res.status == 200) {
                 state.hasSession = true
             }
-        } catch ( e ) {
+        } catch (e) {
             console.error('Failed to create sessions')
         }
     }
-
 
     async function login(login: string, password: string, rememberMe: boolean): Promise<boolean> {
         // TODO: Implement remember me!
@@ -78,7 +76,7 @@ export const useApi = defineStore('api', () => {
         try {
             const res = await api.post<User>('/login', {
                 login,
-                password
+                password,
             })
 
             state.user = res.data
@@ -86,7 +84,7 @@ export const useApi = defineStore('api', () => {
 
             router.push('/')
             return true
-        } catch ( e ) {
+        } catch (e) {
             console.error('Failed to login user')
             state.isAuthenticated = false
             return false
@@ -98,7 +96,7 @@ export const useApi = defineStore('api', () => {
             const res = await api.post<User>('/register', {
                 username,
                 email,
-                password
+                password,
             })
 
             state.user = res.data
@@ -106,11 +104,26 @@ export const useApi = defineStore('api', () => {
 
             router.push('/')
             return true
-        } catch ( e ) {
+        } catch (e) {
             console.error('Failed to register user: <' + username + ',' + email + '>')
             state.isAuthenticated = false
             return false
         }
+    }
+
+    function logout() {
+
+        try {
+
+            api.post('/logout')
+
+            state.isAuthenticated = false
+            state.user = null
+
+        } catch ( e ) {
+            console.error("Failed to logout user:", state.user)
+        }
+
     }
 
     async function fetch(url: string) {
@@ -119,8 +132,9 @@ export const useApi = defineStore('api', () => {
 
     return {
         login,
+        logout,
         register,
         fetch,
-        state
+        state,
     }
 })

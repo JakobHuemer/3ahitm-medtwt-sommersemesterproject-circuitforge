@@ -20,7 +20,6 @@ function doRegister() {
     //TODO: implement error handling before making request
 
     const result = api.register(username.value, email.value, password.value)
-
 }
 </script>
 
@@ -83,9 +82,9 @@ function doRegister() {
                 />
             </div>
 
-<!--            <div class="auth-warning passwords-match-warning" v-if="!doPasswordsMatch">-->
-<!--                <span>passwords do not match!</span>-->
-<!--            </div>-->
+            <!--            <div class="auth-warning passwords-match-warning" v-if="!doPasswordsMatch">-->
+            <!--                <span>passwords do not match!</span>-->
+            <!--            </div>-->
 
             <div class="remember-me">
                 <input type="checkbox" name="remember-me" id="remember-me" v-model="rememberMe" />

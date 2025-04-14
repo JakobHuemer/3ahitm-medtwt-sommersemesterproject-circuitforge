@@ -11,6 +11,9 @@ use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 
 Route::post("/register", [AuthController::class, 'register'])->name("register");
 Route::post("/login", [AuthController::class, "authenticate"])->name("login");
+Route::post("/logout", [AuthController::class, 'logout'])->name("logout");
+
+Route::get("/check/username");
 
 Route::get("/me", function (Request $request) {
     return $request->user();

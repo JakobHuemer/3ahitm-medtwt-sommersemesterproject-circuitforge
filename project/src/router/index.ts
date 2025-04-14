@@ -3,6 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import CreatePostView from '@/views/CreatePostView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
+import UserView from '@/views/UserView.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,11 @@ const router = createRouter({
             meta: {
                 hideNav: true,
             },
+        },
+        {
+            path: '/me',
+            name: 'user',
+            component: UserView,
         },
     ],
 })

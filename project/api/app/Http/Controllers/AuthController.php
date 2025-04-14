@@ -57,12 +57,23 @@ class AuthController extends Controller {
     }
 
 
+    public function logout(Request $request) {
+        Auth::logout();
+    }
+
+
     public function create(array $data) {
         return new User([
             'username' => $data['username'],
             'email' => $data["email"],
             'password' => Hash::make($data['password'])
         ]);
+    }
+
+    public function check_username(Request $request) {
+
+        // validate get params: username: required
+
     }
 
 }
