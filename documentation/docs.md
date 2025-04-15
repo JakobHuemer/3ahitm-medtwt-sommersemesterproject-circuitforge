@@ -25,6 +25,8 @@ Figma: https://www.figma.com/design/My7Y1fsFgrsLZDAbdR15ZG/CircuitForge?node-id=
 Farben/Fonts: [Design.md](sysspec/frontend/design.md)
 
 
+![](images/sprint1.png)
+
 ### Sprint 1: Projektinitialisierung
 
 03.04.2025
@@ -45,8 +47,24 @@ Farben/Fonts: [Design.md](sysspec/frontend/design.md)
 - text Editor auswählen und probieren
 - Laravel projekt
 
+
+![](images/sprint2.png)
+
 ### Sprint 2: Login Management
 
 [TipTap Editor Spec](sysspec/tiptap.md)
 
-In Progress...
+
+**Login System**
+
+- Registrierung
+  - Form Validierung
+  - username
+  - email
+  - password
+  - confirm password
+
+- Anmeldung
+  - login: username oder email
+  - password
+
