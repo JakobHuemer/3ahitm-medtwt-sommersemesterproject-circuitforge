@@ -6,27 +6,32 @@ import { watchDebounced } from '@vueuse/core'
 const api = useApi()
 
 const username = ref<string>('')
-const usernameError = ref<string>('')
 
 const email = ref<string>('')
-const emailError = ref<string>('')
 
 const password = ref<string>('')
-const passwordError = ref<string>('')
 
 const confirmPassword = ref<string>('')
-const confirmPasswordError = ref<string>('')
 
 const rememberMe = ref<boolean>(false)
 
-const errors = reactive({
+type errorsType = {
+    username: string,
+    email: string,
+    password: string
+}
+
+const noErrors: errorsType = {
     username: '',
     email: '',
     password: ''
-})
+}
 
-const doPasswordsMatch = computed(() => {
+const errors = reactive<errorsType>(noErrors)
+
+const doPasswordsMatch = computed<boolean>(() => {
     return password.value == confirmPassword.value
+        && password.value.length > 0
 })
 
 watchDebounced(
@@ -40,9 +45,27 @@ watchDebounced(
             email: email.value,
             password: password.value
         })
-            .then()
+            .then(() => {
+                let t: keyof errorsType
+                for ( t in errors ) {
+                    errors[t] = ''
+                }
+            })
             .catch((e) => {
                 console.log(JSON.stringify(e.response.data.errors, null, 2))
+                const errorsResponse = e.response.data.errors ?? {}
+
+                let t: keyof errorsType
+
+                for ( t in errors ) {
+
+                    if ( errorsResponse[t] ) {
+                        errors[t] = errorsResponse[t][0]
+                    } else {
+                        errors[t] = ''
+                    }
+                }
+
             })
 
     },
@@ -123,10 +146,6 @@ function doRegister() {
                 />
             </div>
 
-            <!--            <div class="auth-warning passwords-match-warning" v-if="!doPasswordsMatch">-->
-            <!--                <span>passwords do not match!</span>-->
-            <!--            </div>-->
-
             <div class="remember-me">
                 <input type="checkbox" name="remember-me" id="remember-me" v-model="rememberMe" />
                 <label for="remember-me" class="checkbox"></label>
@@ -137,7 +156,7 @@ function doRegister() {
         <button
             class="signup"
             data-form-type="register"
-            :disabled="!doPasswordsMatch"
+            :disabled="!doPasswordsMatch || Object.values(errors).join('') !== ''"
             @click="doRegister"
             type="submit"
         >
