@@ -5,12 +5,15 @@ import router from '@/router'
 import type User from '@/types/user'
 
 export const useApi = defineStore('api', () => {
-    const api = shallowRef(axios.create({
-        // baseURL: import.meta.env.BASE_URL.replace(/frontend.*/g, 'api/public/'),
-        baseURL: 'http://localhost:8080/2425-sommerprojekt-3ahitm-JakobHuemer/project/api/public/',
-        withCredentials: true,
-        withXSRFToken: true,
-    }))
+    const api = shallowRef(
+        axios.create({
+            // baseURL: import.meta.env.BASE_URL.replace(/frontend.*/g, 'api/public/'),
+            baseURL:
+                'http://localhost:8080/2425-sommerprojekt-3ahitm-JakobHuemer/project/api/public/',
+            withCredentials: true,
+            withXSRFToken: true,
+        }),
+    )
 
     const state = reactive<{
         isAuthenticated: boolean
@@ -46,13 +49,14 @@ export const useApi = defineStore('api', () => {
         },
     )
 
-    api.value.get<User>('/me')
+    api.value
+        .get<User>('/me')
         .then((r) => {
             state.user = r.data
             state.isAuthenticated = true
         })
         .catch((e) => {
-            console.error('User is not authenticated')
+            console.info('User is not authenticated!')
             state.isAuthenticated = false
         })
 

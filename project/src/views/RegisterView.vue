@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, shallowRef, watch } from 'vue'
 import { useApi } from '@/store/useApi.ts'
 import { watchDebounced } from '@vueuse/core'
 
@@ -15,70 +15,83 @@ const confirmPassword = ref<string>('')
 
 const rememberMe = ref<boolean>(false)
 
-type errorsType = {
-    username: string,
-    email: string,
+const checked = ref<boolean>(false)
+
+const touchedFields = shallowRef<Set<string>>(new Set([]))
+
+type ErrorsType = {
+    username: string
+    email: string
     password: string
 }
 
-const noErrors: errorsType = {
+const noErrors: ErrorsType = {
     username: '',
     email: '',
-    password: ''
+    password: '',
 }
 
-const errors = reactive<errorsType>(noErrors)
+const displayErrors = reactive<ErrorsType>(Object.create(noErrors))
+const allErrors = reactive<ErrorsType>(Object.create(noErrors))
 
 const doPasswordsMatch = computed<boolean>(() => {
     return password.value == confirmPassword.value
-        && password.value.length > 0
 })
 
 watchDebounced(
-    [ username, email, password ],
-    async () => {
-
+    [username, email, password],
+    async (value, oldValue, onCleanup) => {
         console.log(api)
-
-        api.api.post('/dry-register', {
-            username: username.value,
-            email: email.value,
-            password: password.value
-        })
+        console.log(value)
+        console.log(oldValue)
+        console.log(onCleanup)
+        api.api
+            .post('/dry-register', {
+                username: username.value,
+                email: email.value,
+                password: password.value,
+            })
             .then(() => {
-                let t: keyof errorsType
-                for ( t in errors ) {
-                    errors[t] = ''
+                let t: keyof ErrorsType
+                for (t in displayErrors) {
+                    displayErrors[t] = ''
                 }
             })
             .catch((e) => {
                 console.log(JSON.stringify(e.response.data.errors, null, 2))
                 const errorsResponse = e.response.data.errors ?? {}
 
-                let t: keyof errorsType
+                let t: keyof ErrorsType
 
-                for ( t in errors ) {
-
-                    if ( errorsResponse[t] ) {
-                        errors[t] = errorsResponse[t][0]
+                for (t in displayErrors) {
+                    if (errorsResponse[t]) {
+                        allErrors[t] = errorsResponse[t][0]
+                        if (touchedFields.value.has(t)) {
+                            console.log('HAS: ', t)
+                            displayErrors[t] = errorsResponse[t][0]
+                        }
                     } else {
-                        errors[t] = ''
+                        displayErrors[t] = ''
                     }
                 }
-
             })
+            .finally(() => {
+                checked.value = true
 
+                console.log('TOUCHED:', touchedFields.value)
+                console.log('ALL:', JSON.stringify(allErrors, null, 2))
+                console.log('DISPLAY:', JSON.stringify(displayErrors, null, 2))
+                console.log('----------------')
+            })
     },
     {
         debounce: 500,
-        maxWait: 10_000_000
-    }
+        maxWait: 10_000_000,
+    },
 )
 
 function doRegister() {
-    console.log('Signup Triggered')
-
-    //TODO: implement error handling before making request
+    console.debug('Signup Triggered')
 
     const result = api.register(username.value, email.value, password.value)
 }
@@ -91,11 +104,14 @@ function doRegister() {
             <div class="input input-username">
                 <label for="username">
                     <span>username</span>
-                    <span class="auth-error username-error" v-if="!!errors.username">{{
-                            errors.username
-                        }}</span>
+                    <span
+                        class="auth-error username-error"
+                        v-if="!!displayErrors.username && touchedFields.has('username')"
+                        >{{ displayErrors.username }}</span
+                    >
                 </label>
                 <input
+                    @input="touchedFields.add('username')"
                     type="text"
                     name="username"
                     id="username"
@@ -107,21 +123,33 @@ function doRegister() {
             <div class="input input-email">
                 <label for="email">
                     <span>email</span>
-                    <span class="auth-error email-error" v-if="!!errors.email">{{
-                            errors.email
-                        }}</span>
+                    <span
+                        class="auth-error email-error"
+                        v-if="!!displayErrors.email && touchedFields.has('email')"
+                        >{{ displayErrors.email }}</span
+                    >
                 </label>
-                <input type="email" name="email" id="email" v-model="email" autocomplete="email" />
+                <input
+                    @input="touchedFields.add('email')"
+                    type="email"
+                    name="email"
+                    id="email"
+                    v-model="email"
+                    autocomplete="email"
+                />
             </div>
 
             <div class="input input-password">
                 <label for="password">
                     <span>password</span>
-                    <span class="auth-error password-error" v-if="!!errors.password">{{
-                            errors.password
-                        }}</span>
+                    <span
+                        class="auth-error password-error"
+                        v-if="!!displayErrors.password && touchedFields.has('password')"
+                        >{{ displayErrors.password }}</span
+                    >
                 </label>
                 <input
+                    @input="touchedFields.add('password')"
                     type="password"
                     name="password"
                     id="password"
@@ -133,11 +161,14 @@ function doRegister() {
             <div class="input input-confirm-password">
                 <label for="confirm-password">
                     <span>confirm password</span>
-                    <span class="auth-error confirm-password-error" v-if="!doPasswordsMatch"
-                    >passwords do not match</span
+                    <span
+                        class="auth-error confirm-password-error"
+                        v-if="!doPasswordsMatch && touchedFields.has('confirm-password')"
+                        >passwords do not match</span
                     >
                 </label>
                 <input
+                    @input="touchedFields.add('confirm-password')"
                     type="password"
                     name="confirm-password"
                     id="confirm-password"
@@ -156,7 +187,9 @@ function doRegister() {
         <button
             class="signup"
             data-form-type="register"
-            :disabled="!doPasswordsMatch || Object.values(errors).join('') !== ''"
+            :disabled="
+                !doPasswordsMatch || Object.values(displayErrors).join('') !== '' || !checked
+            "
             @click="doRegister"
             type="submit"
         >
