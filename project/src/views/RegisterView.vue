@@ -1,18 +1,56 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { useApi } from '@/store/useApi.ts'
+import { watchDebounced } from '@vueuse/core'
 
 const api = useApi()
 
 const username = ref<string>('')
+const usernameError = ref<string>('')
+
 const email = ref<string>('')
+const emailError = ref<string>('')
+
 const password = ref<string>('')
+const passwordError = ref<string>('')
+
 const confirmPassword = ref<string>('')
+const confirmPasswordError = ref<string>('')
+
 const rememberMe = ref<boolean>(false)
+
+const errors = reactive({
+    username: '',
+    email: '',
+    password: ''
+})
 
 const doPasswordsMatch = computed(() => {
     return password.value == confirmPassword.value
 })
+
+watchDebounced(
+    [ username, email, password ],
+    async () => {
+
+        console.log(api)
+
+        api.api.post('/dry-register', {
+            username: username.value,
+            email: email.value,
+            password: password.value
+        })
+            .then()
+            .catch((e) => {
+                console.log(JSON.stringify(e.response.data.errors, null, 2))
+            })
+
+    },
+    {
+        debounce: 500,
+        maxWait: 10_000_000
+    }
+)
 
 function doRegister() {
     console.log('Signup Triggered')
@@ -30,7 +68,9 @@ function doRegister() {
             <div class="input input-username">
                 <label for="username">
                     <span>username</span>
-                    <span class="auth-error username-error">username already exists</span>
+                    <span class="auth-error username-error" v-if="!!errors.username">{{
+                            errors.username
+                        }}</span>
                 </label>
                 <input
                     type="text"
@@ -44,7 +84,9 @@ function doRegister() {
             <div class="input input-email">
                 <label for="email">
                     <span>email</span>
-                    <span class="auth-error email-error">email is already used</span>
+                    <span class="auth-error email-error" v-if="!!errors.email">{{
+                            errors.email
+                        }}</span>
                 </label>
                 <input type="email" name="email" id="email" v-model="email" autocomplete="email" />
             </div>
@@ -52,10 +94,9 @@ function doRegister() {
             <div class="input input-password">
                 <label for="password">
                     <span>password</span>
-                    <span
-                        class="auth-error password-error auth-error-hidden"
-                        v-if="!doPasswordsMatch"
-                    ></span>
+                    <span class="auth-error password-error" v-if="!!errors.password">{{
+                            errors.password
+                        }}</span>
                 </label>
                 <input
                     type="password"
@@ -70,7 +111,7 @@ function doRegister() {
                 <label for="confirm-password">
                     <span>confirm password</span>
                     <span class="auth-error confirm-password-error" v-if="!doPasswordsMatch"
-                        >passwords do not match</span
+                    >passwords do not match</span
                     >
                 </label>
                 <input

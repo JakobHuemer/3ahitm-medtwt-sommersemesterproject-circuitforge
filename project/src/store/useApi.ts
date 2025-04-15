@@ -5,12 +5,12 @@ import router from '@/router'
 import type User from '@/types/user'
 
 export const useApi = defineStore('api', () => {
-    const api = axios.create({
+    const api = shallowRef(axios.create({
         // baseURL: import.meta.env.BASE_URL.replace(/frontend.*/g, 'api/public/'),
-        baseURL: "http://localhost:8080/2425-sommerprojekt-3ahitm-JakobHuemer/project/api/public/",
+        baseURL: 'http://localhost:8080/2425-sommerprojekt-3ahitm-JakobHuemer/project/api/public/',
         withCredentials: true,
         withXSRFToken: true,
-    })
+    }))
 
     const state = reactive<{
         isAuthenticated: boolean
@@ -23,7 +23,7 @@ export const useApi = defineStore('api', () => {
     })
 
     // interceptor to always have a session if there is none
-    api.interceptors.request.use(
+    api.value.interceptors.request.use(
         async (request) => {
             if (request.url == '/sanctum/csrf-cookie') {
                 return request
@@ -46,7 +46,7 @@ export const useApi = defineStore('api', () => {
         },
     )
 
-    api.get<User>('/me')
+    api.value.get<User>('/me')
         .then((r) => {
             state.user = r.data
             state.isAuthenticated = true
@@ -60,7 +60,7 @@ export const useApi = defineStore('api', () => {
         state.hasSession = false
 
         try {
-            const res = await api.get('/sanctum/csrf-cookie')
+            const res = await api.value.get('/sanctum/csrf-cookie')
 
             if (res.status == 200) {
                 state.hasSession = true
@@ -74,7 +74,7 @@ export const useApi = defineStore('api', () => {
         // TODO: Implement remember me!
 
         try {
-            const res = await api.post<User>('/login', {
+            const res = await api.value.post<User>('/login', {
                 login,
                 password,
             })
@@ -93,7 +93,7 @@ export const useApi = defineStore('api', () => {
 
     async function register(username: string, email: string, password: string): Promise<boolean> {
         try {
-            const res = await api.post<User>('/register', {
+            const res = await api.value.post<User>('/register', {
                 username,
                 email,
                 password,
@@ -112,29 +112,23 @@ export const useApi = defineStore('api', () => {
     }
 
     function logout() {
-
         try {
-
-            api.post('/logout')
+            api.value.post('/logout')
 
             state.isAuthenticated = false
             state.user = null
-
-        } catch ( e ) {
-            console.error("Failed to logout user:", state.user)
+        } catch (e) {
+            console.error('Failed to logout user:', state.user)
         }
-
     }
 
-    async function fetch(url: string) {
-        // TODO: implement and extend params
-    }
+    // methods
 
     return {
         login,
         logout,
         register,
-        fetch,
+        api,
         state,
     }
 })

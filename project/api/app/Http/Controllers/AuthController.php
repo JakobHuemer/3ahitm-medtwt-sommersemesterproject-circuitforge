@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,16 +12,15 @@ use const http\Client\Curl\AUTH_ANY;
 
 class AuthController extends Controller {
 
-    public function register(Request $request) {
+    public function register(StoreUserRequest $request) {
 
-        $request->validate([
-            "username" => 'required|min:3',
-            'email' => 'required|email',
-            'password' => 'required|min:3',
+
+        $data = $request->validated();
+        $user = new User([
+            'username' => $data['username'],
+            'email' => $data["email"],
+            'password' => Hash::make($data['password'])
         ]);
-
-        $data = $request->all();
-        $user = $this->create($data);
 
         $user->save();
 
@@ -46,10 +46,7 @@ class AuthController extends Controller {
         if (Auth::attempt(["username" => $login, "password" => $password]) ||
             Auth::attempt(["email" => $login, "password" => $password])) {
 
-            $request->session()->regenerate();
-
             return Auth::user();
-
         }
 
         throw new HttpException(401, 'Unauthenticated');
@@ -57,7 +54,7 @@ class AuthController extends Controller {
     }
 
 
-    public function logout(Request $request) {
+    public function logout() {
         Auth::logout();
     }
 
@@ -70,9 +67,9 @@ class AuthController extends Controller {
         ]);
     }
 
-    public function check_username(Request $request) {
+    public function dry_register(StoreUserRequest $request) {
 
-        // validate get params: username: required
+        
 
     }
 

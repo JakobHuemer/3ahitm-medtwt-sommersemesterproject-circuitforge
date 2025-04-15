@@ -117,9 +117,8 @@ const api = useApi()
     top: 100%;
     display: none;
 
-
     .nav-user-dropdown-container {
-        margin-block-start: .5rem;
+        margin-block-start: 0.5rem;
 
         border-radius: var(--border-radius-s);
         overflow: hidden;
@@ -138,13 +137,12 @@ const api = useApi()
 
             padding: var(--gap-4) var(--gap-8);
 
-            transition: background .2s;
+            transition: background 0.2s;
 
             &:hover {
                 background: var(--col-surface);
             }
         }
     }
-
 }
 </style>
