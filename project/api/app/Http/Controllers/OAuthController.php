@@ -11,18 +11,18 @@ use Laravel\Socialite\Facades\Socialite;
 
 class OAuthController extends Controller {
 
+    // GitHub
     public function githubRedirect() {
         return Socialite::driver("github")->redirect();
     }
 
     public function githubAuth() {
-
         $githubUser = Socialite::driver("github")->user();
 
         $this->loginWithProvider(OAuthProviderType::GITHUB, $githubUser);
-
     }
 
+    // Google
     public function googleRedirect() {
         return Socialite::driver("google")->redirect();
     }
@@ -31,6 +31,18 @@ class OAuthController extends Controller {
         $googleUser = Socialite::driver("google")->stateless()->user();
 
         $this->loginWithProvider(OAuthProviderType::GOOGLE, $googleUser);
+    }
+
+
+    // Discord
+    public function discordRedirect() {
+        return Socialite::driver("discord")->redirect();
+    }
+
+    public function discordAuth() {
+        $discordUser = Socialite::driver("discord")->stateless()->user();
+
+        $this->loginWithProvider(OAuthProviderType::DISCORD, $discordUser);
     }
 
 
