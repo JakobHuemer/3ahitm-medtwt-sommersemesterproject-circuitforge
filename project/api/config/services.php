@@ -38,19 +38,19 @@ return [
     'github' => [
         'client_id' => env('GITHUB_CLIENT_ID'),
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
-        'redirect' => 'http://localhost:8080/2425-sommerprojekt-3ahitm-JakobHuemer/project/api/public/auth/github/callback',
+        'redirect' => 'http://localhost:8080' . env("API_URL") . 'auth/github/callback',
     ],
 
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect' => 'http://localhost:8080/2425-sommerprojekt-3ahitm-JakobHuemer/project/api/public/auth/google/callback',
+        'redirect' => 'http://localhost:8080' . env("API_URL") . 'auth/google/callback',
     ],
 
     'discord' => [
         'client_id' => env('DISCORD_CLIENT_ID'),
         'client_secret' => env('DISCORD_CLIENT_SECRET'),
-        'redirect' => 'http://localhost:8080/2425-sommerprojekt-3ahitm-JakobHuemer/project/api/public/auth/discord/callback',
+        'redirect' => 'http://localhost:8080' . env("API_URL") . 'auth/discord/callback',
 
         // optional
         'allow_gif_avatars' => (bool)env('DISCORD_AVATAR_GIF', true),

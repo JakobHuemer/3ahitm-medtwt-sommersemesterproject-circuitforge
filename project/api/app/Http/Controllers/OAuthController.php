@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Contracts\User as SUser;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\InvalidStateException;
 
 class OAuthController extends Controller {
 
@@ -17,9 +18,7 @@ class OAuthController extends Controller {
     }
 
     public function githubAuth() {
-        $githubUser = Socialite::driver("github")->user();
-
-        $this->loginWithProvider(OAuthProviderType::GITHUB, $githubUser);
+        $this->loginWithProvider(OAuthProviderType::GITHUB);
     }
 
     // Google
@@ -28,9 +27,7 @@ class OAuthController extends Controller {
     }
 
     public function googleAuth() {
-        $googleUser = Socialite::driver("google")->stateless()->user();
-
-        $this->loginWithProvider(OAuthProviderType::GOOGLE, $googleUser);
+        $this->loginWithProvider(OAuthProviderType::GOOGLE);
     }
 
 
@@ -40,13 +37,17 @@ class OAuthController extends Controller {
     }
 
     public function discordAuth() {
-        $discordUser = Socialite::driver("discord")->stateless()->user();
-
-        $this->loginWithProvider(OAuthProviderType::DISCORD, $discordUser);
+        $this->loginWithProvider(OAuthProviderType::DISCORD);
     }
 
 
-    private function loginWithProvider(OAuthProviderType $provider, SUser $oauth_user) {
+    private function loginWithProvider(OAuthProviderType $provider) {
+
+        try {
+            $oauth_user = Socialite::driver($provider->value)->stateless()->user();
+        } catch (InvalidStateException $exception) {
+            return;
+        }
 
         // check if user already exists
         $platformUser = User::where("email", $oauth_user->getEmail())->first();
