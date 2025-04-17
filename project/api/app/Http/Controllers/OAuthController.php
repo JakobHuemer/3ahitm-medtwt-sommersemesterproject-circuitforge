@@ -23,6 +23,16 @@ class OAuthController extends Controller {
 
     }
 
+    public function googleRedirect() {
+        return Socialite::driver("google")->redirect();
+    }
+
+    public function googleAuth() {
+        $googleUser = Socialite::driver("google")->stateless()->user();
+
+        $this->loginWithProvider(OAuthProviderType::GOOGLE, $googleUser);
+    }
+
 
     private function loginWithProvider(OAuthProviderType $provider, SUser $oauth_user) {
 
@@ -33,7 +43,8 @@ class OAuthController extends Controller {
 
             $platformUser = new User([
                 "email" => $oauth_user->getEmail(),
-                "name" => $oauth_user->getNickname(),
+                "name" => $oauth_user->getNickname() ?? $oauth_user->getName(),
+                "avatar" => $oauth_user->getAvatar(),
             ]);
 
             $platformUser->save();
@@ -46,6 +57,14 @@ class OAuthController extends Controller {
             "refresh_token" => $oauth_user->refreshToken,
             "provider" => $provider,
         ]);
+
+        echo "<pre>";
+        echo "NICK: " . $oauth_user->getNickname();
+        echo "\n";
+        echo "NAME: " . $oauth_user->getName();
+        echo "\n";
+        echo "AVATAR: " . $oauth_user->getAvatar();
+        echo "</pre>";
 
         $oauth_provider->save();
         $platformUser->markEmailAsVerified();

@@ -34,3 +34,7 @@ Route::get("/test", function (Request $request) {
 Route::get("/auth/github/redirect", [OAuthController::class, "githubRedirect"]);
 
 Route::get("/auth/github/callback", [OAuthController::class, "githubAuth"]);
+
+Route::get("/auth/google/redirect", [OAuthController::class, "googleRedirect"]);
+
+Route::get("/auth/google/callback", [OAuthController::class, "googleAuth"]);
