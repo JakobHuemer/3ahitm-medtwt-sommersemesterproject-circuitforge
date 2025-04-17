@@ -10,7 +10,9 @@
         "jacobfitzp/laravel-tiptap-validation": "^1.1",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.19",
         "laravel/tinker": "^2.10.1",
+        "socialiteproviders/discord": "^4.2",
         "symfony/html-sanitizer": "^7.2",
         "ueberdosis/tiptap-php": "^1.4"
     },
