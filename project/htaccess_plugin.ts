@@ -11,7 +11,7 @@ export function generateHtaccessPlugin(): Plugin {
                 const projectPath = process.cwd()
                 const htdocsIndex = projectPath.split(path.sep).findIndex(segment => segment === 'htdocs')
 
-                if (htdocsIndex === -1) {
+                if ( htdocsIndex === -1 ) {
                     throw new Error('Project must be located in an htdocs directory')
                 }
 
@@ -22,13 +22,18 @@ export function generateHtaccessPlugin(): Plugin {
 
             // First .htaccess for frontend (HTML)
             const frontendHtaccessPath = path.resolve(distDir, '.htaccess')
-            const frontendHtaccessContent = `FallbackResource ${baseUrl}index.html`
+            const frontendHtaccessContent = `FallbackResource ${ baseUrl }index.html`
             fs.writeFileSync(frontendHtaccessPath, frontendHtaccessContent)
 
             // Second .htaccess for API (PHP)
             const apiHtaccessPath = path.resolve(distDir, '..', 'api', '.htaccess')
             const apiBaseUrl = baseUrl.replace('/frontend/', '/api/')
-            const apiHtaccessContent = `FallbackResource ${apiBaseUrl}public/index.php`
+            const apiHtaccessContent = `FallbackResource ${ apiBaseUrl }public/index.php`
+
+            // .env.generated file in api/ dir
+            const envPath = path.resolve(distDir, '..', 'api', '.env.generated')
+            const envContent = `FRONTEND_URL=${ baseUrl }\nAPI_URL=${ apiBaseUrl }public/`
+            fs.writeFileSync(envPath, envContent)
 
             // Ensure the directory exists before writing
             fs.mkdirSync(path.dirname(apiHtaccessPath), { recursive: true })
