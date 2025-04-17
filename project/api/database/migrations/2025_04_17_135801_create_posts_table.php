@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreign("id")
                 ->references("id")
                 ->on("entities")
-                ->onUpdate("cascade")
-                ->onDelete("cascade");
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
 
             $table->string("title", 64);
             $table->text("content");

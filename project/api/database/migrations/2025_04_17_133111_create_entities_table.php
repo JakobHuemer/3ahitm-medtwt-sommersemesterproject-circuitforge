@@ -4,16 +4,16 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
+    public function up(): void {
         Schema::create('entities', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('author_id');
+            $table
+                ->bigInteger('author_id')
+                ->nullable();
 
             $table->enum("entity_type", ["post", "discussion", "comment"]);
 
@@ -22,16 +22,15 @@ return new class extends Migration
             $table->foreign('author_id')
                 ->references('id')
                 ->on('users')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
-    {
+    public function down(): void {
         Schema::dropIfExists('entities');
     }
 };
