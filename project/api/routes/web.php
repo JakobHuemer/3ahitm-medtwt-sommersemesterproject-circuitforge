@@ -31,6 +31,6 @@ Route::get("/test", function (Request $request) {
 
 // Socialite Routes
 
-Route::get("/auth/github/redirect", [OAuthController::class, "github_redirect"]);
+Route::get("/auth/github/redirect", [OAuthController::class, "githubRedirect"]);
 
-Route::get("/auth/github/callback", [OAuthController::class, "github_auth"]);
+Route::get("/auth/github/callback", [OAuthController::class, "githubAuth"]);
