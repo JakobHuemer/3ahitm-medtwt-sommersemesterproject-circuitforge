@@ -16,6 +16,11 @@ class Post extends Entity
     ];
 
 
+    protected $hidden = [
+        "entity",
+    ];
+
+
     protected $appends = [
         "author_id",
     ];
