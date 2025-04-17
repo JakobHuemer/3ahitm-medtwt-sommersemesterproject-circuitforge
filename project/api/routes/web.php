@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use JacobFitzp\LaravelTiptapValidation\Facades\TiptapValidation;
+use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 
@@ -25,3 +27,10 @@ Route::get("/me", function (Request $request) {
 Route::get("/test", function (Request $request) {
     return "ALL CAN ACCESS";
 });
+
+
+// Socialite Routes
+
+Route::get("/auth/github/redirect", [OAuthController::class, "github_redirect"]);
+
+Route::get("/auth/github/callback", [OAuthController::class, "github_auth"]);
