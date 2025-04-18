@@ -39,18 +39,21 @@ return [
         'client_id' => env('GITHUB_CLIENT_ID'),
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
         'redirect' => 'http://localhost:8080' . env("API_URL") . 'auth/github/callback',
+        'redirect_add' => 'http://localhost:8080' . env("API_URL") . 'auth/github/callback/add',
     ],
 
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => 'http://localhost:8080' . env("API_URL") . 'auth/google/callback',
+        'redirect_add' => 'http://localhost:8080' . env("API_URL") . 'auth-add/google/callback',
     ],
 
     'discord' => [
         'client_id' => env('DISCORD_CLIENT_ID'),
         'client_secret' => env('DISCORD_CLIENT_SECRET'),
         'redirect' => 'http://localhost:8080' . env("API_URL") . 'auth/discord/callback',
+        'redirect_add' => 'http://localhost:8080' . env("API_URL") . 'auth-add/discord/callback',
 
         // optional
         'allow_gif_avatars' => (bool)env('DISCORD_AVATAR_GIF', true),

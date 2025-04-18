@@ -5,26 +5,24 @@ namespace App\Http\Controllers;
 use App\Enums\OAuthProviderType;
 use App\Models\OAuthProvider;
 use App\Models\User;
-use Error;
-use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
-use Laravel\Socialite\Two\InvalidStateException;
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class OAuthController extends Controller {
 
 
     public function oauthRedirectHandler(OAuthProviderType $providerType) {
-        return Socialite::driver($providerType->value)->redirect();
+        return Socialite::driver($providerType->value)
+            ->redirect();
     }
 
     public function oauthCallbackHandler(OAuthProviderType $providerType): void {
 
-        // TODO: handle auth errors
         try {
             $oauth_user = Socialite::driver($providerType->value)->stateless()->user();
-        } catch (InvalidStateException $exception) {
+        } catch (\Exception $exception) {
+            // TODO: better error handling
             echo "MY INVALID STATE EXCEPTION WAS THROWN";
         }
 
@@ -81,7 +79,67 @@ class OAuthController extends Controller {
 
 
     public function addOauthRedirectHandler(OAuthProviderType $providerType) {
-        return Socialite::driver($providerType->value)->redirect();
+        return Socialite::driver($providerType->value)
+            ->redirectUrl(config("services." . $providerType->value . ".redirect_add"))
+            ->redirect();
+    }
+
+    public function addOAuthCallbackHandler(OAuthProviderType $providerType) {
+        try {
+            $oauthUser = Socialite::driver($providerType->value)
+                ->redirectUrl(config("services." . $providerType->value . ".redirect_add"))
+                ->user();
+        } catch (\Exception $exception) {
+            // TODO: do better error handling
+            throw $exception;
+//            return "something failed";
+        }
+
+        // if auth for provider and user_id already exists
+
+        $providerExists = OAuthProvider
+            ::where("id", Auth::id())
+            ->where("provider", $providerType->value)
+            ->first();
+
+        if ($providerExists) {
+            // update
+
+            $providerExists->token = $oauthUser->token;
+            $providerExists->refresh_token = $oauthUser->refreshToken;
+            $providerExists->email = $oauthUser->getEmail();
+
+            $providerExists->save();
+        } else {
+
+            // check if another user has that login
+
+            $otherExistingProvider = OAuthProvider
+                ::where("email", $oauthUser->getEmail())
+                ->where("provider", $providerType->value)
+                ->first();
+
+            if ($otherExistingProvider
+                && $otherExistingProvider->user_id != Auth::id()) {
+                // this provider is already registerd with another user!
+                throw new HttpException(409,
+                    "This social login is already connected to another account!");
+            }
+
+            // create new for user
+            
+            $provider = new OAuthProvider([
+                "token" => $oauthUser->token,
+                "refresh_token" => $oauthUser->refreshToken,
+                "user_id" => Auth::id(),
+                "provider" => $providerType->value,
+                "email" => $oauthUser->getEmail(),
+            ]);
+
+            $provider->save();
+        }
+
+        return "OKKK";
     }
 
 }
