@@ -29,7 +29,17 @@ Route::get("/test", function (Request $request) {
 });
 
 
+// login/register with socials
 Route::get("/auth/{providerType}/redirect", [OAuthController::class, "oauthRedirectHandler",]);
 Route::get("/auth/{providerType}/callback", [OAuthController::class, "oauthCallbackHandler",]);
 
+// add socials
+Route::get("/auth-add/{providerType}/redirect", [OAuthController::class, "addOauthRedirectHandler"])
+    ->middleware("auth:sanctum");
+Route::get("/auth-add/{providerType}/callback", [OAuthController::class, "addOAuthCallbackHandler"])
+    ->middleware("auth:sanctum");
+
+// special github route
+Route::get("/auth/{providerType}/callback/add", [OAuthController::class, "addOAuthCallbackHandler"])
+    ->middleware("auth:sanctum");
 
