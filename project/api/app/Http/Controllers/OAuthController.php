@@ -5,85 +5,83 @@ namespace App\Http\Controllers;
 use App\Enums\OAuthProviderType;
 use App\Models\OAuthProvider;
 use App\Models\User;
+use Error;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Contracts\User as SUser;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\InvalidStateException;
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class OAuthController extends Controller {
 
-    // GitHub
-    public function githubRedirect() {
-        return Socialite::driver("github")->redirect();
+
+    public function oauthRedirectHandler(OAuthProviderType $providerType) {
+        return Socialite::driver($providerType->value)->redirect();
     }
 
-    public function githubAuth() {
-        $this->loginWithProvider(OAuthProviderType::GITHUB);
-    }
+    public function oauthCallbackHandler(OAuthProviderType $providerType): void {
 
-    // Google
-    public function googleRedirect() {
-        return Socialite::driver("google")->redirect();
-    }
-
-    public function googleAuth() {
-        $this->loginWithProvider(OAuthProviderType::GOOGLE);
-    }
-
-
-    // Discord
-    public function discordRedirect() {
-        return Socialite::driver("discord")->redirect();
-    }
-
-    public function discordAuth() {
-        $this->loginWithProvider(OAuthProviderType::DISCORD);
-    }
-
-
-    private function loginWithProvider(OAuthProviderType $provider) {
-
+        // TODO: handle auth errors
         try {
-            $oauth_user = Socialite::driver($provider->value)->stateless()->user();
+            $oauth_user = Socialite::driver($providerType->value)->stateless()->user();
         } catch (InvalidStateException $exception) {
-            return;
+            echo "MY INVALID STATE EXCEPTION WAS THROWN";
         }
 
-        // check if user already exists
-        $platformUser = User::where("email", $oauth_user->getEmail())->first();
+        // check if that auth already exists
 
-        if (!$platformUser) {
+        $existingOauthProvider = OAuthProvider::where("provider", $providerType->value)
+            ->where("email", $oauth_user->getEmail())
+            ->first();
 
-            $platformUser = new User([
+        if ($existingOauthProvider) {
+            // update auth entry
+            $existingOauthProvider->token = $oauth_user->token;
+            $existingOauthProvider->refresh_token = $oauth_user->refreshToken;
+
+            $existingOauthProvider->save();
+
+            $platformUser = User::where("id", $existingOauthProvider->user_id)->first();
+
+        } else {
+
+            // check if user with email already exists
+            $platformUser = User::where("email", $oauth_user->getEmail())->first();
+
+            if (!$platformUser) {
+
+                // create new user
+
+                $platformUser = new User([
+                    "email" => $oauth_user->getEmail(),
+                    "name" => $oauth_user->getNickname() ?? $oauth_user->getName(),
+                    "avatar" => $oauth_user->getAvatar(),
+                ]);
+
+                $platformUser->save();
+
+            }
+
+            // add oauth entry
+
+            $oauthUser = new OAuthProvider([
+                "user_id" => $platformUser->id,
+                "token" => $oauth_user->token,
+                "refresh_token" => $oauth_user->refreshToken,
+                "provider" => $providerType,
                 "email" => $oauth_user->getEmail(),
-                "name" => $oauth_user->getNickname() ?? $oauth_user->getName(),
-                "avatar" => $oauth_user->getAvatar(),
             ]);
 
-            $platformUser->save();
+
+            $oauthUser->save();
 
         }
-
-        $oauth_provider = new OAuthProvider([
-            "user_id" => $platformUser->id,
-            "token" => $oauth_user->token,
-            "refresh_token" => $oauth_user->refreshToken,
-            "provider" => $provider,
-        ]);
-
-        echo "<pre>";
-        echo "NICK: " . $oauth_user->getNickname();
-        echo "\n";
-        echo "NAME: " . $oauth_user->getName();
-        echo "\n";
-        echo "AVATAR: " . $oauth_user->getAvatar();
-        echo "</pre>";
-
-        $oauth_provider->save();
-        $platformUser->markEmailAsVerified();
-
         Auth::login($platformUser);
+    }
 
+
+    public function addOauthRedirectHandler(OAuthProviderType $providerType) {
+        return Socialite::driver($providerType->value)->redirect();
     }
 
 }
