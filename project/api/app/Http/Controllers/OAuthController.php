@@ -7,10 +7,14 @@ use App\Models\OAuthProvider;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class OAuthController extends Controller {
+/* TODO: correctly redirect to the frontend after handling
+        the social logins and passing on information
+*/
 
+class OAuthController extends Controller {
 
     public function oauthRedirectHandler(OAuthProviderType $providerType) {
         return Socialite::driver($providerType->value)
@@ -85,6 +89,10 @@ class OAuthController extends Controller {
     }
 
     public function addOAuthCallbackHandler(OAuthProviderType $providerType) {
+
+
+        // allow a single user to allow multiple logins with the same provider
+
         try {
             $oauthUser = Socialite::driver($providerType->value)
                 ->redirectUrl(config("services." . $providerType->value . ".redirect_add"))
@@ -92,43 +100,17 @@ class OAuthController extends Controller {
         } catch (\Exception $exception) {
             // TODO: do better error handling
             throw $exception;
-//            return "something failed";
         }
 
-        // if auth for provider and user_id already exists
-
-        $providerExists = OAuthProvider
-            ::where("id", Auth::id())
+        // check if this login for that provider already exists
+        $existingOAuthProvider = OAuthProvider::
+        where("email", $oauthUser->getEmail())
             ->where("provider", $providerType->value)
             ->first();
 
-        if ($providerExists) {
-            // update
-
-            $providerExists->token = $oauthUser->token;
-            $providerExists->refresh_token = $oauthUser->refreshToken;
-            $providerExists->email = $oauthUser->getEmail();
-
-            $providerExists->save();
-        } else {
-
-            // check if another user has that login
-
-            $otherExistingProvider = OAuthProvider
-                ::where("email", $oauthUser->getEmail())
-                ->where("provider", $providerType->value)
-                ->first();
-
-            if ($otherExistingProvider
-                && $otherExistingProvider->user_id != Auth::id()) {
-                // this provider is already registerd with another user!
-                throw new HttpException(409,
-                    "This social login is already connected to another account!");
-            }
-
-            // create new for user
-            
-            $provider = new OAuthProvider([
+        if (!$existingOAuthProvider) {
+            // if not, just create and save for authed user
+            $oauthProvider = new OAuthProvider([
                 "token" => $oauthUser->token,
                 "refresh_token" => $oauthUser->refreshToken,
                 "user_id" => Auth::id(),
@@ -136,8 +118,24 @@ class OAuthController extends Controller {
                 "email" => $oauthUser->getEmail(),
             ]);
 
-            $provider->save();
+            $oauthProvider->save();
+            return "CREATE NEW AND ADD OK!";
         }
+
+        // check if the existing provider belongs to a different user
+
+        if ($existingOAuthProvider->id != Auth::id()) {
+            throw new ConflictHttpException("This social login is already connected with another account!");
+        }
+
+        // now that the account exists and already belongs to the user
+        // we can update it
+
+        $existingOAuthProvider->token = $oauthUser->token;
+        $existingOAuthProvider->refresh_token = $oauthUser->refreshToken;
+        $existingOAuthProvider->email = $oauthUser->getEmail();
+
+        $existingOAuthProvider->save();
 
         return "OKKK";
     }
