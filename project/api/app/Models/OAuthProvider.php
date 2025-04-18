@@ -15,6 +15,7 @@ class OAuthProvider extends Model {
         "refresh_token",
         "user_id",
         "provider",
+        "email"
     ];
 
     public function casts() {

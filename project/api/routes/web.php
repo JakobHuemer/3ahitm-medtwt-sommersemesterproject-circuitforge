@@ -29,16 +29,7 @@ Route::get("/test", function (Request $request) {
 });
 
 
-// Socialite Routes
+Route::get("/auth/{providerType}/redirect", [OAuthController::class, "oauthRedirectHandler",]);
+Route::get("/auth/{providerType}/callback", [OAuthController::class, "oauthCallbackHandler",]);
 
-Route::get("/auth/github/redirect", [OAuthController::class, "githubRedirect"]);
 
-Route::get("/auth/github/callback", [OAuthController::class, "githubAuth"]);
-
-Route::get("/auth/google/redirect", [OAuthController::class, "googleRedirect"]);
-
-Route::get("/auth/google/callback", [OAuthController::class, "googleAuth"]);
-
-Route::get("/auth/discord/redirect", [OAuthController::class, "discordRedirect"]);
-
-Route::get("/auth/discord/callback", [OAuthController::class, "discordAuth"]);
