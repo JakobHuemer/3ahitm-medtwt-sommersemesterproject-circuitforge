@@ -4,6 +4,7 @@ import { useApi } from '@/store/useApi.ts'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import InputField from '@/components/InputField.vue'
 
 const api = useApi()
 
@@ -30,27 +31,42 @@ async function doLogin() {
                 <span>Wrong login or password!</span>
             </div>
 
-            <div class="input input-login">
-                <label for="login">username or email</label>
-                <input
-                    type="text"
-                    name="login"
-                    id="login"
-                    v-model="login"
-                    autocomplete="username email"
-                />
-            </div>
+            <!--            <div class="input input-login">-->
+            <!--                <label for="login">username or email</label>-->
+            <!--                <input-->
+            <!--                    type="text"-->
+            <!--                    name="login"-->
+            <!--                    id="login"-->
+            <!--                    v-model="login"-->
+            <!--                    autocomplete="username email"-->
+            <!--                />-->
+            <!--            </div>-->
 
-            <div class="input input-password">
-                <label for="password">password</label>
-                <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    v-model="password"
-                    autocomplete="current-password password"
-                />
-            </div>
+            <InputField
+                class="input input-login"
+                v-model="login"
+                label="login"
+                autocomplete="username email"
+            />
+
+            <InputField
+                class="input input-login"
+                v-model="password"
+                autocomplete="current-password password"
+                label="password"
+                type="password"
+            />
+
+            <!--            <div class="input input-password">-->
+            <!--                <label for="password">password</label>-->
+            <!--                <input-->
+            <!--                    type="password"-->
+            <!--                    name="password"-->
+            <!--                    id="password"-->
+            <!--                    v-model="password"-->
+            <!--                    autocomplete="current-password password"-->
+            <!--                />-->
+            <!--            </div>-->
 
             <div class="remember-me">
                 <input type="checkbox" name="remember-me" id="remember-me" v-model="rememberMe" />
@@ -69,6 +85,8 @@ async function doLogin() {
 </template>
 
 <style scoped>
+@import '../assets/auth-views.css';
+
 .auth-error {
     border: 1px solid var(--col-error);
     background: color-mix(in srgb, var(--col-error) 10%, transparent);
@@ -76,7 +94,7 @@ async function doLogin() {
 
     display: flex;
     align-items: center;
-    gap: var(--gap-4);
+    gap: 5px;
 
     padding: var(--gap-8);
 

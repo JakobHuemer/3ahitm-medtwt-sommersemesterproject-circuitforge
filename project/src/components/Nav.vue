@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useApi } from '@/store/useApi.ts'
 
 const api = useApi()
@@ -32,7 +31,7 @@ const api = useApi()
                         <div class="nav-user-dropdown">
                             <div class="nav-user-dropdown-container">
                                 <button @click="api.logout()">Logout</button>
-                                <button>Preferences</button>
+                                <RouterLink to="/settings/preferences">Preferences</RouterLink>
                             </div>
                         </div>
                     </div>
@@ -126,7 +125,8 @@ const api = useApi()
         background: var(--col-content);
         display: grid;
 
-        button {
+        button,
+        a {
             outline: none;
             border: 0;
             color: white;
@@ -134,6 +134,7 @@ const api = useApi()
             width: 100%;
             text-align: left;
             font-family: var(--font-title);
+            font-size: 80%;
 
             padding: var(--gap-4) var(--gap-8);
 
