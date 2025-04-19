@@ -124,7 +124,7 @@ class OAuthController extends Controller {
 
         // check if the existing provider belongs to a different user
 
-        if ($existingOAuthProvider->id != Auth::id()) {
+        if ($existingOAuthProvider->user_id != Auth::id()) {
             throw new ConflictHttpException("This social login is already connected with another account!");
         }
 
