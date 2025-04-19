@@ -39,7 +39,7 @@ return [
         'client_id' => env('GITHUB_CLIENT_ID'),
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
         'redirect' => 'http://localhost:8080' . env("API_URL") . 'auth/github/callback',
-        'redirect_add' => 'http://localhost:8080' . env("API_URL") . 'auth/github/callback/add',
+        'redirect_add' => 'http://localhost:8080' . env("API_URL") . 'auth-add/github/callback',
     ],
 
     'google' => [
