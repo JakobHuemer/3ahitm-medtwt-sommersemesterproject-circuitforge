@@ -25,6 +25,9 @@ export const useApi = defineStore('api', () => {
         hasSession: false,
     })
 
+    let setupFinished = false
+    const runLater: Function[] = []
+
     // interceptor to always have a session if there is none
     api.value.interceptors.request.use(
         async (request) => {
@@ -58,6 +61,10 @@ export const useApi = defineStore('api', () => {
         .catch((e) => {
             console.info('User is not authenticated!')
             state.isAuthenticated = false
+        })
+        .finally(() => {
+            setupFinished = true
+            runLater.forEach((cb) => cb())
         })
 
     async function createSession() {
@@ -126,7 +133,9 @@ export const useApi = defineStore('api', () => {
         }
     }
 
-    // methods
+    function runWhenFinished(callback: Function) {
+        runLater.push(callback)
+    }
 
     return {
         login,
@@ -134,5 +143,6 @@ export const useApi = defineStore('api', () => {
         register,
         api,
         state,
+        runWhenFinished,
     }
 })

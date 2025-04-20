@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import InputField from '@/components/InputField.vue'
+import ButtonComponent from '@/components/ButtonComponent.vue'
 
 const api = useApi()
 
@@ -31,17 +32,6 @@ async function doLogin() {
                 <span>Wrong login or password!</span>
             </div>
 
-            <!--            <div class="input input-login">-->
-            <!--                <label for="login">username or email</label>-->
-            <!--                <input-->
-            <!--                    type="text"-->
-            <!--                    name="login"-->
-            <!--                    id="login"-->
-            <!--                    v-model="login"-->
-            <!--                    autocomplete="username email"-->
-            <!--                />-->
-            <!--            </div>-->
-
             <InputField
                 class="input input-login"
                 v-model="login"
@@ -57,17 +47,6 @@ async function doLogin() {
                 type="password"
             />
 
-            <!--            <div class="input input-password">-->
-            <!--                <label for="password">password</label>-->
-            <!--                <input-->
-            <!--                    type="password"-->
-            <!--                    name="password"-->
-            <!--                    id="password"-->
-            <!--                    v-model="password"-->
-            <!--                    autocomplete="current-password password"-->
-            <!--                />-->
-            <!--            </div>-->
-
             <div class="remember-me">
                 <input type="checkbox" name="remember-me" id="remember-me" v-model="rememberMe" />
                 <label for="remember-me" class="checkbox"></label>
@@ -75,7 +54,15 @@ async function doLogin() {
             </div>
         </div>
 
-        <button type="submit" class="signup" @click="doLogin" data-form-type="login">Login</button>
+        <ButtonComponent
+            :big="true"
+            button-type="primary"
+            type="submit"
+            class="signup"
+            @click="doLogin"
+            data-form-type="login"
+            >Login</ButtonComponent
+        >
 
         <div class="footnote">
             <span class="footnote-text">Don't have an Account? </span>
