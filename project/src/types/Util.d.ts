@@ -1,1 +1,1 @@
-export type Color = 'warn' | 'success' | 'error' | 'notify'
+export type Color = 'warn' | 'success' | 'error' | 'info'
