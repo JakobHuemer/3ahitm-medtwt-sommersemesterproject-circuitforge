@@ -3,8 +3,6 @@ import InputField from '@/components/InputField.vue'
 import { computed, ref } from 'vue'
 import { useApi } from '@/store/useApi.ts'
 import ButtonComponent from '@/components/ButtonComponent.vue'
-import { faXing } from '@fortawesome/free-brands-svg-icons/faXing'
-import { faCheck, faCheckSquare, faFaceAngry } from '@fortawesome/free-solid-svg-icons'
 
 const api = useApi()
 
