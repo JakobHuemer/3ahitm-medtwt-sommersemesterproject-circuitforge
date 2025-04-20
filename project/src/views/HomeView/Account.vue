@@ -111,9 +111,7 @@ api.runWhenFinished(() => {
                         </div>
 
                         <div class="end">
-                            <ButtonComponent button-type="secondary"
-                                >reactivate</ButtonComponent
-                            >
+                            <ButtonComponent button-type="secondary">reactivate</ButtonComponent>
                             <ButtonComponent button-type="error">delete</ButtonComponent>
                         </div>
                     </div>
@@ -152,7 +150,7 @@ api.runWhenFinished(() => {
     </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 @import '../../assets/settings-page.css';
 
 .connections-list {
