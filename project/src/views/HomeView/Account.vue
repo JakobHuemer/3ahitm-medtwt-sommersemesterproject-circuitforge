@@ -25,7 +25,6 @@ api.runWhenFinished(() => {
 
 <template>
     <div class="wrapper">
-
         <h3>Account</h3>
 
         <!--    Basic -->
@@ -43,7 +42,6 @@ api.runWhenFinished(() => {
                 <ButtonComponent button-type="primary">Update</ButtonComponent>
             </div>
         </section>
-
 
         <section class="email">
             <h4>Email</h4>
@@ -72,9 +70,7 @@ api.runWhenFinished(() => {
             <h4>Connections</h4>
 
             <div class="connections-list">
-
                 <div class="connection-item">
-
                     <div class="icon">
                         <FontAwesomeIcon :icon="faGoogle" />
                     </div>
@@ -92,14 +88,12 @@ api.runWhenFinished(() => {
                         </div>
 
                         <div class="end">
-                            <FontAwesomeIcon :icon="faCircleXmark" />
+                            <ButtonComponent button-type="error">delete</ButtonComponent>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="connection-item">
-
                     <div class="icon">
                         <FontAwesomeIcon :icon="faDiscord" />
                     </div>
@@ -117,15 +111,15 @@ api.runWhenFinished(() => {
                         </div>
 
                         <div class="end">
-                            <ButtonComponent>reactivate</ButtonComponent>
-                            <FontAwesomeIcon :icon="faCircleXmark" />
+                            <ButtonComponent button-type="secondary"
+                                >reactivate</ButtonComponent
+                            >
+                            <ButtonComponent button-type="error">delete</ButtonComponent>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="connection-item">
-
                     <div class="icon">
                         <FontAwesomeIcon :icon="faGithub" />
                     </div>
@@ -143,17 +137,12 @@ api.runWhenFinished(() => {
                         </div>
 
                         <div class="end">
-                            <FontAwesomeIcon :icon="faCircleXmark" />
+                            <ButtonComponent button-type="error">delete</ButtonComponent>
                         </div>
                     </div>
-
                 </div>
-
-
-
             </div>
         </section>
-
 
         <section class="danger">
             <h4>Danger Zone</h4>
@@ -163,8 +152,8 @@ api.runWhenFinished(() => {
     </div>
 </template>
 
-<style scoped>
-@import "../../assets/settings-page.css";
+<style scoped lang="scss">
+@import '../../assets/settings-page.css';
 
 .connections-list {
     display: flex;
@@ -226,9 +215,7 @@ api.runWhenFinished(() => {
                     &.status-inactive {
                         --color: var(--col-warn);
                     }
-
                 }
-
             }
 
             .footer {
@@ -237,21 +224,18 @@ api.runWhenFinished(() => {
                 gap: var(--gap-8);
 
                 .name::before {
-                    content: "-";
+                    content: '-';
                     margin-right: var(--gap-8);
                 }
             }
-
         }
 
         .end {
             display: flex;
-            gap: var(--gap-16);
+            gap: var(--gap-12);
             align-items: center;
             margin-right: var(--gap-12);
         }
     }
 }
-
-
 </style>

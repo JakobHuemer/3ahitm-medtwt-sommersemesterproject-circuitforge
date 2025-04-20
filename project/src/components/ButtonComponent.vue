@@ -2,7 +2,7 @@
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-type ButtonType = 'primary' | 'secondary' | 'normal'
+type ButtonType = 'primary' | 'secondary' | 'accent' | 'normal' | 'error'
 type ButtonSize = 'normal' | 'medium' | 'big'
 
 const props = withDefaults(
@@ -38,6 +38,11 @@ const emit = defineEmits(['click'])
 
 <style scoped>
 button {
+    --color: var(--col-surface);
+    --color-hover: var(--col-surface-hover);
+    --color-active: var(--col-surface-active);
+    --color-disabled: var(--col-container);
+
     padding: var(--gap-8) var(--gap-12);
 
     outline: none;
@@ -49,6 +54,21 @@ button {
     gap: var(--gap-4);
     align-items: center;
     justify-content: center;
+
+    background: var(--color);
+
+    &:hover {
+        background: var(--color-hover);
+    }
+
+    &:active {
+        background: var(--color-active);
+    }
+
+    &:disabled {
+        background: var(--color-disabled);
+        color: var(--col-text-secondary);
+    }
 
     &.size-medium {
         gap: calc((var(--gap-8) + var(--gap-4)) / 2);
@@ -66,47 +86,36 @@ button {
 }
 
 .button-primary {
-    background: var(--col-primary);
-    transition: background 0.2s;
-
-    cursor: pointer;
-
-    &:hover {
-        background: var(--col-primary-hover);
-    }
-
-    &:active {
-        background: var(--col-primary-active);
-    }
+    --color: var(--col-primary);
+    --color-hover: var(--col-primary-hover);
+    --color-active: var(--col-primary-active);
+    --color-disabled: var(--col-primary-disabled);
 }
 
 .button-secondary {
-    background: var(--col-secondary);
-    transition: background 0.2s;
-
-    cursor: pointer;
-
-    &:hover {
-        background: var(--col-secondary-hover);
-    }
-
-    &:active {
-        background: var(--col-secondary-active);
-    }
+    --color: var(--col-secondary);
+    --color-hover: var(--col-secondary-hover);
+    --color-active: var(--col-secondary-active);
+    --color-disabled: var(--col-secondary-disabled);
 }
 
-.button-normal {
-    background: var(--col-surface);
-    transition: background 0.2s;
+.button-accent {
+    --color: var(--col-accent);
+    --color-hover: var(--col-accent-hover);
+    --color-active: var(--col-accent-active);
+    --color-disabled: var(--col-accent-disabled);
+}
 
-    cursor: pointer;
+.button-error {
+    --color: var(--col-error);
 
-    &:hover {
-        background: var(--col-surface-hover);
-    }
+    /* Hover: lighten + reduce saturation slightly */
+    --color-hover: hsl(from var(--col-error) h calc(s * 1.6) calc(l * 1.2));
 
-    &:active {
-        background: var(--col-surface-active);
-    }
+    /* Active: darken + increase saturation */
+    --color-active: hsl(from var(--col-error) h calc(s * 0.7) calc(l * 0.8));
+
+    /* Disabled: darken further + desaturate more */
+    --color-disabled: hsl(from var(--col-error) h calc(s * 0.7) calc(l * 0.5));
 }
 </style>
