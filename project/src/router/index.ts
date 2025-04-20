@@ -4,7 +4,6 @@ import CreatePostView from '@/views/CreatePostView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import UserView from '@/views/UserView.vue'
-import CallbackHandler from '@/views/CallbackHandler.vue'
 import Account from '@/views/HomeView/Account.vue'
 import HomeView from '@/views/HomeView.vue'
 import Preferences from '@/views/HomeView/Preferences.vue'
@@ -17,10 +16,6 @@ const router = createRouter({
             name: 'CircuitForge',
             component: HomeView,
             alias: '/index.html',
-        },
-        {
-            path: '/api-callback',
-            component: CallbackHandler,
         },
         {
             path: '/post/create',
