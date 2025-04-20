@@ -3,6 +3,7 @@ import { computed, reactive, ref, shallowRef, watch } from 'vue'
 import { useApi } from '@/store/useApi.ts'
 import { watchDebounced } from '@vueuse/core'
 import InputField from '@/components/InputField.vue'
+import ButtonComponent from '@/components/ButtonComponent.vue'
 
 const api = useApi()
 
@@ -157,7 +158,7 @@ function doRegister() {
             </div>
         </div>
 
-        <button
+        <ButtonComponent
             class="signup"
             data-form-type="register"
             :disabled="
@@ -165,9 +166,8 @@ function doRegister() {
             "
             @click="doRegister"
             type="submit"
-        >
-            Sign Up
-        </button>
+            >Sign Up
+        </ButtonComponent>
 
         <div class="footnote">
             <span class="footnote-text">Already have an Account? </span>

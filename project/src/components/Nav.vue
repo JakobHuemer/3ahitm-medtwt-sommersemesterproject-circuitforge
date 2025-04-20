@@ -24,7 +24,7 @@ const api = useApi()
                                 />
                             </div>
                             <span class="username">
-                                {{ api.state.user?.username }}
+                                {{ api.state.user?.username ?? api.state.user?.name }}
                             </span>
                         </div>
 
@@ -60,7 +60,7 @@ const api = useApi()
     justify-content: space-between;
     align-items: end;
 
-    h1 {
+    h1 a {
         font-family: var(--font-title);
     }
 
@@ -83,6 +83,10 @@ const api = useApi()
         align-items: end;
         gap: var(--gap-16);
         font-family: var(--font-title);
+
+        & * {
+            font-family: inherit;
+        }
     }
 }
 
