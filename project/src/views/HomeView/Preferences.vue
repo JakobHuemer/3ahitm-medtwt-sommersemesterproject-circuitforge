@@ -4,4 +4,7 @@
     <h3>Preferences</h3>
 </template>
 
-<style scoped></style>
+<style scoped>
+@import "../../assets/settings-page.css";
+
+</style>

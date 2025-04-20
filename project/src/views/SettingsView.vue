@@ -32,10 +32,16 @@ h2 {
     text-align: center;
 }
 
-:deep(h3) {
+:deep(h3),
+:deep(h4){
     font-family: var(--font-title);
     font-size: var(--font-size-nav-item);
     margin-block-end: var(--gap-32);
+}
+
+:deep(h4) {
+    font-size: calc((var(--font-size-body) + var(--font-title)) / 2);
+    margin-block-end: var(--gap-8);
 }
 
 .side-bar {

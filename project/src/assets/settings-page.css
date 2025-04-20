@@ -1,0 +1,21 @@
+
+.wrapper {
+    display: grid;
+    gap: var(--gap-32);
+}
+
+section {
+    display: grid;
+    gap: var(--gap-16);
+
+    button {
+        justify-self: left;
+    }
+
+    &.danger {
+        border: 1px solid var(--col-error);
+        border-radius: var(--border-radius);
+        padding: var(--gap-16);
+    }
+}
+
