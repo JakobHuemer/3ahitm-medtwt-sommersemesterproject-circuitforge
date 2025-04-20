@@ -5,8 +5,7 @@ import { useApi } from '@/store/useApi.ts'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCircleXmark, faImage } from '@fortawesome/free-solid-svg-icons'
-import Notice from '@/components/Notice.vue'
-import { faDiscord, faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons'
+import SocialConnection from '@/components/Settings/SocialConnection.vue'
 
 const api = useApi()
 
@@ -70,75 +69,34 @@ api.runWhenFinished(() => {
             <h4>Connections</h4>
 
             <div class="connections-list">
-                <div class="connection-item">
-                    <div class="icon">
-                        <FontAwesomeIcon :icon="faGoogle" />
-                    </div>
 
-                    <div class="main">
-                        <div class="main-content">
-                            <div class="header">
-                                <span class="provider">Google</span>
-                                <span class="status status-active">active</span>
-                            </div>
-                            <div class="footer">
-                                <span class="email">jakki@gmail.com</span>
-                                <span class="name">Jakob Huemer</span>
-                            </div>
-                        </div>
+                <SocialConnection
+                    provider="google"
+                    :active="true"
+                    email="jakki@gmail.com"
+                    name="Jakob Huemer"
+                />
 
-                        <div class="end">
-                            <ButtonComponent button-type="error">delete</ButtonComponent>
-                        </div>
-                    </div>
-                </div>
+                <SocialConnection
+                    provider="github"
+                    :active="false"
+                    email="jakob.fistelberger@gmail.com"
+                    name="JakobFistelberger"
+                />
+                <SocialConnection
+                    provider="github"
+                    :active="true"
+                    email="j.huemer-fistelberger@htblaleonding.onmicrosoft.com"
+                    name="J.H.F"
+                />
 
-                <div class="connection-item">
-                    <div class="icon">
-                        <FontAwesomeIcon :icon="faDiscord" />
-                    </div>
+                <SocialConnection
+                    provider="discord"
+                    :active="true"
+                    email="jakkidummy@gmail.com"
+                    name="jakki_"
+                />
 
-                    <div class="main">
-                        <div class="main-content">
-                            <div class="header">
-                                <span class="provider">Google</span>
-                                <span class="status status-inactive">inactive</span>
-                            </div>
-                            <div class="footer">
-                                <span class="email">jakki@gmail.com</span>
-                                <span class="name">Jakob Huemer</span>
-                            </div>
-                        </div>
-
-                        <div class="end">
-                            <ButtonComponent button-type="secondary">reactivate</ButtonComponent>
-                            <ButtonComponent button-type="error">delete</ButtonComponent>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="connection-item">
-                    <div class="icon">
-                        <FontAwesomeIcon :icon="faGithub" />
-                    </div>
-
-                    <div class="main">
-                        <div class="main-content">
-                            <div class="header">
-                                <span class="provider">Google</span>
-                                <span class="status status-active">active</span>
-                            </div>
-                            <div class="footer">
-                                <span class="email">jakki@gmail.com</span>
-                                <span class="name">Jakob Huemer</span>
-                            </div>
-                        </div>
-
-                        <div class="end">
-                            <ButtonComponent button-type="error">delete</ButtonComponent>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
 
@@ -158,82 +116,5 @@ api.runWhenFinished(() => {
     flex-direction: column;
     align-items: stretch;
     gap: var(--gap-8);
-}
-
-.connection-item {
-    display: flex;
-    align-items: center;
-    height: 100%;
-
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    background: var(--col-content);
-
-    .icon {
-        height: 100%;
-        aspect-ratio: 1;
-
-        background: white;
-        color: black;
-
-        display: grid;
-        place-items: center;
-
-        svg {
-            height: 50%;
-        }
-    }
-
-    .main {
-        padding: var(--gap-8);
-
-        display: flex;
-        flex: 1;
-        align-items: center;
-        justify-content: space-between;
-
-        .main-content {
-            .header {
-                display: flex;
-                gap: var(--gap-8);
-                align-items: center;
-
-                .provider {
-                    font-size: var(--font-size-card-title);
-                }
-
-                .status {
-                    --color: var(--col-success);
-
-                    background: var(--col-container);
-                    color: var(--color);
-                    border-radius: var(--border-radius-s);
-                    padding: var(--gap-4) var(--gap-8);
-
-                    &.status-inactive {
-                        --color: var(--col-warn);
-                    }
-                }
-            }
-
-            .footer {
-                margin-top: var(--gap-4);
-                display: flex;
-                gap: var(--gap-8);
-
-                .name::before {
-                    content: '-';
-                    margin-right: var(--gap-8);
-                }
-            }
-        }
-
-        .end {
-            display: flex;
-            gap: var(--gap-12);
-            align-items: center;
-            margin-right: var(--gap-12);
-        }
-    }
 }
 </style>
