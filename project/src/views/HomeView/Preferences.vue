@@ -5,6 +5,5 @@
 </template>
 
 <style scoped>
-@import "../../assets/settings-page.css";
-
+@import '../../assets/settings-page.css';
 </style>

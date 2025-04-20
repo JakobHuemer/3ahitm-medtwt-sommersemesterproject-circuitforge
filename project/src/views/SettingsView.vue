@@ -33,7 +33,7 @@ h2 {
 }
 
 :deep(h3),
-:deep(h4){
+:deep(h4) {
     font-family: var(--font-title);
     font-size: var(--font-size-nav-item);
     margin-block-end: var(--gap-32);
