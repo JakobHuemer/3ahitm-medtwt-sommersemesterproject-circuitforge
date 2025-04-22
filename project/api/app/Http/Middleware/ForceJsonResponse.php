@@ -13,12 +13,12 @@ class ForceJsonResponse {
      * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
      */
     public function handle(Request $request, Closure $next): Response {
-//        $request->header("Content-Type", "application/json");
+        $request->header("Content-Type", "application/json");
          $response = $next($request);
 
-//        if (method_exists($response, 'header')) {
-//            $response->header('Content-Type', 'application/json');
-//        }
+        if (method_exists($response, 'header')) {
+            $response->header('Content-Type', 'application/json');
+        }
 
         return $response;
 
