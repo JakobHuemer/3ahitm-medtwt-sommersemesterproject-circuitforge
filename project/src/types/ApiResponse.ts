@@ -1,0 +1,24 @@
+export type ApiResponse =
+    | {
+          responseType: ApiResponseType.AUTH_ADD
+          data: AuthAddResponse
+      }
+    | {
+          responseType: ApiResponseType.AUTH_LOGIN
+          data: AuthLoginResponse
+      }
+
+interface AuthLoginResponse {
+    success: boolean
+    error?: string
+}
+
+interface AuthAddResponse {
+    success: boolean
+    error?: string
+}
+
+export enum ApiResponseType {
+    AUTH_LOGIN,
+    AUTH_ADD,
+}
