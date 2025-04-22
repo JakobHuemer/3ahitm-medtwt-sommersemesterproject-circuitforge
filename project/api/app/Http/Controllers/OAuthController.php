@@ -123,6 +123,10 @@ class OAuthController extends Controller {
             ]);
 
             $oauthProvider->save();
+
+            return $this->sendAuthAddMessage(true, "Successfully added login "
+                . $providerType->value .
+                " for " . $oauthUser->getEmail());
         }
 
         // check if the existing provider belongs to a different user
@@ -148,9 +152,9 @@ class OAuthController extends Controller {
     }
 
     public function getOAuthProviders() {
-        $providers = OAuthProvider::all()->where("user_id", Auth::id());
+        $providersList = OAuthProvider::where("user_id", Auth::id())->get();
 
-        return Response(json_encode($providers));
+        return Response(json_encode($providersList));
     }
 
     private function sendAuthLoginMessage(bool $success, string $error = ""): RedirectResponse {
