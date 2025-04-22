@@ -57,6 +57,7 @@ watchDebounced(
                 let t: keyof ErrorsType
                 for (t in displayErrors) {
                     displayErrors[t] = ''
+                    allErrors[t] = ''
                 }
             })
             .catch((e) => {
@@ -162,8 +163,10 @@ function doRegister() {
             class="signup"
             data-form-type="register"
             :disabled="
-                !doPasswordsMatch || Object.values(displayErrors).join('') !== '' || !checked
+                !doPasswordsMatch || Object.values(allErrors).join('') !== '' || !checked
             "
+            button-type="primary"
+            size="medium"
             @click="doRegister"
             type="submit"
             >Sign Up

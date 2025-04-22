@@ -57,6 +57,7 @@ async function doLogin() {
         <ButtonComponent
             :big="true"
             button-type="primary"
+            size="medium"
             type="submit"
             class="signup"
             @click="doLogin"
