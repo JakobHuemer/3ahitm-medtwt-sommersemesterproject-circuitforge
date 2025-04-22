@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useApi } from '@/store/useApi.ts'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import InputField from '@/components/InputField.vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import Notice from '@/components/Notice.vue'

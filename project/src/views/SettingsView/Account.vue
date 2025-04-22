@@ -6,6 +6,7 @@ import ButtonComponent from '@/components/ButtonComponent.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCircleXmark, faImage } from '@fortawesome/free-solid-svg-icons'
 import SocialConnection from '@/components/Settings/SocialConnection.vue'
+import Notice from '@/components/Notice.vue'
 
 const api = useApi()
 
@@ -16,9 +17,34 @@ const user = computed(() => {
 const username = ref<string>('')
 const name = ref<string>('')
 
+interface Connection {
+    id: number
+    user_id: number
+    email: string
+    provider: string
+}
+
+const connections = ref<Connection[]>([])
+const connectionsLoaded = ref(false)
+const connectionsError = ref(false)
+
 api.runWhenFinished(() => {
     username.value = api.state.user?.username ?? ''
     name.value = api.state.user?.name ?? ''
+
+    // fetch connections
+
+    api.api
+        .get<Connection[]>('/socials')
+        .then((res) => {
+            for (const conn of res.data) {
+                connections.value.push(conn)
+            }
+        })
+        .catch(() => (connectionsError.value = true))
+        .finally(() => {
+            connectionsLoaded.value = true
+        })
 })
 </script>
 
@@ -69,31 +95,17 @@ api.runWhenFinished(() => {
 
             <div class="connections-list">
                 <SocialConnection
-                    provider="google"
+                    v-if="!connectionsError && connectionsLoaded"
+                    v-for="conn of connections"
+                    :provider="conn.provider"
                     :active="true"
-                    email="jakki@gmail.com"
-                    name="Jakob Huemer"
+                    :email="conn.email"
                 />
 
-                <SocialConnection
-                    provider="github"
-                    :active="false"
-                    email="jakob.fistelberger@gmail.com"
-                    name="JakobFistelberger"
-                />
-                <SocialConnection
-                    provider="github"
-                    :active="true"
-                    email="j.huemer-fistelberger@htblaleonding.onmicrosoft.com"
-                    name="J.H.F"
-                />
+                <!-- Loading -->
+                <span v-if="!connectionsLoaded">Loading ...</span>
 
-                <SocialConnection
-                    provider="discord"
-                    :active="true"
-                    email="jakkidummy@gmail.com"
-                    name="jakki_"
-                />
+                <Notice type="error" v-if="connectionsError">Failed to get Connections!</Notice>
             </div>
         </section>
 
