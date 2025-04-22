@@ -17,7 +17,6 @@
         text-align: center;
     }
 
-
     .form-section {
         display: grid;
         gap: var(--gap-16);
@@ -51,7 +50,6 @@
                 outline: 1px solid var(--col-accent);
             }
         }
-
     }
 
     .footnote {
@@ -62,4 +60,3 @@
         }
     }
 }
-

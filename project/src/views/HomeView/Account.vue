@@ -24,7 +24,6 @@ api.runWhenFinished(() => {
 
 <template>
     <div class="wrapper">
-
         <h3>Profile</h3>
         <!--    Basic -->
         <section class="basic">
@@ -69,7 +68,6 @@ api.runWhenFinished(() => {
             <h3>Connections</h3>
 
             <div class="connections-list">
-
                 <SocialConnection
                     provider="google"
                     :active="true"
@@ -96,7 +94,6 @@ api.runWhenFinished(() => {
                     email="jakkidummy@gmail.com"
                     name="jakki_"
                 />
-
             </div>
         </section>
 
@@ -116,7 +113,6 @@ api.runWhenFinished(() => {
 
     align-items: center;
 
-
     .left {
         .profile-picture {
             width: 8rem;
@@ -125,7 +121,7 @@ api.runWhenFinished(() => {
             position: relative;
 
             &:hover::before {
-                content: "";
+                content: '';
                 position: absolute;
                 height: 100%;
                 width: 100%;
@@ -162,7 +158,6 @@ api.runWhenFinished(() => {
     .buttons {
         display: flex;
         gap: var(--gap-8);
-
     }
 }
 
@@ -179,5 +174,4 @@ api.runWhenFinished(() => {
     align-items: stretch;
     gap: var(--gap-8);
 }
-
 </style>

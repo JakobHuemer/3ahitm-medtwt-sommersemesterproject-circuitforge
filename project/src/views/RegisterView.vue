@@ -162,9 +162,7 @@ function doRegister() {
         <ButtonComponent
             class="signup"
             data-form-type="register"
-            :disabled="
-                !doPasswordsMatch || Object.values(allErrors).join('') !== '' || !checked
-            "
+            :disabled="!doPasswordsMatch || Object.values(allErrors).join('') !== '' || !checked"
             button-type="primary"
             size="medium"
             @click="doRegister"
