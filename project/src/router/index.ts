@@ -4,9 +4,9 @@ import CreatePostView from '@/views/CreatePostView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import UserView from '@/views/UserView.vue'
-import Account from '@/views/HomeView/Account.vue'
+import Account from '@/views/SettingsView/Account.vue'
 import HomeView from '@/views/HomeView.vue'
-import Preferences from '@/views/HomeView/Preferences.vue'
+import Preferences from '@/views/SettingsView/Preferences.vue'
 import ApiCallbackHandler from '@/views/ApiCallbackHandler.vue'
 
 const router = createRouter({
