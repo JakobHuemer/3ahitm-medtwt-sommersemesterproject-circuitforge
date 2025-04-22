@@ -24,8 +24,8 @@ api.runWhenFinished(() => {
 
 <template>
     <div class="wrapper">
-        <h3>Account</h3>
 
+        <h3>Profile</h3>
         <!--    Basic -->
         <section class="basic">
             <div class="left">
@@ -43,7 +43,7 @@ api.runWhenFinished(() => {
         </section>
 
         <section class="email">
-            <h4>Email</h4>
+            <h3>Email</h3>
 
             <InputField label="email" />
 
@@ -54,7 +54,7 @@ api.runWhenFinished(() => {
         </section>
 
         <section class="password">
-            <h4>Password</h4>
+            <h3>Password</h3>
 
             <div class="inputs">
                 <InputField label="current password" autocomplete="current-password" />
@@ -66,7 +66,7 @@ api.runWhenFinished(() => {
         </section>
 
         <section class="connections">
-            <h4>Connections</h4>
+            <h3>Connections</h3>
 
             <div class="connections-list">
 
@@ -101,7 +101,7 @@ api.runWhenFinished(() => {
         </section>
 
         <section class="danger">
-            <h4>Danger Zone</h4>
+            <h3>Danger Zone</h3>
 
             <ButtonComponent button-type="primary">Delete Account</ButtonComponent>
         </section>

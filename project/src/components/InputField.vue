@@ -73,7 +73,6 @@ const emit = defineEmits(['input'])
         margin-top: 0.4rem;
         padding: var(--gap-inset);
         background: var(--col-surface);
-        outline: none;
         width: 100%;
         border: none;
 

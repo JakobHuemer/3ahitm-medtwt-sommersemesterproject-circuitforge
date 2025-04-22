@@ -1,6 +1,6 @@
 @import './base.css';
 
-*:focus {
+*:focus-visible {
     outline: 1px solid var(--col-accent);
 }
 
