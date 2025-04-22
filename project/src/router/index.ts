@@ -7,6 +7,7 @@ import UserView from '@/views/UserView.vue'
 import Account from '@/views/HomeView/Account.vue'
 import HomeView from '@/views/HomeView.vue'
 import Preferences from '@/views/HomeView/Preferences.vue'
+import ApiCallbackHandler from '@/views/ApiCallbackHandler.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,6 +60,14 @@ const router = createRouter({
                     component: Preferences,
                 },
             ],
+        },
+        {
+            path: '/api-handler',
+            name: 'Api Handler',
+            component: ApiCallbackHandler,
+            meta: {
+                hideNav: true,
+            },
         },
     ],
 })
