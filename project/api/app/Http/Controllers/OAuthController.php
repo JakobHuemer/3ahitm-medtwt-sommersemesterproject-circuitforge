@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ApiResponseType;
 use App\Enums\OAuthProviderType;
 use App\Models\OAuthProvider;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
@@ -21,13 +23,12 @@ class OAuthController extends Controller {
             ->redirect();
     }
 
-    public function oauthCallbackHandler(OAuthProviderType $providerType): void {
+    public function oauthCallbackHandler(OAuthProviderType $providerType) {
 
         try {
             $oauth_user = Socialite::driver($providerType->value)->stateless()->user();
         } catch (\Exception $exception) {
-            // TODO: better error handling
-            echo "MY INVALID STATE EXCEPTION WAS THROWN";
+            return $this->sendAuthLoginMessage(false, "Invalid state exception");
         }
 
         // check if that auth already exists
@@ -78,7 +79,10 @@ class OAuthController extends Controller {
             $oauthUser->save();
 
         }
+
         Auth::login($platformUser);
+
+        return $this->sendAuthLoginMessage(true);
     }
 
 
@@ -89,8 +93,6 @@ class OAuthController extends Controller {
     }
 
     public function addOAuthCallbackHandler(OAuthProviderType $providerType) {
-
-
         // allow a single user to allow multiple logins with the same provider
 
         try {
@@ -99,7 +101,9 @@ class OAuthController extends Controller {
                 ->user();
         } catch (\Exception $exception) {
             // TODO: do better error handling
-            throw $exception;
+            // if the user clicks cancel etc.
+            return $this->sendAuthAddMessage(false,
+                "Something went wrong logging in with " . $providerType->value);
         }
 
         // check if this login for that provider already exists
@@ -119,13 +123,13 @@ class OAuthController extends Controller {
             ]);
 
             $oauthProvider->save();
-            return "CREATE NEW AND ADD OK!";
         }
 
         // check if the existing provider belongs to a different user
 
         if ($existingOAuthProvider->user_id != Auth::id()) {
-            throw new ConflictHttpException("This social login is already connected with another account!");
+            return $this->sendAuthAddMessage(false,
+                "This social login is already connected with another account!",);
         }
 
         // now that the account exists and already belongs to the user
@@ -137,7 +141,49 @@ class OAuthController extends Controller {
 
         $existingOAuthProvider->save();
 
-        return "OKKK";
+        return $this->sendAuthAddMessage(true,
+            "Successfully added login "
+            . $providerType->value .
+            " for " . $existingOAuthProvider->email);
+    }
+
+    public function getOAuthProviders() {
+        $providers = OAuthProvider::all()->where("user_id", Auth::id());
+
+        return Response(json_encode($providers));
+    }
+
+    private function sendAuthLoginMessage(bool $success, string $error = ""): RedirectResponse {
+
+        $response = [
+            "responseType" => ApiResponseType::AUTH_LOGIN,
+            "data" => [
+                "success" => $success,
+                "error" => $error
+            ]
+        ];
+
+        $encodedResponse = base64_encode(json_encode($response));
+
+        return redirect()->away(env('FRONTEND_URL') . "api-handler#" . $encodedResponse);
+//        return redirect(env('FRONTEND_URL') . "api-handler#" . $encodedResponse);
+
+    }
+
+    private function sendAuthAddMessage(bool $success, string $message): RedirectResponse {
+        $response = [
+            "responseType" => ApiResponseType::AUTH_ADD,
+            "data" => [
+                "success" => $success,
+                "message" => $message,
+                "error" => $message
+            ]
+        ];
+
+        $encodedResponse = base64_encode(json_encode($response));
+
+        return redirect()->away(env("FRONTEND_URL") . "api-handler#" . $encodedResponse);
+//        return redirect(env("FRONTEND_URL") . "api-handler#" . $encodedResponse);
     }
 
 }

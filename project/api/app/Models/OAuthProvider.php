@@ -18,6 +18,11 @@ class OAuthProvider extends Model {
         "email"
     ];
 
+    protected $hidden = [
+        "token",
+        "refresh_token",
+    ];
+
     public function casts() {
         return [
             "provider" => OAuthProviderType::class,
