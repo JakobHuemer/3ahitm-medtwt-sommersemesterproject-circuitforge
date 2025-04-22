@@ -38,3 +38,7 @@ Route::get("/auth-add/{providerType}/redirect", [OAuthController::class, "addOau
     ->middleware("auth:sanctum");
 Route::get("/auth-add/{providerType}/callback", [OAuthController::class, "addOAuthCallbackHandler"])
     ->middleware("auth:sanctum");
+
+// get socials
+Route::get("/socials", [OAuthController::class, "getOAuthProviders"])
+    ->middleware("auth:sanctum");
