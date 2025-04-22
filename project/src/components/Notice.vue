@@ -3,18 +3,18 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { computed } from 'vue'
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import {
-    faBug,
     faCheckSquare,
+    faExclamationTriangle,
     faInfoCircle,
-    faTriangleExclamation,
+    faSkull,
 } from '@fortawesome/free-solid-svg-icons'
 
 type NoticeType = 'warn' | 'info' | 'error' | 'success'
 
 const iconDictionary: Map<NoticeType, IconDefinition> = new Map<NoticeType, IconDefinition>([
-    ['error', faBug],
+    ['error', faSkull],
     ['success', faCheckSquare],
-    ['warn', faTriangleExclamation],
+    ['warn', faExclamationTriangle],
     ['info', faInfoCircle],
 ])
 
