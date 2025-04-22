@@ -13,9 +13,8 @@ interface AuthLoginResponse {
     error?: string
 }
 
-interface AuthAddResponse {
-    success: boolean
-    error?: string
+interface AuthAddResponse extends AuthLoginResponse {
+    message: string
 }
 
 export enum ApiResponseType {
