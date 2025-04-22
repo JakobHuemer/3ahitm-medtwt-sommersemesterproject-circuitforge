@@ -25,13 +25,12 @@
 .side-bar {
     padding: var(--gap-16);
 
-
     a {
         position: relative;
         outline: none;
 
         &.router-link-exact-active::before {
-            content: "";
+            content: '';
             height: 100%;
             width: 5px;
             left: -10px;

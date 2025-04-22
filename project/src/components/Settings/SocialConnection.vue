@@ -14,7 +14,7 @@ const props = defineProps<{
 
 const providerIconList: Map<string, { icon: IconDefinition; bgColor: string; logoColor: string }> =
     new Map([
-        ['google', { icon: faGoogle, bgColor: "#4285F4", logoColor: 'white' }],
+        ['google', { icon: faGoogle, bgColor: '#4285F4', logoColor: 'white' }],
         ['discord', { icon: faDiscord, bgColor: '#5865F2', logoColor: 'white' }],
         ['github', { icon: faGithub, bgColor: '#24292e', logoColor: 'white' }],
     ])
@@ -28,9 +28,7 @@ const providerColor = computed(() => {
     <div class="connection-item">
         <div
             class="icon"
-            :style="
-                'fill: ' + providerColor?.logoColor + '; background: ' + providerColor?.bgColor
-            "
+            :style="'fill: ' + providerColor?.logoColor + '; background: ' + providerColor?.bgColor"
         >
             <FontAwesomeIcon v-if="providerColor" :icon="providerColor.icon" />
         </div>

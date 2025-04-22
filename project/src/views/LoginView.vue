@@ -28,7 +28,6 @@ async function doLogin() {
     <div class="auth-container login-container full-height" role="form">
         <h1 class="title">Login to CircuitForge</h1>
         <div class="form-section">
-
             <Notice v-if="loginFailed" type="error">Wrong login or password!</Notice>
 
             <InputField
