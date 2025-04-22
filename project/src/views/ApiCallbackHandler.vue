@@ -20,12 +20,14 @@ try {
     error.value = true
 }
 
+console.log(response)
+
 switch (response?.responseType) {
     case ApiResponseType.AUTH_ADD:
         if (response.data.success) {
-            notice.success('add_auth', response.data.message)
+            notice.success(response.responseType, response.data.message)
         } else {
-            notice.error('add_auth', response.data.message)
+            notice.error(response.responseType, response.data.message)
         }
         router.push('/settings/account')
         break

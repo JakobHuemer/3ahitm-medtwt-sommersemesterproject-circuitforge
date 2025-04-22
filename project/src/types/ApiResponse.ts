@@ -18,6 +18,6 @@ interface AuthAddResponse extends AuthLoginResponse {
 }
 
 export enum ApiResponseType {
-    AUTH_LOGIN,
-    AUTH_ADD,
+    AUTH_LOGIN = 'auth_login',
+    AUTH_ADD = 'auth_add',
 }
