@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import InputField from '@/components/InputField.vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
+import Notice from '@/components/Notice.vue'
 
 const api = useApi()
 
@@ -27,10 +28,8 @@ async function doLogin() {
     <div class="auth-container login-container full-height" role="form">
         <h1 class="title">Login to CircuitForge</h1>
         <div class="form-section">
-            <div class="auth-error" v-if="loginFailed">
-                <FontAwesomeIcon :icon="faXmark" />
-                <span>Wrong login or password!</span>
-            </div>
+
+            <Notice v-if="loginFailed" type="error">Wrong login or password!</Notice>
 
             <InputField
                 class="input input-login"
@@ -74,20 +73,4 @@ async function doLogin() {
 
 <style scoped>
 @import '../assets/auth-views.css';
-
-.auth-error {
-    border: 1px solid var(--col-error);
-    background: color-mix(in srgb, var(--col-error) 10%, transparent);
-    border-radius: var(--border-radius-s);
-
-    display: flex;
-    align-items: center;
-    gap: 5px;
-
-    padding: var(--gap-8);
-
-    svg {
-        color: var(--col-error);
-    }
-}
 </style>

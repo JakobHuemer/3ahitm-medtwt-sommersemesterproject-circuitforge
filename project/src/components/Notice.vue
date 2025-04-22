@@ -47,7 +47,7 @@ const icon = computed(() => {
     padding: var(--gap-8);
 
     border: 1px solid var(--color);
-    background: color-mix(in srgb, color-mix(in srgb, var(--color), transparent), transparent);
+    background: color-mix(in srgb, var(--color) 20%, transparent);
     border-radius: var(--border-radius-s);
 
     svg {
