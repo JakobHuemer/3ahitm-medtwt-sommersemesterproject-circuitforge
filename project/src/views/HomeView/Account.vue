@@ -111,10 +111,73 @@ api.runWhenFinished(() => {
 <style scoped>
 @import '../../assets/settings-page.css';
 
+.basic {
+    display: flex;
+
+    align-items: center;
+
+
+    .left {
+        .profile-picture {
+            width: 8rem;
+            aspect-ratio: 1;
+            border-radius: var(--border-radius-s);
+            position: relative;
+
+            &:hover::before {
+                content: "";
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                border-radius: var(--border-radius-s);
+                background: color-mix(in srgb, var(--col-content-hover), transparent);
+                cursor: pointer;
+            }
+
+            &.profile-picture-placeholder {
+                display: grid;
+                place-items: center;
+                background: var(--col-content);
+
+                svg {
+                    height: 30%;
+                }
+            }
+        }
+    }
+
+    .right {
+        flex: 1;
+
+        display: grid;
+        gap: var(--gap-8);
+
+        button {
+            margin-block-start: var(--gap-8);
+        }
+    }
+}
+
+.email {
+    .buttons {
+        display: flex;
+        gap: var(--gap-8);
+
+    }
+}
+
+.password {
+    .inputs {
+        display: grid;
+        gap: var(--gap-8);
+    }
+}
+
 .connections-list {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: var(--gap-8);
 }
+
 </style>
