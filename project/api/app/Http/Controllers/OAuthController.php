@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use phpseclib3\Math\PrimeField\Integer;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -133,7 +134,7 @@ class OAuthController extends Controller {
 
         if ($existingOAuthProvider->user_id != Auth::id()) {
             return $this->sendAuthAddMessage(false,
-                "This social login is already connected with another account!",);
+                "Account " . $existingOAuthProvider->email . " is already connected to another account!",);
         }
 
         // now that the account exists and already belongs to the user
@@ -188,6 +189,15 @@ class OAuthController extends Controller {
 
         return redirect()->away(env("FRONTEND_URL") . "api-handler#" . $encodedResponse);
 //        return redirect(env("FRONTEND_URL") . "api-handler#" . $encodedResponse);
+    }
+
+    public function removeSocialConnection(int $id) {
+        // TODO: Add Gates so users can only delete their own connections
+
+
+        OAuthProvider::where("id", $id)->delete();
+
+
     }
 
 }
