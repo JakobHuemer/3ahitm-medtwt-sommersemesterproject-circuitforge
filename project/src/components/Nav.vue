@@ -81,12 +81,8 @@ const api = useApi()
     .nav-items {
         display: flex;
         align-items: end;
-        gap: var(--gap-16);
+        gap: var(--gap-32);
         font-family: var(--font-title);
-
-        & * {
-            font-family: inherit;
-        }
     }
 }
 
