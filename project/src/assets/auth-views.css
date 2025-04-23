@@ -60,3 +60,22 @@
         }
     }
 }
+
+
+.login-divider {
+    display: flex;
+    align-items: center;
+}
+
+.login-divider::before, .login-divider::after {
+    flex: 1;
+    content: '';
+    padding: 1px;
+    background-color: var(--col-surface);
+    margin: var(--gap-8);
+}
+
+.login-providers-text {
+    text-align: center;
+}
+
