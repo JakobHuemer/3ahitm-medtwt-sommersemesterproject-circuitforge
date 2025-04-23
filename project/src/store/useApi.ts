@@ -1,8 +1,10 @@
 import { defineStore } from 'pinia'
-import { reactive, ref, shallowRef } from 'vue'
+import { reactive, ref, shallowRef, watch } from 'vue'
 import axios from 'axios'
 import router from '@/router'
 import type User from '@/types/user'
+
+const LS_USER_KEY = 'circuitforge-user'
 
 export const useApi = defineStore('api', () => {
     const api = shallowRef(
@@ -15,17 +17,42 @@ export const useApi = defineStore('api', () => {
         }),
     )
 
+    // fetch from localstorage
+
+    const localUserString = localStorage.getItem(LS_USER_KEY)
+    let localUser: User | null = null
+
+    if (localUserString) {
+        localUser = JSON.parse(localUserString)
+    }
+
+    api.value
+        .get<User>('/me')
+        .then((r) => {
+            state.user = r.data
+            state.isAuthenticated = true
+        })
+        .catch((e) => {
+            state.isAuthenticated = false
+        })
+        .finally(() => {
+            runLater.forEach((cb) => cb())
+        })
+
     const state = reactive<{
         isAuthenticated: boolean
         user: null | User
         hasSession: boolean
     }>({
-        isAuthenticated: false,
-        user: null,
+        isAuthenticated: !!localUser,
+        user: localUser,
         hasSession: false,
     })
 
-    let setupFinished = false
+    watch(state, (newState) => {
+        localStorage.setItem(LS_USER_KEY, JSON.stringify(newState.user))
+    })
+
     const runLater: Function[] = []
 
     // interceptor to always have a session if there is none
@@ -51,20 +78,6 @@ export const useApi = defineStore('api', () => {
             return Promise.reject(error)
         },
     )
-
-    api.value
-        .get<User>('/me')
-        .then((r) => {
-            state.user = r.data
-            state.isAuthenticated = true
-        })
-        .catch((e) => {
-            state.isAuthenticated = false
-        })
-        .finally(() => {
-            setupFinished = true
-            runLater.forEach((cb) => cb())
-        })
 
     async function createSession() {
         state.hasSession = false
