@@ -19,7 +19,7 @@ class StoreUserRequest extends FormRequest {
      */
     public function rules(): array {
         return [
-            "username" => ["required", "min:2", "max:40", "unique:users"],
+            "username" => ["required", "min:2", "max:40", "unique:users", "alpha_dash"],
             "email" => ["required", "email", "unique:users"],
             "password" => ['required', "min:8"]
         ];
@@ -31,6 +31,7 @@ class StoreUserRequest extends FormRequest {
             "username.max" => "username cannot be over 40 long",
             "username.required" => "a username is required",
             "username.unique" => "this username is already used",
+            "username.alpha_dash" => "username must only container A-z, 0-9, -, _",
 
             "email.required" => "an email is required",
             "email.unique" => "this email is already used",

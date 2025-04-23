@@ -59,4 +59,12 @@ return [
         'allow_gif_avatars' => (bool)env('DISCORD_AVATAR_GIF', true),
         'avatar_default_extension' => env('DISCORD_EXTENSION_DEFAULT', 'png'), // only pick from jpg, png, webp
     ],
+
+    'twitch' => [
+        'client_id' => env('TWITCH_CLIENT_ID'),
+        'client_secret' => env('TWITCH_CLIENT_SECRET'),
+
+        'redirect' => 'http://localhost:8080' . env("API_URL") . 'auth/twitch/callback',
+        'redirect_add' => 'http://localhost:8080' . env("API_URL") . 'auth-add/twitch/callback',
+    ]
 ];

@@ -57,9 +57,10 @@ class OAuthController extends Controller {
                 // create new user
 
                 $platformUser = new User([
-                    "email" => $oauth_user->getEmail(),
+//                    "email" => $oauth_user->getEmail(),
+                    "username" => $this->generateUniqueUsername($oauth_user->getNickname() ?? $oauth_user->getName()),
                     "name" => $oauth_user->getNickname() ?? $oauth_user->getName(),
-                    "avatar" => $oauth_user->getAvatar(),
+                    "avatar" => $oauth_user->getAvatar() ?? null,
                 ]);
 
                 $platformUser->save();
@@ -101,7 +102,6 @@ class OAuthController extends Controller {
                 ->redirectUrl(config("services." . $providerType->value . ".redirect_add"))
                 ->user();
         } catch (\Exception $exception) {
-            // TODO: do better error handling
             // if the user clicks cancel etc.
             return $this->sendAuthAddMessage(false,
                 "Something went wrong logging in with " . $providerType->value);
@@ -198,6 +198,61 @@ class OAuthController extends Controller {
         OAuthProvider::where("id", $id)->delete();
 
 
+    }
+
+    private function generateUniqueUsername($name = null): string {
+        // If name is null, empty or not a string, generate a random username
+        if (empty($name) || !is_string($name)) {
+            return $this->generateRandomUsername();
+        }
+
+        // Convert to lowercase and replace spaces with dashes
+        $username = strtolower($name);
+
+        // Remove any characters that aren't alphanumeric or dashes
+        $username = preg_replace('/[^A-Za-z0-9-]/', '', $username);
+
+        // Ensure username is at least 2 characters
+        if (strlen($username) < 2) {
+            return $this->generateRandomUsername();
+        }
+
+        // Truncate to 37 characters (max:40 minus potential suffix)
+        if (strlen($username) > 37) {
+            $username = substr($username, 0, 37);
+        }
+
+        // Check if username exists in database
+        $baseUsername = $username;
+        $counter = 1;
+
+        while (User::where('username', $username)->exists()) {
+            // Add a numeric suffix that won't exceed max:40
+            $suffix = '-' . $counter;
+            $username = substr($baseUsername, 0, 40 - strlen($suffix)) . $suffix;
+            $counter++;
+        }
+
+        return $username;
+    }
+
+    /**
+     * Generate a random username that doesn't exist in the database
+     */
+    private function generateRandomUsername(): string {
+        $adjectives = ['happy', 'clever', 'brave', 'calm', 'kind', 'wise', 'quick', 'bright', 'swift', 'cool'];
+        $nouns = ['fox', 'wolf', 'eagle', 'tiger', 'bear', 'lion', 'hawk', 'dolphin', 'deer', 'panda'];
+
+        do {
+            // Generate a random username with format: adjective-noun-digits
+            $randomAdjective = $adjectives[array_rand($adjectives)];
+            $randomNoun = $nouns[array_rand($nouns)];
+            $randomDigits = rand(100, 9999);
+
+            $username = $randomAdjective . '-' . $randomNoun . '-' . $randomDigits;
+        } while (User::where('username', $username)->exists());
+
+        return $username;
     }
 
 }

@@ -16,9 +16,9 @@ class ForceJsonResponse {
         $request->header("Content-Type", "application/json");
          $response = $next($request);
 
-        if (method_exists($response, 'header')) {
-            $response->header('Content-Type', 'application/json');
-        }
+//        if (method_exists($response, 'header')) {
+//            $response->header('Content-Type', 'application/json');
+//        }
 
         return $response;
 
