@@ -1,0 +1,74 @@
+{
+    "name": "jacobfitzp/laravel-tiptap-validation",
+    "description": "Laravel validation rules for the Tiptap WYSIWYG editor.",
+    "keywords": [
+        "JacobFitzp",
+        "laravel",
+        "laravel-tiptap-validation"
+    ],
+    "homepage": "https://github.com/jacobfitzp/laravel-tiptap-validation",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jacob Fitzpatrick",
+            "email": "contact@jacobfitzp.me",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "laravel/helpers": "^1.6",
+        "spatie/laravel-package-tools": "^1.15.0"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^7.9",
+        "nunomaduro/larastan": "^2.0.1",
+        "orchestra/testbench": "^8.4",
+        "pestphp/pest": "^2.0",
+        "pestphp/pest-plugin-arch": "^2.0",
+        "pestphp/pest-plugin-laravel": "^2.0",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "spatie/laravel-ray": "^1.26"
+    },
+    "autoload": {
+        "psr-4": {
+            "JacobFitzp\\LaravelTiptapValidation\\": "src/",
+            "JacobFitzp\\LaravelTiptapValidation\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JacobFitzp\\LaravelTiptapValidation\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "JacobFitzp\\LaravelTiptapValidation\\TiptapValidationServiceProvider"
+            ],
+            "aliases": {
+                "TiptapValidation": "JacobFitzp\\LaravelTiptapValidation\\Facades\\TiptapValidation"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
