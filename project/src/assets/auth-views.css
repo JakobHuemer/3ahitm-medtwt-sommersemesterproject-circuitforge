@@ -61,13 +61,13 @@
     }
 }
 
-
 .login-divider {
     display: flex;
     align-items: center;
 }
 
-.login-divider::before, .login-divider::after {
+.login-divider::before,
+.login-divider::after {
     flex: 1;
     content: '';
     padding: 1px;
@@ -78,4 +78,3 @@
 .login-providers-text {
     text-align: center;
 }
-
