@@ -2,9 +2,11 @@
 import { ref } from 'vue'
 import { faDiscord, faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons'
 import ButtonComponent from '@/components/ButtonComponent.vue'
-import { useRouter } from 'vue-router'
 
-const router = ref(useRouter())
+const props = defineProps<{
+    authAdd?: boolean
+}>()
+
 const basePath = ref(import.meta.env.BASE_URL)
 
 const providers = ref([
@@ -18,7 +20,6 @@ const providers = ref([
         provider: 'Discord',
         icon: faDiscord,
         bgColor: '#5865F2',
-
         logoColor: 'white',
     },
     {
@@ -35,14 +36,19 @@ const providers = ref([
         <div v-for="prov of providers" class="provider">
             <a
                 :href="
-                    basePath + '/../../api/public/auth/' + prov.provider.toLowerCase() + '/redirect'
+                    basePath +
+                    '/../../api/public/auth' +
+                    (authAdd ? '-add/' : '/') +
+                    prov.provider.toLowerCase() +
+                    '/redirect'
                 "
             >
                 <ButtonComponent
                     :icon="prov.icon"
-                    size="medium"
+                    size="normal"
                     :style="'background: ' + prov.bgColor + ';color: ' + prov.logoColor"
-                />
+                    >{{ authAdd ? 'add ' + prov.provider : '' }}</ButtonComponent
+                >
             </a>
         </div>
     </div>

@@ -12,12 +12,14 @@ const props = defineProps<{
     name?: string
 }>()
 
-const providerIconList: Map<string, { icon: IconDefinition; bgColor: string; logoColor: string }> =
-    new Map([
-        ['google', { icon: faGoogle, bgColor: '#4285F4', logoColor: 'white' }],
-        ['discord', { icon: faDiscord, bgColor: '#5865F2', logoColor: 'white' }],
-        ['github', { icon: faGithub, bgColor: '#24292e', logoColor: 'white' }],
-    ])
+const providerIconList: Map<
+    string,
+    { icon: IconDefinition; bgColor: string; logoColor: string; display: string }
+> = new Map([
+    ['google', { icon: faGoogle, bgColor: '#4285F4', logoColor: 'white', display: 'Google' }],
+    ['discord', { icon: faDiscord, bgColor: '#5865F2', logoColor: 'white', display: 'Discord' }],
+    ['github', { icon: faGithub, bgColor: '#24292e', logoColor: 'white', display: 'GitHub' }],
+])
 
 const providerColor = computed(() => {
     return providerIconList.get(props.provider)
@@ -36,7 +38,7 @@ const providerColor = computed(() => {
         <div class="main">
             <div class="main-content">
                 <div class="header">
-                    <span class="provider">{{ provider }}</span>
+                    <span class="provider">{{ providerColor?.display ?? provider }}</span>
                     <span class="status" :data-active="active">{{
                         active ? 'active' : 'inactive'
                     }}</span>

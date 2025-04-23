@@ -27,7 +27,6 @@ async function doLogin() {
     <div class="auth-container login-container full-height" role="form">
         <h1 class="title">Login to CircuitForge</h1>
 
-        <span class="login-providers-text">Login using social networks</span>
         <LoginProviders class="login-providers-container" />
 
         <div class="login-divider">or</div>
