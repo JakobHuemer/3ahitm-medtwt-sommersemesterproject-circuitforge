@@ -1,22 +1,38 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 import Nav from '@/components/Nav.vue'
+import { ref } from 'vue'
 
-let url = window.location.href
+import creeper from '@/assets/img/background/creeper.jpg'
+import rails from '@/assets/img/background/rails.jpg'
+import og from '@/assets/img/background/og.jpg'
+import planet from '@/assets/img/background/planet.jpg'
+import forest from '@/assets/img/background/forest.png'
+import plains from '@/assets/img/background/plains.jpg'
 
-// fetch /api/posts with vue
+let images = [creeper, rails, og, planet, creeper, forest, plains]
+const bgImage = ref(images[Math.floor(Math.random() * images.length)])
 </script>
 
 <template>
-    <Nav v-if="!$route.meta.hideNav" />
-    <div class="main-wrapper">
+    <Nav class="root-navigation" v-if="!$route.meta.hideNav" />
+    <div
+        class="main-wrapper"
+        :style="
+            $route.meta.hideNav
+                ? 'background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, 0.7)), url(' +
+                  bgImage +
+                  ') center / cover no-repeat'
+                : ''
+        "
+    >
         <main>
             <RouterView />
         </main>
     </div>
 </template>
 
-<style scoped>
+<style>
 .main-wrapper {
     display: grid;
 }
