@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { faDiscord, faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons'
+import { faDiscord, faGithub, faGoogle, faTwitch } from '@fortawesome/free-brands-svg-icons'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 
 const props = defineProps<{
@@ -26,6 +26,12 @@ const providers = ref([
         provider: 'GitHub',
         icon: faGithub,
         bgColor: '#24292e',
+        logoColor: 'white',
+    },
+    {
+        provider: 'Twitch',
+        icon: faTwitch,
+        bgColor: '#6441a5',
         logoColor: 'white',
     },
 ])

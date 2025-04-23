@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { faDiscord, faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons'
+import { faDiscord, faGithub, faGoogle, faTwitch } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
@@ -25,6 +25,7 @@ const providerIconList: Map<
     ['google', { icon: faGoogle, bgColor: '#4285F4', logoColor: 'white', display: 'Google' }],
     ['discord', { icon: faDiscord, bgColor: '#5865F2', logoColor: 'white', display: 'Discord' }],
     ['github', { icon: faGithub, bgColor: '#24292e', logoColor: 'white', display: 'GitHub' }],
+    ['twitch', { icon: faTwitch, bgColor: '#6441a5', logoColor: 'white', display: 'Twitch' }],
 ])
 
 const providerColor = computed(() => {
@@ -48,7 +49,9 @@ function removeSocialConnection() {
     <div class="connection-item">
         <div
             class="icon"
-            :style="'fill: ' + providerColor?.logoColor + '; background: ' + providerColor?.bgColor"
+            :style="
+                'color: ' + providerColor?.logoColor + '; background: ' + providerColor?.bgColor
+            "
         >
             <FontAwesomeIcon v-if="providerColor" :icon="providerColor.icon" />
         </div>
