@@ -42,3 +42,7 @@ Route::get("/auth-add/{providerType}/callback", [OAuthController::class, "addOAu
 // get socials
 Route::get("/socials", [OAuthController::class, "getOAuthProviders"])
     ->middleware("auth:sanctum");
+
+// delete socials
+Route::delete("/socials/{id}", [OAuthController::class, "removeSocialConnection"])
+    ->middleware("auth:sanctum");
