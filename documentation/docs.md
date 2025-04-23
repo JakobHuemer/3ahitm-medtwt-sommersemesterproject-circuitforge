@@ -57,14 +57,21 @@ Farben/Fonts: [Design.md](sysspec/frontend/design.md)
 
 **Login System**
 
-- Registrierung
+- **Registrierung**
   - Form Validierung
   - username
   - email
   - password
   - confirm password
 
-- Anmeldung
+- **Anmeldung**
   - login: username oder email
   - password
+
+- **Social Login**
+  - Anmeldung und managen von social logins
+  - Twitch
+  - Discord
+  - GitHub
+  - Google
 
