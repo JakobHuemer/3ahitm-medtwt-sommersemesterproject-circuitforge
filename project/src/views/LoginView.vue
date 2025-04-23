@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useApi } from '@/store/useApi.ts'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import InputField from '@/components/InputField.vue'
+import ButtonComponent from '@/components/ButtonComponent.vue'
+import Notice from '@/components/Notice.vue'
+import LoginProviders from '@/components/Auth/LoginProviders.vue'
 
 const api = useApi()
 
@@ -24,33 +26,28 @@ async function doLogin() {
 <template>
     <div class="auth-container login-container full-height" role="form">
         <h1 class="title">Login to CircuitForge</h1>
+
+        <LoginProviders class="login-providers-container" />
+
+        <div class="login-divider">or</div>
+
         <div class="form-section">
-            <div class="auth-error" v-if="loginFailed">
-                <FontAwesomeIcon :icon="faXmark" />
-                <span>Wrong login or password!</span>
-            </div>
+            <Notice v-if="loginFailed" type="error">Wrong login or password!</Notice>
 
-            <div class="input input-login">
-                <label for="login">username or email</label>
-                <input
-                    type="text"
-                    name="login"
-                    id="login"
-                    v-model="login"
-                    autocomplete="username email"
-                />
-            </div>
+            <InputField
+                class="input input-login"
+                v-model="login"
+                label="login"
+                autocomplete="username email"
+            />
 
-            <div class="input input-password">
-                <label for="password">password</label>
-                <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    v-model="password"
-                    autocomplete="current-password password"
-                />
-            </div>
+            <InputField
+                class="input input-login"
+                v-model="password"
+                autocomplete="current-password password"
+                label="password"
+                type="password"
+            />
 
             <div class="remember-me">
                 <input type="checkbox" name="remember-me" id="remember-me" v-model="rememberMe" />
@@ -59,7 +56,16 @@ async function doLogin() {
             </div>
         </div>
 
-        <button type="submit" class="signup" @click="doLogin" data-form-type="login">Login</button>
+        <ButtonComponent
+            :big="true"
+            button-type="primary"
+            size="medium"
+            type="submit"
+            class="signup"
+            @click="doLogin"
+            data-form-type="login"
+            >Login</ButtonComponent
+        >
 
         <div class="footnote">
             <span class="footnote-text">Don't have an Account? </span>
@@ -69,19 +75,5 @@ async function doLogin() {
 </template>
 
 <style scoped>
-.auth-error {
-    border: 1px solid var(--col-error);
-    background: color-mix(in srgb, var(--col-error) 10%, transparent);
-    border-radius: var(--border-radius-s);
-
-    display: flex;
-    align-items: center;
-    gap: var(--gap-4);
-
-    padding: var(--gap-8);
-
-    svg {
-        color: var(--col-error);
-    }
-}
+@import '../assets/auth-views.css';
 </style>

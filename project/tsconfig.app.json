@@ -15,6 +15,6 @@
         "./src/*"
       ]
     },
-    "allowJs": true
+    "strict": true
   }
 }

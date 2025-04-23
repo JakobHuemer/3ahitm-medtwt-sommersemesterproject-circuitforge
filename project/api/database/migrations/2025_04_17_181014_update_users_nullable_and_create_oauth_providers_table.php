@@ -24,12 +24,18 @@ return new class extends Migration {
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
+            $table->string("email");
+
             $table->string("token");
             $table->string("refresh_token")->nullable();
 
 
             $table->string("provider")->index();
             $table->timestamps();
+
+            // make the combination of provider and email unique
+            // not individually
+            $table->unique(["provider", "email"]);
         });
     }
 

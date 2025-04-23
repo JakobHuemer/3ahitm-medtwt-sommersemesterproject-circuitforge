@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useApi } from '@/store/useApi.ts'
 
 const api = useApi()
@@ -11,7 +10,7 @@ const api = useApi()
             <h1>
                 <RouterLink to="/">CircuitForge</RouterLink>
             </h1>
-            <input type="text" name="search" id="search" class="search" placeholder="Search" />
+            <!--            <input type="text" name="search" id="search" class="search" placeholder="Search" />-->
             <div class="nav-items">
                 <RouterLink to="/posts">Posts</RouterLink>
                 <RouterLink to="/discussions">Discussions</RouterLink>
@@ -25,14 +24,14 @@ const api = useApi()
                                 />
                             </div>
                             <span class="username">
-                                {{ api.state.user?.username }}
+                                {{ api.state.user?.username ?? api.state.user?.name }}
                             </span>
                         </div>
 
                         <div class="nav-user-dropdown">
                             <div class="nav-user-dropdown-container">
                                 <button @click="api.logout()">Logout</button>
-                                <button>Preferences</button>
+                                <RouterLink to="/settings/preferences">Preferences</RouterLink>
                             </div>
                         </div>
                     </div>
@@ -61,7 +60,7 @@ const api = useApi()
     justify-content: space-between;
     align-items: end;
 
-    h1 {
+    h1 a {
         font-family: var(--font-title);
     }
 
@@ -84,6 +83,10 @@ const api = useApi()
         align-items: end;
         gap: var(--gap-16);
         font-family: var(--font-title);
+
+        & * {
+            font-family: inherit;
+        }
     }
 }
 
@@ -126,7 +129,8 @@ const api = useApi()
         background: var(--col-content);
         display: grid;
 
-        button {
+        button,
+        a {
             outline: none;
             border: 0;
             color: white;
@@ -134,6 +138,7 @@ const api = useApi()
             width: 100%;
             text-align: left;
             font-family: var(--font-title);
+            font-size: 80%;
 
             padding: var(--gap-4) var(--gap-8);
 

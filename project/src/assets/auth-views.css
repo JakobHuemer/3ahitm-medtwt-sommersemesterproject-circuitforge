@@ -17,38 +17,9 @@
         text-align: center;
     }
 
-    *:not(input) {
-        /* https://www.w3schools.com/howto/howto_css_disable_text_selection.asp */
-        -webkit-user-select: none; /* Safari */
-        -ms-user-select: none; /* IE 10 and IE 11 */
-        user-select: none; /* Standard syntax */
-    }
-
     .form-section {
         display: grid;
         gap: var(--gap-16);
-
-        label {
-            --error-gap: calc(var(--font-size-body) / 2);
-
-            display: flex;
-            gap: var(--error-gap);
-
-            & > *:nth-child(2) {
-                color: var(--col-error);
-
-                &:not(.auth-error-hidden)::before {
-                    color: var(--col-text-primary);
-                    content: '-';
-                    margin-right: var(--error-gap);
-                }
-            }
-        }
-
-        /* Tod overwrite the others */
-        label:has(.auth-error) + input {
-            outline: 1px solid var(--col-error);
-        }
 
         .remember-me {
             display: flex;
@@ -79,54 +50,6 @@
                 outline: 1px solid var(--col-accent);
             }
         }
-
-        .input {
-            position: relative;
-
-            --gap-inset: var(--gap-12);
-
-            input {
-                margin-top: 0.4rem;
-                padding: var(--gap-inset);
-                background: var(--col-surface);
-                outline: none;
-                width: 100%;
-                border: none;
-
-                overflow: hidden;
-                border-radius: var(--border-radius-s);
-
-                color: var(--col-text-primary);
-            }
-        }
-    }
-
-    button.signup {
-        background: var(--col-primary);
-        color: var(--col-text-primary);
-        padding: var(--gap-12);
-        font-size: var(--font-size-card-title);
-        font-weight: 500;
-        border-radius: var(--border-radius-s);
-        outline: none;
-        transition: background 0.1s;
-
-        border: none;
-
-        cursor: pointer;
-
-        &:not(:disabled):hover {
-            background: var(--col-primary-hover);
-        }
-
-        &:not(:disabled):active {
-            background: var(--col-primary-active);
-        }
-
-        &:disabled {
-            background: var(--col-primary-disabled);
-            cursor: not-allowed;
-        }
     }
 
     .footnote {
@@ -138,6 +61,20 @@
     }
 }
 
-.auth-warning {
-    color: var(--col-error);
+.login-divider {
+    display: flex;
+    align-items: center;
+}
+
+.login-divider::before,
+.login-divider::after {
+    flex: 1;
+    content: '';
+    padding: 1px;
+    background-color: var(--col-surface);
+    margin: var(--gap-8);
+}
+
+.login-providers-text {
+    text-align: center;
 }

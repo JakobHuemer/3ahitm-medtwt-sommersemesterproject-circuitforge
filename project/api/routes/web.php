@@ -29,16 +29,20 @@ Route::get("/test", function (Request $request) {
 });
 
 
-// Socialite Routes
+// login/register with socials
+Route::get("/auth/{providerType}/redirect", [OAuthController::class, "oauthRedirectHandler",]);
+Route::get("/auth/{providerType}/callback", [OAuthController::class, "oauthCallbackHandler",]);
 
-Route::get("/auth/github/redirect", [OAuthController::class, "githubRedirect"]);
+// add socials
+Route::get("/auth-add/{providerType}/redirect", [OAuthController::class, "addOauthRedirectHandler"])
+    ->middleware("auth:sanctum");
+Route::get("/auth-add/{providerType}/callback", [OAuthController::class, "addOAuthCallbackHandler"])
+    ->middleware("auth:sanctum");
 
-Route::get("/auth/github/callback", [OAuthController::class, "githubAuth"]);
+// get socials
+Route::get("/socials", [OAuthController::class, "getOAuthProviders"])
+    ->middleware("auth:sanctum");
 
-Route::get("/auth/google/redirect", [OAuthController::class, "googleRedirect"]);
-
-Route::get("/auth/google/callback", [OAuthController::class, "googleAuth"]);
-
-Route::get("/auth/discord/redirect", [OAuthController::class, "discordRedirect"]);
-
-Route::get("/auth/discord/callback", [OAuthController::class, "discordAuth"]);
+// delete socials
+Route::delete("/socials/{id}", [OAuthController::class, "removeSocialConnection"])
+    ->middleware("auth:sanctum");

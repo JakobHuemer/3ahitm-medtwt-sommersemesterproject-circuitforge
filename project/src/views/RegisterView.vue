@@ -2,6 +2,9 @@
 import { computed, reactive, ref, shallowRef, watch } from 'vue'
 import { useApi } from '@/store/useApi.ts'
 import { watchDebounced } from '@vueuse/core'
+import InputField from '@/components/InputField.vue'
+import ButtonComponent from '@/components/ButtonComponent.vue'
+import LoginProviders from '@/components/Auth/LoginProviders.vue'
 
 const api = useApi()
 
@@ -55,6 +58,7 @@ watchDebounced(
                 let t: keyof ErrorsType
                 for (t in displayErrors) {
                     displayErrors[t] = ''
+                    allErrors[t] = ''
                 }
             })
             .catch((e) => {
@@ -100,82 +104,59 @@ function doRegister() {
 <template>
     <div class="auth-container register-container full-height" role="form">
         <h1 class="title">Register on CircuitForge</h1>
+
+        <LoginProviders class="login-providers-container" />
+
+        <div class="login-divider">or</div>
+
         <div class="form-section">
-            <div class="input input-username">
-                <label for="username">
-                    <span>username</span>
-                    <span
-                        class="auth-error username-error"
-                        v-if="!!displayErrors.username && touchedFields.has('username')"
-                        >{{ displayErrors.username }}</span
-                    >
-                </label>
-                <input
-                    @input="touchedFields.add('username')"
-                    type="text"
-                    name="username"
-                    id="username"
-                    v-model="username"
-                    autocomplete="username"
-                />
-            </div>
+            <!--            Username -->
+            <InputField
+                label="username"
+                color="error"
+                :show-notice="!!displayErrors.username && touchedFields.has('username')"
+                :show-outline="!!displayErrors.username && touchedFields.has('username')"
+                :notice-text="displayErrors.username"
+                v-model="username"
+                autocomplete="username"
+                @input="touchedFields.add('username')"
+            />
 
-            <div class="input input-email">
-                <label for="email">
-                    <span>email</span>
-                    <span
-                        class="auth-error email-error"
-                        v-if="!!displayErrors.email && touchedFields.has('email')"
-                        >{{ displayErrors.email }}</span
-                    >
-                </label>
-                <input
-                    @input="touchedFields.add('email')"
-                    type="email"
-                    name="email"
-                    id="email"
-                    v-model="email"
-                    autocomplete="email"
-                />
-            </div>
+            <!--            Email -->
+            <InputField
+                label="email"
+                type="email"
+                :show-notice="!!displayErrors.email && touchedFields.has('email')"
+                :show-outline="!!displayErrors.email && touchedFields.has('email')"
+                :notice-text="displayErrors.email"
+                v-model="email"
+                autocomplete="email"
+                @input="touchedFields.add('email')"
+            />
 
-            <div class="input input-password">
-                <label for="password">
-                    <span>password</span>
-                    <span
-                        class="auth-error password-error"
-                        v-if="!!displayErrors.password && touchedFields.has('password')"
-                        >{{ displayErrors.password }}</span
-                    >
-                </label>
-                <input
-                    @input="touchedFields.add('password')"
-                    type="password"
-                    name="password"
-                    id="password"
-                    v-model="password"
-                    autocomplete="new-password"
-                />
-            </div>
+            <!--            Password -->
+            <InputField
+                label="password"
+                type="password"
+                v-model="password"
+                :show-outline="!!displayErrors.password && touchedFields.has('password')"
+                :show-notice="!!displayErrors.password && touchedFields.has('password')"
+                :notice-text="displayErrors.password"
+                autocomplete="new-password"
+                @input="touchedFields.add('password')"
+            />
 
-            <div class="input input-confirm-password">
-                <label for="confirm-password">
-                    <span>confirm password</span>
-                    <span
-                        class="auth-error confirm-password-error"
-                        v-if="!doPasswordsMatch && touchedFields.has('confirm-password')"
-                        >passwords do not match</span
-                    >
-                </label>
-                <input
-                    @input="touchedFields.add('confirm-password')"
-                    type="password"
-                    name="confirm-password"
-                    id="confirm-password"
-                    v-model="confirmPassword"
-                    autocomplete="new-password"
-                />
-            </div>
+            <!--            Confirm Password -->
+            <InputField
+                label="confirm password"
+                type="password"
+                v-model="confirmPassword"
+                :show-outline="!doPasswordsMatch && touchedFields.has('confirm-password')"
+                :show-notice="!doPasswordsMatch && touchedFields.has('confirm-password')"
+                notice-text="passwords do not match"
+                autocomplete="new-password"
+                @input="touchedFields.add('confirm-password')"
+            />
 
             <div class="remember-me">
                 <input type="checkbox" name="remember-me" id="remember-me" v-model="rememberMe" />
@@ -184,17 +165,16 @@ function doRegister() {
             </div>
         </div>
 
-        <button
+        <ButtonComponent
             class="signup"
             data-form-type="register"
-            :disabled="
-                !doPasswordsMatch || Object.values(displayErrors).join('') !== '' || !checked
-            "
+            :disabled="!doPasswordsMatch || Object.values(allErrors).join('') !== '' || !checked"
+            button-type="primary"
+            size="medium"
             @click="doRegister"
             type="submit"
-        >
-            Sign Up
-        </button>
+            >Sign Up
+        </ButtonComponent>
 
         <div class="footnote">
             <span class="footnote-text">Already have an Account? </span>
@@ -203,4 +183,6 @@ function doRegister() {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+@import '../assets/auth-views.css';
+</style>

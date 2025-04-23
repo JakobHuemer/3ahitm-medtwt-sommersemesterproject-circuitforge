@@ -2,87 +2,201 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ApiResponseType;
 use App\Enums\OAuthProviderType;
 use App\Models\OAuthProvider;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Contracts\User as SUser;
 use Laravel\Socialite\Facades\Socialite;
-use Laravel\Socialite\Two\InvalidStateException;
+use phpseclib3\Math\PrimeField\Integer;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
+/* TODO: correctly redirect to the frontend after handling
+        the social logins and passing on information
+*/
 
 class OAuthController extends Controller {
 
-    // GitHub
-    public function githubRedirect() {
-        return Socialite::driver("github")->redirect();
+    public function oauthRedirectHandler(OAuthProviderType $providerType) {
+        return Socialite::driver($providerType->value)
+            ->redirect();
     }
 
-    public function githubAuth() {
-        $this->loginWithProvider(OAuthProviderType::GITHUB);
-    }
-
-    // Google
-    public function googleRedirect() {
-        return Socialite::driver("google")->redirect();
-    }
-
-    public function googleAuth() {
-        $this->loginWithProvider(OAuthProviderType::GOOGLE);
-    }
-
-
-    // Discord
-    public function discordRedirect() {
-        return Socialite::driver("discord")->redirect();
-    }
-
-    public function discordAuth() {
-        $this->loginWithProvider(OAuthProviderType::DISCORD);
-    }
-
-
-    private function loginWithProvider(OAuthProviderType $provider) {
+    public function oauthCallbackHandler(OAuthProviderType $providerType) {
 
         try {
-            $oauth_user = Socialite::driver($provider->value)->stateless()->user();
-        } catch (InvalidStateException $exception) {
-            return;
+            $oauth_user = Socialite::driver($providerType->value)->stateless()->user();
+        } catch (\Exception $exception) {
+            return $this->sendAuthLoginMessage(false, "Invalid state exception");
         }
 
-        // check if user already exists
-        $platformUser = User::where("email", $oauth_user->getEmail())->first();
+        // check if that auth already exists
 
-        if (!$platformUser) {
+        $existingOauthProvider = OAuthProvider::where("provider", $providerType->value)
+            ->where("email", $oauth_user->getEmail())
+            ->first();
 
-            $platformUser = new User([
+        if ($existingOauthProvider) {
+            // update auth entry
+            $existingOauthProvider->token = $oauth_user->token;
+            $existingOauthProvider->refresh_token = $oauth_user->refreshToken;
+
+            $existingOauthProvider->save();
+
+            $platformUser = User::where("id", $existingOauthProvider->user_id)->first();
+
+        } else {
+
+            // check if user with email already exists
+            $platformUser = User::where("email", $oauth_user->getEmail())->first();
+
+            if (!$platformUser) {
+
+                // create new user
+
+                $platformUser = new User([
+                    "email" => $oauth_user->getEmail(),
+                    "name" => $oauth_user->getNickname() ?? $oauth_user->getName(),
+                    "avatar" => $oauth_user->getAvatar(),
+                ]);
+
+                $platformUser->save();
+
+            }
+
+            // add oauth entry
+
+            $oauthUser = new OAuthProvider([
+                "user_id" => $platformUser->id,
+                "token" => $oauth_user->token,
+                "refresh_token" => $oauth_user->refreshToken,
+                "provider" => $providerType,
                 "email" => $oauth_user->getEmail(),
-                "name" => $oauth_user->getNickname() ?? $oauth_user->getName(),
-                "avatar" => $oauth_user->getAvatar(),
             ]);
 
-            $platformUser->save();
+
+            $oauthUser->save();
 
         }
 
-        $oauth_provider = new OAuthProvider([
-            "user_id" => $platformUser->id,
-            "token" => $oauth_user->token,
-            "refresh_token" => $oauth_user->refreshToken,
-            "provider" => $provider,
-        ]);
-
-        echo "<pre>";
-        echo "NICK: " . $oauth_user->getNickname();
-        echo "\n";
-        echo "NAME: " . $oauth_user->getName();
-        echo "\n";
-        echo "AVATAR: " . $oauth_user->getAvatar();
-        echo "</pre>";
-
-        $oauth_provider->save();
-        $platformUser->markEmailAsVerified();
-
         Auth::login($platformUser);
+
+        return $this->sendAuthLoginMessage(true);
+    }
+
+
+    public function addOauthRedirectHandler(OAuthProviderType $providerType) {
+        return Socialite::driver($providerType->value)
+            ->redirectUrl(config("services." . $providerType->value . ".redirect_add"))
+            ->redirect();
+    }
+
+    public function addOAuthCallbackHandler(OAuthProviderType $providerType) {
+        // allow a single user to allow multiple logins with the same provider
+
+        try {
+            $oauthUser = Socialite::driver($providerType->value)
+                ->redirectUrl(config("services." . $providerType->value . ".redirect_add"))
+                ->user();
+        } catch (\Exception $exception) {
+            // TODO: do better error handling
+            // if the user clicks cancel etc.
+            return $this->sendAuthAddMessage(false,
+                "Something went wrong logging in with " . $providerType->value);
+        }
+
+        // check if this login for that provider already exists
+        $existingOAuthProvider = OAuthProvider::
+        where("email", $oauthUser->getEmail())
+            ->where("provider", $providerType->value)
+            ->first();
+
+        if (!$existingOAuthProvider) {
+            // if not, just create and save for authed user
+            $oauthProvider = new OAuthProvider([
+                "token" => $oauthUser->token,
+                "refresh_token" => $oauthUser->refreshToken,
+                "user_id" => Auth::id(),
+                "provider" => $providerType->value,
+                "email" => $oauthUser->getEmail(),
+            ]);
+
+            $oauthProvider->save();
+
+            return $this->sendAuthAddMessage(true, "Successfully added login "
+                . $providerType->value .
+                " for " . $oauthUser->getEmail());
+        }
+
+        // check if the existing provider belongs to a different user
+
+        if ($existingOAuthProvider->user_id != Auth::id()) {
+            return $this->sendAuthAddMessage(false,
+                "Account " . $existingOAuthProvider->email . " is already connected to another account!",);
+        }
+
+        // now that the account exists and already belongs to the user
+        // we can update it
+
+        $existingOAuthProvider->token = $oauthUser->token;
+        $existingOAuthProvider->refresh_token = $oauthUser->refreshToken;
+        $existingOAuthProvider->email = $oauthUser->getEmail();
+
+        $existingOAuthProvider->save();
+
+        return $this->sendAuthAddMessage(true,
+            "Successfully added login "
+            . $providerType->value .
+            " for " . $existingOAuthProvider->email);
+    }
+
+    public function getOAuthProviders() {
+        $providersList = OAuthProvider::where("user_id", Auth::id())->get();
+
+        return Response(json_encode($providersList));
+    }
+
+    private function sendAuthLoginMessage(bool $success, string $error = ""): RedirectResponse {
+
+        $response = [
+            "responseType" => ApiResponseType::AUTH_LOGIN,
+            "data" => [
+                "success" => $success,
+                "error" => $error
+            ]
+        ];
+
+        $encodedResponse = base64_encode(json_encode($response));
+
+        return redirect()->away(env('FRONTEND_URL') . "api-handler#" . $encodedResponse);
+//        return redirect(env('FRONTEND_URL') . "api-handler#" . $encodedResponse);
+
+    }
+
+    private function sendAuthAddMessage(bool $success, string $message): RedirectResponse {
+        $response = [
+            "responseType" => ApiResponseType::AUTH_ADD,
+            "data" => [
+                "success" => $success,
+                "message" => $message,
+                "error" => $message
+            ]
+        ];
+
+        $encodedResponse = base64_encode(json_encode($response));
+
+        return redirect()->away(env("FRONTEND_URL") . "api-handler#" . $encodedResponse);
+//        return redirect(env("FRONTEND_URL") . "api-handler#" . $encodedResponse);
+    }
+
+    public function removeSocialConnection(int $id) {
+        // TODO: Add Gates so users can only delete their own connections
+
+
+        OAuthProvider::where("id", $id)->delete();
+
 
     }
 

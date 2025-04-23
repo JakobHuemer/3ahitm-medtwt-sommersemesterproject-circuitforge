@@ -15,6 +15,12 @@ class OAuthProvider extends Model {
         "refresh_token",
         "user_id",
         "provider",
+        "email"
+    ];
+
+    protected $hidden = [
+        "token",
+        "refresh_token",
     ];
 
     public function casts() {
