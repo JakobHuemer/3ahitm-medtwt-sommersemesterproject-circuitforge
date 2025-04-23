@@ -57,7 +57,7 @@ const providers = ref([
 <style scoped>
 .login-providers {
     display: flex;
-    gap: var(--gap-16);
+    gap: var(--gap-8);
     justify-content: center;
 }
 </style>

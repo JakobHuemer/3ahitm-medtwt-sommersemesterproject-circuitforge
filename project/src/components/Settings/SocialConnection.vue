@@ -4,13 +4,19 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import { computed } from 'vue'
+import { useApi } from '@/store/useApi.ts'
+
+const api = useApi()
 
 const props = defineProps<{
+    id: number
     provider: string
     active: boolean
     email: string
     name?: string
 }>()
+
+const emit = defineEmits(['delete'])
 
 const providerIconList: Map<
     string,
@@ -24,6 +30,18 @@ const providerIconList: Map<
 const providerColor = computed(() => {
     return providerIconList.get(props.provider)
 })
+
+function removeSocialConnection() {
+    api.api
+        .delete('/socials/' + props.id)
+        .then((res) => {
+            console.log('RESPONSE', res)
+            emit('delete')
+        })
+        .catch((err) => {
+            console.log('ERROR', err)
+        })
+}
 </script>
 
 <template>
@@ -51,7 +69,9 @@ const providerColor = computed(() => {
 
             <div class="end">
                 <ButtonComponent v-if="!active" button-type="secondary">reactivate</ButtonComponent>
-                <ButtonComponent button-type="error">remove</ButtonComponent>
+                <ButtonComponent button-type="error" @click="removeSocialConnection"
+                    >remove</ButtonComponent
+                >
             </div>
         </div>
     </div>
