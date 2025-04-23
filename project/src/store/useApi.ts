@@ -9,9 +9,9 @@ const LS_USER_KEY = 'circuitforge-user'
 export const useApi = defineStore('api', () => {
     const api = shallowRef(
         axios.create({
-            // baseURL: import.meta.env.BASE_URL.replace(/frontend.*/g, 'api/public/'),
-            baseURL:
-                'http://localhost:8080/2425-sommerprojekt-3ahitm-JakobHuemer/project/api/public/',
+            baseURL: import.meta.env.BASE_URL.replace(/frontend.*/g, 'api/public/'),
+            // baseURL:
+            //     'http://localhost:8080/2425-sommerprojekt-3ahitm-JakobHuemer/project/api/public/',
             withCredentials: true,
             withXSRFToken: true,
         }),

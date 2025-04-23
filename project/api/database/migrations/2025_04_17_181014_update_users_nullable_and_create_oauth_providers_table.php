@@ -10,8 +10,8 @@ return new class extends Migration {
      */
     public function up(): void {
         Schema::table("users", function (Blueprint $table) {
-            $table->string("username")->nullable()->change();
             $table->string("password")->nullable()->change();
+            $table->string("email")->nullable()->change();
         });
 
         Schema::create("oauth_providers", function (Blueprint $table) {
@@ -44,8 +44,8 @@ return new class extends Migration {
      */
     public function down(): void {
         Schema::table("users", function (Blueprint $table) {
-            $table->string("username")->nullable(false)->change();
             $table->string("password")->nullable(false)->change();
+            $table->string("email")->nullable(false)->change();
         });
 
         Schema::dropIfExists("oauth_providers");

@@ -6,4 +6,5 @@ enum OAuthProviderType: string {
     case GITHUB = "github";
     case GOOGLE = "google";
     case DISCORD = "discord";
+    case Twitch = "twitch";
 }
