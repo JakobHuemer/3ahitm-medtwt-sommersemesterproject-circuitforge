@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import InputField from '@/components/InputField.vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, shallowRef } from 'vue'
 import { useApi } from '@/store/useApi.ts'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faCircleXmark, faImage } from '@fortawesome/free-solid-svg-icons'
+import { faImage } from '@fortawesome/free-solid-svg-icons'
 import SocialConnection from '@/components/Settings/SocialConnection.vue'
 import Notice from '@/components/Notice.vue'
+import LoginProviders from '@/components/Auth/LoginProviders.vue'
+import { NoticeType, useNotice } from '@/store/useNotice.ts'
 
 const api = useApi()
 
@@ -16,6 +18,15 @@ const user = computed(() => {
 
 const username = ref<string>('')
 const name = ref<string>('')
+
+const notices = useNotice()
+
+notices.on('notice', (notice) => {
+    console.log('NOTICE')
+    console.log('NOTICE')
+    console.log('NOTICE')
+    console.log(notice)
+})
 
 interface Connection {
     id: number
@@ -45,7 +56,17 @@ onMounted(() => {
         .finally(() => {
             connectionsLoaded.value = true
         })
+
+    console.log(notices.get(NoticeType.ERROR, 'auth_add'))
+    console.log(notices.get(NoticeType.ERROR, 'auth_add'))
+    console.log(notices.get(NoticeType.ERROR, 'auth_add'))
 })
+
+const noticeObj = shallowRef(
+    notices.popNotices([{ noticeType: NoticeType.ERROR, name: 'auth_add' }]),
+)
+
+console.log('noticeObj', noticeObj.value)
 </script>
 
 <template>
@@ -94,6 +115,10 @@ onMounted(() => {
             <h3>Connections</h3>
 
             <div class="connections-list">
+                <Notice type="error" v-if="noticeObj.get('error:auth_add')"
+                    >{{ noticeObj.get('error:auth_add')!.message }}
+                </Notice>
+
                 <SocialConnection
                     v-if="!connectionsError && connectionsLoaded"
                     v-for="conn of connections"
@@ -106,6 +131,11 @@ onMounted(() => {
                 <span v-if="!connectionsLoaded">Loading ...</span>
 
                 <Notice type="error" v-if="connectionsError">Failed to get Connections!</Notice>
+                <LoginProviders
+                    class="login-providers-add-list"
+                    style="justify-content: left"
+                    :auth-add="true"
+                />
             </div>
         </section>
 
@@ -185,5 +215,9 @@ onMounted(() => {
     flex-direction: column;
     align-items: stretch;
     gap: var(--gap-8);
+}
+
+.login-providers-add-list {
+    padding-block: var(--gap-8);
 }
 </style>

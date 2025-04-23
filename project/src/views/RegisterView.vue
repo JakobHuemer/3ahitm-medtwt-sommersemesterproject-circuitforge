@@ -105,7 +105,6 @@ function doRegister() {
     <div class="auth-container register-container full-height" role="form">
         <h1 class="title">Register on CircuitForge</h1>
 
-        <span class="login-providers-text">Register using social networks</span>
         <LoginProviders class="login-providers-container" />
 
         <div class="login-divider">or</div>

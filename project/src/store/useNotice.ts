@@ -1,7 +1,7 @@
 // AI-Notice: heavily inspired by claude.ai
 
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, shallowRef } from 'vue'
 import { EventEmitter, type Listener } from 'events'
 
 let idCounter = 0
@@ -28,8 +28,8 @@ export interface ErrorNotice extends Notice {
     throwable?: Error
 }
 
-export const useNotice = defineStore('error', () => {
-    const errorsMap = ref<Map<string, Notice[]>>(new Map())
+export const useNotice = defineStore('notice', () => {
+    const errorsMap = shallowRef<Map<string, Notice[]>>(new Map())
     const emitter = new EventEmitter()
 
     /**
@@ -48,7 +48,7 @@ export const useNotice = defineStore('error', () => {
         data?: any,
         throwable?: Error,
     ): Notice {
-        const notice: Notice = {
+        let notice: Notice = {
             id: ++idCounter,
             type,
             name,
@@ -60,16 +60,19 @@ export const useNotice = defineStore('error', () => {
 
         const noticeIndexName = `${type}:${name}`
 
-        if (!errorsMap.value.has(noticeIndexName)) {
-            errorsMap.value.set(noticeIndexName, [])
-        }
-
-        const queue = errorsMap.value.get(noticeIndexName)!
+        const queue =
+            errorsMap.value.get(noticeIndexName) ||
+            errorsMap.value.set(noticeIndexName, []).get(noticeIndexName)!
 
         queue.push(notice)
 
-        emitter.emit('notice', notice)
-        emitter.emit(notice.type, notice)
+        console.warn('NOTICE -------------------------')
+        console.info(queue)
+
+        console.warn('MAP ------------------------------')
+        console.info(errorsMap.value)
+
+        console.warn(JSON.stringify(errorsMap.value))
 
         return notice
     }
@@ -111,6 +114,7 @@ export const useNotice = defineStore('error', () => {
     }
 
     function get(type: NoticeType, name: string): Notice[] | undefined {
+        console.warn(JSON.stringify(errorsMap.value))
         return errorsMap.value.get(`${type}:${name}`)
     }
 
@@ -121,6 +125,19 @@ export const useNotice = defineStore('error', () => {
             ...(get(NoticeType.WARN, name) ?? []),
             ...(get(NoticeType.ERROR, name) ?? []),
         ]
+    }
+
+    function popNotices(args: { noticeType: NoticeType; name: string }[]) {
+        let poppedNotices = new Map<string, Notice>()
+
+        for (const n of args) {
+            const notice = pop(n.noticeType, n.name)
+            if (notice != undefined) {
+                poppedNotices.set(n.noticeType + ':' + n.name, notice)
+            }
+        }
+
+        return poppedNotices
     }
 
     function on(name: string, callback: Listener) {
@@ -143,5 +160,6 @@ export const useNotice = defineStore('error', () => {
         getAll,
         on,
         off,
+        popNotices,
     }
 })

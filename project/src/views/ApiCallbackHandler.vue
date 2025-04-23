@@ -5,7 +5,7 @@ import { ref } from 'vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import { faHome } from '@fortawesome/free-solid-svg-icons'
 import router from '@/router'
-import { useNotice } from '@/store/useNotice.ts'
+import { NoticeType, useNotice } from '@/store/useNotice.ts'
 
 const hash = useRoute().hash.substring(1)
 const error = ref<boolean>(false)
@@ -33,8 +33,8 @@ switch (response?.responseType) {
         break
     case ApiResponseType.AUTH_LOGIN:
         if (!response.data.success) {
-            notice.error('auth_login', response.data.error ?? 'Login failed!')
-            router.push('/login')
+            console.log(notice.error('auth_login', response.data.error ?? 'Login failed!'))
+            router.back()
             break
         }
         router.push('/')
