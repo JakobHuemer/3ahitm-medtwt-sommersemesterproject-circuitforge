@@ -66,14 +66,6 @@ export const useNotice = defineStore('notice', () => {
 
         queue.push(notice)
 
-        console.warn('NOTICE -------------------------')
-        console.info(queue)
-
-        console.warn('MAP ------------------------------')
-        console.info(errorsMap.value)
-
-        console.warn(JSON.stringify(errorsMap.value))
-
         return notice
     }
 

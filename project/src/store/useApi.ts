@@ -59,7 +59,6 @@ export const useApi = defineStore('api', () => {
             state.isAuthenticated = true
         })
         .catch((e) => {
-            console.info('User is not authenticated!')
             state.isAuthenticated = false
         })
         .finally(() => {
@@ -96,7 +95,6 @@ export const useApi = defineStore('api', () => {
             router.push('/')
             return true
         } catch (e) {
-            console.error('Failed to login user')
             state.isAuthenticated = false
             return false
         }

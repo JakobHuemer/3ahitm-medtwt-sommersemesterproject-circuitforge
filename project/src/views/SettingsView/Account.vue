@@ -122,6 +122,8 @@ console.log('noticeObj', noticeObj.value)
                 <SocialConnection
                     v-if="!connectionsError && connectionsLoaded"
                     v-for="conn of connections"
+                    @delete="connections.splice(connections.indexOf(conn))"
+                    :id="conn.id"
                     :provider="conn.provider"
                     :active="true"
                     :email="conn.email"
