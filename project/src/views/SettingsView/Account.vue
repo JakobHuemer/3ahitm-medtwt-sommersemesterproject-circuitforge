@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import InputField from '@/components/InputField.vue'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useApi } from '@/store/useApi.ts'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -28,7 +28,7 @@ const connections = ref<Connection[]>([])
 const connectionsLoaded = ref(false)
 const connectionsError = ref(false)
 
-api.runWhenFinished(() => {
+onMounted(() => {
     username.value = api.state.user?.username ?? ''
     name.value = api.state.user?.name ?? ''
 

@@ -10,7 +10,7 @@ const api = useApi()
             <h1>
                 <RouterLink to="/">CircuitForge</RouterLink>
             </h1>
-            <input type="text" name="search" id="search" class="search" placeholder="Search" />
+            <!--            <input type="text" name="search" id="search" class="search" placeholder="Search" />-->
             <div class="nav-items">
                 <RouterLink to="/posts">Posts</RouterLink>
                 <RouterLink to="/discussions">Discussions</RouterLink>

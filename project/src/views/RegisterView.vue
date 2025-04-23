@@ -4,6 +4,7 @@ import { useApi } from '@/store/useApi.ts'
 import { watchDebounced } from '@vueuse/core'
 import InputField from '@/components/InputField.vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
+import LoginProviders from '@/components/Auth/LoginProviders.vue'
 
 const api = useApi()
 
@@ -103,6 +104,12 @@ function doRegister() {
 <template>
     <div class="auth-container register-container full-height" role="form">
         <h1 class="title">Register on CircuitForge</h1>
+
+        <span class="login-providers-text">Register using social networks</span>
+        <LoginProviders class="login-providers-container" />
+
+        <div class="login-divider">or</div>
+
         <div class="form-section">
             <!--            Username -->
             <InputField
