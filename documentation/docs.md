@@ -77,3 +77,8 @@ Farben/Fonts: [Design.md](sysspec/frontend/design.md)
   - GitHub
   - Google
 
+
+**Ziele für Sprint 3**
+
+- Post erstellung/view
+- 3D Rendering der Schematics
