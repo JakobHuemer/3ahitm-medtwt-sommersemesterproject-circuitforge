@@ -12,13 +12,12 @@ Typ: JSON API x Vue.js Frontend
 - Backend: `project/api/`
 
 
-## Sprints
 
-### Pre-Sprint 1: Projektantrag
+## Pre-Sprint 1: Projektantrag
 
 [Projektantrag](projektantrag.md)
 
-### Pre-Sprint 2: Figma Prototyp
+## Pre-Sprint 2: Figma Prototyp
 
 Figma: https://www.figma.com/design/My7Y1fsFgrsLZDAbdR15ZG/CircuitForge?node-id=0-1&t=yzkKsVEjpbKWpXnm-1
 
@@ -27,7 +26,7 @@ Farben/Fonts: [Design.md](sysspec/frontend/design.md)
 
 ![](images/sprint1.png)
 
-### Sprint 1: Projektinitialisierung
+## Sprint 1: Projektinitialisierung
 
 03.04.2025
 
@@ -50,7 +49,7 @@ Farben/Fonts: [Design.md](sysspec/frontend/design.md)
 
 ![](images/sprint2.png)
 
-### Sprint 2: Login Management
+## Sprint 2: Login Management
 
 ![](images/sprint2-commits.png)
 
@@ -82,3 +81,11 @@ Farben/Fonts: [Design.md](sysspec/frontend/design.md)
 
 - Post erstellung/view
 - 3D Rendering der Schematics
+
+
+![](images/sprint3.png)
+
+## Sprint 3: create/view Post
+
+In Progress...
+
