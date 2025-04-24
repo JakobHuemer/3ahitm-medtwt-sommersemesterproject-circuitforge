@@ -22,6 +22,8 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
+            $table->boolean("archived")->default(false);
+
             $table->string("title", 64);
             $table->text("content");
 
