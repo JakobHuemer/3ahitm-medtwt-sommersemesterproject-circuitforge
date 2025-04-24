@@ -52,6 +52,8 @@ Farben/Fonts: [Design.md](sysspec/frontend/design.md)
 
 ### Sprint 2: Login Management
 
+![](images/sprint2-commits.png)
+
 [TipTap Editor Spec](sysspec/tiptap.md)
 
 
