@@ -24,4 +24,12 @@ class Entity extends Model {
             'entity_type' => EntityType::class
         ];
     }
+
+    public static function createWithType(EntityType $type, int $authorId) {
+        return new Entity([
+            "author_id" => $authorId,
+            "entity_type" => $type,
+        ]);
+    }
+
 }
