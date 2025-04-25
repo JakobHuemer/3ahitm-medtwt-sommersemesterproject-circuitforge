@@ -5,7 +5,6 @@ interface Props {
     label: string
     type?: string
     noticeText?: string
-    color?: Color
     showNotice?: boolean
     showOutline?: boolean
     autocomplete?: string
