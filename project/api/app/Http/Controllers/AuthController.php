@@ -21,9 +21,11 @@ class AuthController extends Controller {
             'password' => Hash::make($data['password'])
         ]);
 
+        $remember = $request->boolean("remember");
+
         $user->save();
 
-        Auth::login($user, true);
+        Auth::login($user, $remember);
 
         return Auth::user();
 
@@ -34,6 +36,7 @@ class AuthController extends Controller {
         $request->validate([
             'login' => 'required',
             'password' => 'required',
+            'remember' => 'boolean'
         ]);
 
         $credentials = $request->only("login", "password");
@@ -41,15 +44,15 @@ class AuthController extends Controller {
         $login = $credentials["login"];
         $password = $credentials["password"];
 
+        $remember = $request->boolean("remember");
 
-        if (Auth::attempt(["username" => $login, "password" => $password]) ||
-            Auth::attempt(["email" => $login, "password" => $password])) {
+        if (Auth::attempt(["username" => $login, "password" => $password], $remember) ||
+            Auth::attempt(["email" => $login, "password" => $password], $remember)) {
 
             return Auth::user();
         }
 
         throw new HttpException(401, 'Unauthenticated');
-
     }
 
 
@@ -64,12 +67,6 @@ class AuthController extends Controller {
             'email' => $data["email"],
             'password' => Hash::make($data['password'])
         ]);
-    }
-
-    public function dry_register(StoreUserRequest $request) {
-
-
-
     }
 
 }
