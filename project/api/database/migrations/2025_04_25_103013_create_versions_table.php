@@ -11,10 +11,12 @@ return new class extends Migration {
      */
     public function up(): void {
         Schema::create('versions', function (Blueprint $table) {
-            $table->id();
 
-            $table->string("version")->unique("unique_version");
+            $table->string("version");
+            $table->primary("version");
+
             $table->enum("type", VersionType::values());
+
             $table->timestamp("released")
                 ->nullable()
                 ->default(null);
@@ -22,11 +24,12 @@ return new class extends Migration {
         });
 
         Schema::create("version_post", function (Blueprint $table) {
-            $table->foreignId("version_id")
-                ->references("id")
+            $table->string("version_id");
+            $table->primary("version_id")
+                ->references("version")
                 ->on("versions")
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
+                ->noActionOnDelete()
+                ->noActionOnUpdate();
 
             $table->foreignId("post_id")
                 ->references("id")
@@ -44,6 +47,7 @@ return new class extends Migration {
      * Reverse the migrations.
      */
     public function down(): void {
+        Schema::dropIfExists('version_post');
         Schema::dropIfExists('versions');
     }
 };

@@ -52,7 +52,7 @@ class Post extends Entity {
         // create entity
 
         $entity = new Entity([
-            "type" => EntityType::POST,
+            "entity_type" => EntityType::POST,
             "author_id" => $authorId,
         ]);
 

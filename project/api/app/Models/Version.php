@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Version extends Model {
 
+    protected $primaryKey = "version";
+    protected $keyType = "string";
 
     protected $fillable = [
         "version",
