@@ -28,6 +28,14 @@ class Entity extends Model {
             "hashtag_id");
     }
 
+    public function ratings(): BelongsToMany {
+        return $this->belongsToMany(
+            User::class,
+            "ratings",
+            "entity_id",
+            "user_id");
+    }
+
     protected function casts(): array {
         return [
             'entity_type' => EntityType::class
