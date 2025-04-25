@@ -1,104 +1,49 @@
 <script setup lang="ts">
-import { computed, reactive, ref, shallowRef, watch } from 'vue'
+import { ref } from 'vue'
 import { useApi } from '@/store/useApi.ts'
-import { watchDebounced } from '@vueuse/core'
 import InputField from '@/components/InputField.vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import LoginProviders from '@/components/Auth/LoginProviders.vue'
+import router from '@/router'
+import Notice from '@/components/Notice.vue'
 
+const DEBOUNCE_TIME = 500
+
+const registerError = ref(false)
 const api = useApi()
 
-const username = ref<string>('')
+const form = api.useRegisterForm()
 
-const email = ref<string>('')
+function submit() {
+    registerError.value = false
+    form.submit()
+        .then((res) => {
+            console.log('SUCC: ', res)
+            // router.push('/').then(() => router.go(0))
+        })
+        .catch((err) => {
+            if (err.status != 422) {
+                // not just a check -> something went wrong
+                registerError.value = true
+            }
+        })
+}
 
-const password = ref<string>('')
+const validateTimeouts = new Map<string, number>()
 
-const confirmPassword = ref<string>('')
+function validate(validate: any) {
+    const prevTimeout = validateTimeouts.get(validate)
+    if (prevTimeout) {
+        clearInterval(prevTimeout)
+    }
+
+    validateTimeouts.set(
+        validate,
+        setTimeout(() => form.validate(validate), DEBOUNCE_TIME),
+    )
+}
 
 const rememberMe = ref<boolean>(false)
-
-const checked = ref<boolean>(false)
-
-const touchedFields = shallowRef<Set<string>>(new Set([]))
-
-type ErrorsType = {
-    username: string
-    email: string
-    password: string
-}
-
-const noErrors: ErrorsType = {
-    username: '',
-    email: '',
-    password: '',
-}
-
-const displayErrors = reactive<ErrorsType>(Object.create(noErrors))
-const allErrors = reactive<ErrorsType>(Object.create(noErrors))
-
-const doPasswordsMatch = computed<boolean>(() => {
-    return password.value == confirmPassword.value
-})
-
-watchDebounced(
-    [username, email, password],
-    async (value, oldValue, onCleanup) => {
-        console.log(api)
-        console.log(value)
-        console.log(oldValue)
-        console.log(onCleanup)
-        api.api
-            .post('/dry-register', {
-                username: username.value,
-                email: email.value,
-                password: password.value,
-            })
-            .then(() => {
-                let t: keyof ErrorsType
-                for (t in displayErrors) {
-                    displayErrors[t] = ''
-                    allErrors[t] = ''
-                }
-            })
-            .catch((e) => {
-                console.log(JSON.stringify(e.response.data.errors, null, 2))
-                const errorsResponse = e.response.data.errors ?? {}
-
-                let t: keyof ErrorsType
-
-                for (t in displayErrors) {
-                    if (errorsResponse[t]) {
-                        allErrors[t] = errorsResponse[t][0]
-                        if (touchedFields.value.has(t)) {
-                            console.log('HAS: ', t)
-                            displayErrors[t] = errorsResponse[t][0]
-                        }
-                    } else {
-                        displayErrors[t] = ''
-                    }
-                }
-            })
-            .finally(() => {
-                checked.value = true
-
-                console.log('TOUCHED:', touchedFields.value)
-                console.log('ALL:', JSON.stringify(allErrors, null, 2))
-                console.log('DISPLAY:', JSON.stringify(displayErrors, null, 2))
-                console.log('----------------')
-            })
-    },
-    {
-        debounce: 500,
-        maxWait: 10_000_000,
-    },
-)
-
-function doRegister() {
-    console.debug('Signup Triggered')
-
-    const result = api.register(username.value, email.value, password.value)
-}
 </script>
 
 <template>
@@ -110,52 +55,51 @@ function doRegister() {
         <div class="login-divider">or</div>
 
         <div class="form-section">
-            <!--            Username -->
+            <Notice type="error" v-if="registerError"
+                >Ops! An error occurred while creating user
+            </Notice>
+
             <InputField
                 label="username"
-                color="error"
-                :show-notice="!!displayErrors.username && touchedFields.has('username')"
-                :show-outline="!!displayErrors.username && touchedFields.has('username')"
-                :notice-text="displayErrors.username"
-                v-model="username"
+                :show-notice="form.invalid('username')"
+                :show-outline="form.invalid('username')"
+                :notice-text="form.errors.username"
+                v-model="form.username"
                 autocomplete="username"
-                @input="touchedFields.add('username')"
+                @input="validate('username')"
             />
 
-            <!--            Email -->
             <InputField
                 label="email"
                 type="email"
-                :show-notice="!!displayErrors.email && touchedFields.has('email')"
-                :show-outline="!!displayErrors.email && touchedFields.has('email')"
-                :notice-text="displayErrors.email"
-                v-model="email"
+                :show-notice="form.invalid('email')"
+                :show-outline="form.invalid('email')"
+                :notice-text="form.errors.email"
+                v-model="form.email"
                 autocomplete="email"
-                @input="touchedFields.add('email')"
+                @input="validate('email')"
             />
 
-            <!--            Password -->
             <InputField
                 label="password"
                 type="password"
-                v-model="password"
-                :show-outline="!!displayErrors.password && touchedFields.has('password')"
-                :show-notice="!!displayErrors.password && touchedFields.has('password')"
-                :notice-text="displayErrors.password"
+                :show-outline="form.invalid('password')"
+                :show-notice="form.invalid('password')"
+                :notice-text="form.errors.password"
                 autocomplete="new-password"
-                @input="touchedFields.add('password')"
+                v-model="form.password"
+                @input="validate('password')"
             />
 
-            <!--            Confirm Password -->
             <InputField
                 label="confirm password"
                 type="password"
-                v-model="confirmPassword"
-                :show-outline="!doPasswordsMatch && touchedFields.has('confirm-password')"
-                :show-notice="!doPasswordsMatch && touchedFields.has('confirm-password')"
-                notice-text="passwords do not match"
+                :show-outline="form.invalid('password_confirmation')"
+                :show-notice="form.invalid('password_confirmation')"
+                :notice-text="form.errors.password_confirmation"
                 autocomplete="new-password"
-                @input="touchedFields.add('confirm-password')"
+                v-model="form.password_confirmation"
+                @input="validate('password_confirmation')"
             />
 
             <div class="remember-me">
@@ -168,10 +112,10 @@ function doRegister() {
         <ButtonComponent
             class="signup"
             data-form-type="register"
-            :disabled="!doPasswordsMatch || Object.values(allErrors).join('') !== '' || !checked"
+            :disabled="form.processing"
             button-type="primary"
             size="medium"
-            @click="doRegister"
+            @click="submit"
             type="submit"
             >Sign Up
         </ButtonComponent>

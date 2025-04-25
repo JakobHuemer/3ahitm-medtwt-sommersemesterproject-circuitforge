@@ -3,13 +3,16 @@ import { reactive, ref, shallowRef, watch } from 'vue'
 import axios from 'axios'
 import router from '@/router'
 import type User from '@/types/user'
+import { useForm } from 'laravel-precognition-vue'
 
 const LS_USER_KEY = 'circuitforge-user'
+
+const BACKEND_URL = import.meta.env.BASE_URL.replace(/frontend.*/g, 'api/public/')
 
 export const useApi = defineStore('api', () => {
     const api = shallowRef(
         axios.create({
-            baseURL: import.meta.env.BASE_URL.replace(/frontend.*/g, 'api/public/'),
+            baseURL: BACKEND_URL,
             // baseURL:
             //     'http://localhost:8080/2425-sommerprojekt-3ahitm-JakobHuemer/project/api/public/',
             withCredentials: true,
@@ -19,7 +22,7 @@ export const useApi = defineStore('api', () => {
 
     // fetch from localstorage
 
-    const localUserString = localStorage.getItem(LS_USER_KEY)
+    const localUserString = sessionStorage.getItem(LS_USER_KEY)
     let localUser: User | null = null
 
     if (localUserString) {
@@ -50,7 +53,7 @@ export const useApi = defineStore('api', () => {
     })
 
     watch(state, (newState) => {
-        localStorage.setItem(LS_USER_KEY, JSON.stringify(newState.user))
+        sessionStorage.setItem(LS_USER_KEY, JSON.stringify(newState.user))
     })
 
     const runLater: Function[] = []
@@ -58,17 +61,16 @@ export const useApi = defineStore('api', () => {
     // interceptor to always have a session if there is none
     api.value.interceptors.request.use(
         async (request) => {
-            if (request.url == '/sanctum/csrf-cookie') {
+            if (request.url == '/sanctum/csrf-cookie' || state.hasSession) {
                 return request
             }
 
-            if (!state.hasSession) {
-                await createSession()
-            }
+            await refreshSession()
 
             return request
         },
         (error) => {
+            // TODO: display to the user, that the api is unavailable
             if (
                 error.response &&
                 (error.response.status === 401 || error.response.status === 419)
@@ -79,7 +81,7 @@ export const useApi = defineStore('api', () => {
         },
     )
 
-    async function createSession() {
+    async function refreshSession() {
         state.hasSession = false
 
         try {
@@ -148,6 +150,23 @@ export const useApi = defineStore('api', () => {
         runLater.push(callback)
     }
 
+    function useRegisterForm() {
+        console.info('USING REGISTER FORM')
+        return useForm(
+            'post',
+            BACKEND_URL + 'register',
+            {
+                username: '',
+                email: '',
+                password: '',
+                password_confirmation: '',
+            },
+            {
+                adapter: api.value.defaults.adapter,
+            },
+        )
+    }
+
     return {
         login,
         logout,
@@ -155,5 +174,6 @@ export const useApi = defineStore('api', () => {
         api,
         state,
         runWhenFinished,
+        useRegisterForm,
     }
 })

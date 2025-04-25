@@ -8,12 +8,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use const http\Client\Curl\AUTH_ANY;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AuthController extends Controller {
 
     public function register(StoreUserRequest $request) {
-
 
         $data = $request->validated();
         $user = new User([
@@ -69,7 +68,7 @@ class AuthController extends Controller {
 
     public function dry_register(StoreUserRequest $request) {
 
-        
+
 
     }
 

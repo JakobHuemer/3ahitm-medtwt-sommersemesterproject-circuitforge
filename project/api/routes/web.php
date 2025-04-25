@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OAuthController;
+use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
@@ -11,8 +12,11 @@ use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 
 
-Route::post("/register", [AuthController::class, 'register'])->name("register");
-Route::post("/login", [AuthController::class, "authenticate"])->name("login");
+Route::post("/register", [AuthController::class, 'register'])->name("register")
+    ->middleware([HandlePrecognitiveRequests::class]);
+Route::post("/login", [AuthController::class, "authenticate"])->name("login")
+    ->middleware([HandlePrecognitiveRequests::class]);
+
 Route::post("/logout", [AuthController::class, 'logout'])->name("logout");
 
 Route::post("/dry-register", [AuthController::class, 'dry_register'])->name("dry-register");
