@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,6 +15,7 @@ class VersionSeeder extends Seeder {
      * Run the database seeds.
      */
     public function run(): void {
+
 
         try {
             $data = $this->getJsonVersions();
@@ -34,12 +36,21 @@ class VersionSeeder extends Seeder {
 
             $versionArr = $data->versions;
 
+            DB::table('versions')->truncate();
+
             foreach ($versionArr as $value) {
-                $this->command->info(json_encode($versionArr));
+                DB::table('versions')->insert([
+                    "version" => $value->id,
+                    "released" => $value->releaseTime,
+                    "type" => $value->type,
+                ]);
             }
 
+            $this->command->info("Done seeding versions!");
+
         } catch (\Exception $exception) {
-            $this->command->error("No version_manifest.json file available! Not seeding!");
+            $this->command->error("Something went horribly wrong! not seeding: "
+                . $exception->getMessage());
         }
 
     }
@@ -65,7 +76,7 @@ class VersionSeeder extends Seeder {
         }
 
         if (Storage::exists($localFilePath)) {
-            return json_decode(Storage::get($localFilePath), true);
+            return json_decode(Storage::get($localFilePath));
         } else {
             throw new \Exception("versions_manifest.json does not exists! cannot proceed further!");
         }
