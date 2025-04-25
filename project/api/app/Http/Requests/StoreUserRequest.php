@@ -21,7 +21,8 @@ class StoreUserRequest extends FormRequest {
         return [
             "username" => ["required", "min:2", "max:40", "unique:users", "alpha_dash"],
             "email" => ["required", "email", "unique:users"],
-            "password" => ['required', "min:8"]
+            "password" => ['required', "min:8"],
+            "password_confirmation" => ['required', "same:password"],
         ];
     }
 
@@ -38,7 +39,10 @@ class StoreUserRequest extends FormRequest {
             "email.email" => "the email musst be valid",
 
             "password.required" => "a password is required",
-            "password.min" => "password musst be at least 8 characters long"
+            "password.min" => "password musst be at least 8 characters long",
+
+            "password_confirmation.required" => "password musst be confirmed",
+            "password_confirmation.same" => "passwords do not match",
         ];
     }
 
