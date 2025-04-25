@@ -19,8 +19,6 @@ Route::post("/login", [AuthController::class, "authenticate"])->name("login")
 
 Route::post("/logout", [AuthController::class, 'logout'])->name("logout");
 
-Route::post("/dry-register", [AuthController::class, 'dry_register'])->name("dry-register");
-
 Route::get("/check/username");
 
 Route::get("/me", function (Request $request) {
