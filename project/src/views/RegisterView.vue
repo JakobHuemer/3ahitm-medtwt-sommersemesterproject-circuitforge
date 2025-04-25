@@ -19,7 +19,7 @@ function submit() {
     form.submit()
         .then((res) => {
             console.log('SUCC: ', res)
-            // router.push('/').then(() => router.go(0))
+            router.push('/').then(() => router.go(0))
         })
         .catch((err) => {
             if (err.status != 422) {
@@ -42,8 +42,6 @@ function validate(validate: any) {
         setTimeout(() => form.validate(validate), DEBOUNCE_TIME),
     )
 }
-
-const rememberMe = ref<boolean>(false)
 </script>
 
 <template>
@@ -103,7 +101,12 @@ const rememberMe = ref<boolean>(false)
             />
 
             <div class="remember-me">
-                <input type="checkbox" name="remember-me" id="remember-me" v-model="rememberMe" />
+                <input
+                    type="checkbox"
+                    name="remember-me"
+                    id="remember-me"
+                    v-model="form.remember"
+                />
                 <label for="remember-me" class="checkbox"></label>
                 <label for="remember-me">remember me</label>
             </div>

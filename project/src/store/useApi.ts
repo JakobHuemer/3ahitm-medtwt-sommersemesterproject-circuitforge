@@ -29,6 +29,8 @@ export const useApi = defineStore('api', () => {
         localUser = JSON.parse(localUserString)
     }
 
+    // Setup
+
     api.value
         .get<User>('/me')
         .then((r) => {
@@ -95,13 +97,18 @@ export const useApi = defineStore('api', () => {
         }
     }
 
-    async function login(login: string, password: string, rememberMe: boolean): Promise<boolean> {
+    async function login(
+        login: string,
+        password: string,
+        remember: boolean = false,
+    ): Promise<boolean> {
         // TODO: Implement remember me!
 
         try {
             const res = await api.value.post<User>('/login', {
                 login,
                 password,
+                remember,
             })
 
             state.user = res.data
@@ -160,6 +167,7 @@ export const useApi = defineStore('api', () => {
                 email: '',
                 password: '',
                 password_confirmation: '',
+                remember: '',
             },
             {
                 adapter: api.value.defaults.adapter,
