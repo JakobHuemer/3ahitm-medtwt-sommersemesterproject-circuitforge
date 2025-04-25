@@ -50,14 +50,15 @@ class PostVersionTest extends TestCase {
 
         $version2->save();
 
-        $post->versions()->attach("1.21.4");
-        $post->versions()->attach("1.21.5-pre3");
+        $post->versions()->attach($version1);
+        $post->versions()->attach($version2);
 
         echo json_encode($post->versions()->get(), JSON_PRETTY_PRINT);
 
+
         // test if $post has both versions?
-//        $this->assertTrue($post->versions()->where("version_id", $version1->version)->exists());
-//        $this->assertTrue($post->versions()->where("version", $version2->version)->exists());
+        $this->assertTrue($post->versions()->where("version", $version1->version)->exists());
+        $this->assertTrue($post->versions()->where("version", $version2->version)->exists());
 
     }
 }

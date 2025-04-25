@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Version extends Model {
 
     protected $primaryKey = "version";
+    public $incrementing = false;
     protected $keyType = "string";
 
     protected $fillable = [
@@ -27,7 +28,7 @@ class Version extends Model {
     }
 
     public function posts(): BelongsToMany {
-        return $this->belongsToMany(Post::class, "version_post", "post_id", "version_id");
+        return $this->belongsToMany(Post::class, "version_post", "version_id", "post_id");
     }
 
 }
