@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\EntityType;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Post extends Entity {
 
@@ -37,6 +38,11 @@ class Post extends Entity {
     }
 
 
+    public function assets(): HasMany {
+        return $this->hasMany(Asset::class);
+    }
+
+
     public function entity(): BelongsTo {
         return $this->belongsTo(Entity::class, "id", "id");
     }
@@ -47,8 +53,7 @@ class Post extends Entity {
 
     // custom creators
 
-    public static function createPost(int $authorId, string $title, string $content): Post {
-
+    public static function createPost(int $authorId, string $title, string $content, array $assets = []): Post {
         // create entity
 
         $entity = new Entity([
