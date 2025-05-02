@@ -1,5 +1,6 @@
 <script async setup lang="ts">
 import { ref } from 'vue'
+import TagsContainer from '@/components/TagsContainer.vue'
 
 const props = defineProps<{
     postId: number
@@ -95,22 +96,7 @@ const post = await loadPost(123)
                 </div>
             </div>
 
-            <div class="tags-container">
-                <div class="tags-list versions">
-                    <div class="tag tag-version" v-for="version of post.versions">
-                        <div class="tag-version-icon">
-                            <img src="../assets/img/tags/name_tag.png" alt="v" />
-                        </div>
-                        <span>{{ version }}</span>
-                    </div>
-                </div>
-
-                <div class="tags-list hashtags">
-                    <div class="tag tag-hashtag" v-for="hashtag of post.hashtags">
-                        <span>{{ hashtag }}</span>
-                    </div>
-                </div>
-            </div>
+            <TagsContainer :versions="post.versions" :hashtags="post.hashtags" />
         </div>
     </div>
 </template>
@@ -174,48 +160,6 @@ img:not(.img-header img) {
             .post-stat {
                 display: flex;
                 gap: var(--gap-4);
-            }
-        }
-
-        .tags-container {
-            display: grid;
-            gap: var(--gap-8);
-            font-family: 'Minecraftia', sans-serif;
-
-            .tags-list {
-                display: flex;
-                gap: var(--gap-4);
-                flex-wrap: wrap;
-
-                .tag {
-                    padding: 6px 8px;
-                    border-radius: var(--border-radius-s);
-                    transition: background-color 0.1s;
-                    cursor: pointer;
-
-                    &.tag-version {
-                        background: var(--col-secondary);
-                        display: flex;
-                        gap: var(--gap-4);
-                        align-items: center;
-
-                        &:hover {
-                            background: var(--col-secondary-hover);
-                        }
-                    }
-
-                    &.tag-hashtag {
-                        background: var(--col-primary);
-
-                        &:hover {
-                            background-color: var(--col-primary-hover);
-                        }
-
-                        &::before {
-                            content: '#';
-                        }
-                    }
-                }
             }
         }
     }
