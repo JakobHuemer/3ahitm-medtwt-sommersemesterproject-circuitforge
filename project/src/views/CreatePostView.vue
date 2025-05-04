@@ -109,44 +109,6 @@ h2 {
     position: relative;
 }
 
-/* Custom Horizontal Scrollbar Styling for .container-images */
-
-/* Target only .container-images for Firefox */
-.container-images {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
-    overflow-x: auto; /* Enable horizontal scrolling */
-    overflow-y: hidden; /* Prevent vertical scrolling */
-    white-space: nowrap; /* Prevent content from wrapping */
-    padding-bottom: 3px; /* Add padding equal to scrollbar height */
-    margin-bottom: -3px; /* Pull it back up to make scrollbar not take space */
-}
-
-/* WebKit browsers (Chrome, Safari, newer Edge) */
-.container-images::-webkit-scrollbar {
-    height: 3px; /* Horizontal scrollbar height */
-    width: 3px; /* Also setting width for vertical scrollbar for consistency */
-}
-
-.container-images::-webkit-scrollbar-track {
-    background: transparent; /* Track background */
-    border-radius: 10px;
-}
-
-.container-images::-webkit-scrollbar-thumb {
-    background: rgba(155, 155, 155, 0.5); /* Scrollbar color */
-    border-radius: 10px; /* Rounded corners */
-}
-
-.container-images::-webkit-scrollbar-thumb:hover {
-    background: rgba(155, 155, 155, 0.8); /* Darker on hover */
-}
-
-/* For Internet Explorer and older Edge */
-.container-images {
-    -ms-overflow-style: none; /* IE and Edge - hide default scrollbar */
-}
-
 .container-images {
     --container-images-gap: var(--gap-16);
     width: 100%;
@@ -161,11 +123,24 @@ h2 {
         top: 0;
         left: 0;
         height: 100%;
-        width: calc(var(--container-images-gap) * 2);
+        width: calc(var(--container-images-gap) * 2.5);
         z-index: 100;
-        /*backdrop-filter: blur(20px);*/
-        background: var(--col-container);
-        mask-image: linear-gradient(to right, white, transparent);
+        background: linear-gradient(
+            to left,
+            transparent 0%,
+            color-mix(in srgb, var(--col-container) 5%, transparent) 30%,
+            color-mix(in srgb, var(--col-container) 10%, transparent) 50%,
+            color-mix(in srgb, var(--col-container) 25%, transparent) 65%,
+            color-mix(in srgb, var(--col-container) 50%, transparent) 80%,
+            color-mix(in srgb, var(--col-container) 85%, transparent) 90%,
+            var(--col-container) 100%
+        );
+        /*mask-image: linear-gradient(to right, white, transparent);*/
+    }
+
+    &::after {
+        left: 100%;
+        transform: translateX(-100%) scaleX(-1);
     }
 
     .scroll-container {
