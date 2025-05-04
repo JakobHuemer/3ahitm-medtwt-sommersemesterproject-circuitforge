@@ -28,7 +28,9 @@ const props = defineProps<{
 .tags-container {
     display: grid;
     gap: var(--gap-8);
+    font-size: calc(var(--font-size-body) * 0.8);
     font-family: 'Minecraftia', sans-serif;
+    image-rendering: pixelated;
 
     .tags-list {
         display: flex;

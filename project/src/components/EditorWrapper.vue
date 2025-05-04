@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { Editor, EditorContent, Extension, type JSONContent } from '@tiptap/vue-3'
+import { type Content, Editor, EditorContent, type JSONContent } from '@tiptap/vue-3'
 import { shallowRef } from 'vue'
-import { StarterKit } from '@tiptap/starter-kit'
 
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
@@ -14,6 +13,9 @@ import Heading from '@tiptap/extension-heading'
 import Blockquote from '@tiptap/extension-blockquote'
 import Code from '@tiptap/extension-code'
 import CodeBlock from '@tiptap/extension-code-block'
+import BulletList from '@tiptap/extension-bullet-list'
+import OrderedList from '@tiptap/extension-ordered-list'
+import ListItem from '@tiptap/extension-list-item'
 
 import type PostEditorInstance from '@/types/post-editor-instance'
 
@@ -25,7 +27,9 @@ const props = defineProps<{
 
 const editor = shallowRef<Editor>(
     new Editor({
-        content: '<h1>hello world</h1><p>Ja moin</p>',
+        content: `
+        <h1>hello world</h1>
+        `,
         editable: props.editable,
         autofocus: props.autoFocus,
         extensions: [
@@ -40,12 +44,15 @@ const editor = shallowRef<Editor>(
             Blockquote,
             Code,
             CodeBlock,
+            BulletList,
+            OrderedList,
+            ListItem,
         ],
     }),
 )
 
 function getJson(): JSONContent {
-    return { text: editor.value.getHTML() }
+    return editor.value.getJSON()
 }
 
 function setJson(json: JSONContent) {

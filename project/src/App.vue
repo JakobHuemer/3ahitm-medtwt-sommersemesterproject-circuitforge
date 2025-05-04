@@ -39,6 +39,7 @@ const bgImage = ref(images[Math.floor(Math.random() * images.length)])
 
 main {
     width: var(--main-width);
+    overflow: hidden;
     display: block;
     margin: var(--gap-32);
     margin-inline: auto;
