@@ -168,6 +168,7 @@ onBeforeUnmount(() => {
         background: var(--col-content-hover);
         color: var(--col-text-secondary);
         font-style: italic;
+        margin-block: var(--gap-8);
         padding: var(--gap-4);
         padding-left: var(--gap-8);
     }

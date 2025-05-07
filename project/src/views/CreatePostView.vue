@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faCloudArrowUp, faImage, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { ref, watch } from 'vue'
+import { faCloudArrowUp, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { ref, shallowRef, watch } from 'vue'
 import TagsContainer from '@/components/TagsContainer.vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import EditorWrapper from '@/components/EditorWrapper.vue'
 import type { JSONContent } from '@tiptap/vue-3'
+import FilePreview from '@/components/FilePreview.vue'
 
 const hashtags = ref<string[]>(['hello', 'thisIsTag', 'memo'])
 const versions = ref<string[]>(['1.21+', '1.8.9'])
@@ -37,85 +38,25 @@ function adjustHeight() {
     textarea.style.height = `${textarea.scrollHeight}px`
 }
 
-const content = ref<JSONContent>({
-    type: 'doc',
-    content: [
-        {
-            type: 'heading',
-            attrs: {
-                level: 1,
-            },
-            content: [
-                {
-                    type: 'text',
-                    text: 'H1 title',
-                },
-            ],
-        },
-        {
-            type: 'heading',
-            attrs: {
-                level: 2,
-            },
-            content: [
-                {
-                    type: 'text',
-                    text: 'H2 TItle',
-                },
-            ],
-        },
-        {
-            type: 'heading',
-            attrs: {
-                level: 3,
-            },
-            content: [
-                {
-                    type: 'text',
-                    text: 'H3 TItle',
-                },
-            ],
-        },
-        {
-            type: 'heading',
-            attrs: {
-                level: 4,
-            },
-            content: [
-                {
-                    type: 'text',
-                    text: 'H4 Title',
-                },
-            ],
-        },
-        {
-            type: 'heading',
-            attrs: {
-                level: 5,
-            },
-            content: [
-                {
-                    type: 'text',
-                    text: 'H5 Title',
-                },
-            ],
-        },
-        {
-            type: 'heading',
-            attrs: {
-                level: 6,
-            },
-            content: [
-                {
-                    type: 'text',
-                    text: 'h& TItle',
-                },
-            ],
-        },
-    ],
-})
+const content = ref<JSONContent>({})
 
-const syncedContent = ref<string>('')
+const fileInput = ref<HTMLInputElement>()
+
+const fileList = ref<Map<number, File>>(new Map())
+
+let prevNum = Math.max(...fileList.value.keys(), 1)
+
+function handleFile(event: Event) {
+    const target = event.target as HTMLInputElement
+    if (!fileInput.value?.files || fileInput.value.files.length == 0) return
+
+    console.log('prevnum:', prevNum)
+    // add files
+    for (let file of fileInput.value.files) {
+        fileList.value.set(++prevNum, file)
+        console.log('putting: ', prevNum + ' as ' + file.name)
+    }
+}
 </script>
 
 <template>
@@ -123,51 +64,25 @@ const syncedContent = ref<string>('')
         <h2>Create Post</h2>
         <div class="container container-images">
             <div class="scroll-container">
-                <div class="post-image add-image-button">
+                <label for="image-upload" class="post-image add-image-button">
                     <FontAwesomeIcon :icon="faCloudArrowUp" />
                     <span>Add Image</span>
-                </div>
-                <div class="post-image">
-                    <img
-                        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.photographylife.com%2Fwp-content%2Fuploads%2F2014%2F06%2FNikon-D810-Image-Sample-6.jpg&f=1&nofb=1&ipt=7725af85bf7241ed3992926d1f0b192b48bebee7488f69025b9f125661665464"
-                        alt="asdsad"
+                    <input
+                        multiple
+                        accept="image/*"
+                        ref="fileInput"
+                        type="file"
+                        @change="handleFile"
+                        name="image-upload"
+                        id="image-upload"
                     />
-                </div>
-                <div class="post-image">
-                    <img
-                        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.photographylife.com%2Fwp-content%2Fuploads%2F2014%2F06%2FNikon-D810-Image-Sample-6.jpg&f=1&nofb=1&ipt=7725af85bf7241ed3992926d1f0b192b48bebee7488f69025b9f125661665464"
-                        alt="asdsad"
-                    />
-                </div>
-                <div class="post-image">
-                    <img
-                        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.photographylife.com%2Fwp-content%2Fuploads%2F2014%2F06%2FNikon-D810-Image-Sample-6.jpg&f=1&nofb=1&ipt=7725af85bf7241ed3992926d1f0b192b48bebee7488f69025b9f125661665464"
-                        alt="asdsad"
-                    />
-                </div>
-                <div class="post-image">
-                    <img
-                        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.photographylife.com%2Fwp-content%2Fuploads%2F2014%2F06%2FNikon-D810-Image-Sample-6.jpg&f=1&nofb=1&ipt=7725af85bf7241ed3992926d1f0b192b48bebee7488f69025b9f125661665464"
-                        alt="asdsad"
-                    />
-                </div>
-                <div class="post-image">
-                    <img
-                        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.photographylife.com%2Fwp-content%2Fuploads%2F2014%2F06%2FNikon-D810-Image-Sample-6.jpg&f=1&nofb=1&ipt=7725af85bf7241ed3992926d1f0b192b48bebee7488f69025b9f125661665464"
-                        alt="asdsad"
-                    />
-                </div>
-                <div class="post-image">
-                    <img
-                        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.photographylife.com%2Fwp-content%2Fuploads%2F2014%2F06%2FNikon-D810-Image-Sample-6.jpg&f=1&nofb=1&ipt=7725af85bf7241ed3992926d1f0b192b48bebee7488f69025b9f125661665464"
-                        alt="asdsad"
-                    />
-                </div>
-                <div class="post-image">
-                    <img
-                        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.photographylife.com%2Fwp-content%2Fuploads%2F2014%2F06%2FNikon-D810-Image-Sample-6.jpg&f=1&nofb=1&ipt=7725af85bf7241ed3992926d1f0b192b48bebee7488f69025b9f125661665464"
-                        alt="asdsad"
-                    />
+                </label>
+
+                <div class="post-image" v-for="[key, file] in fileList" :key="key.toString()">
+                    <div class="delete-button">
+                        <FontAwesomeIcon :icon="faTrash" @click="fileList.delete(key)" />
+                    </div>
+                    <FilePreview :file="file" />
                 </div>
             </div>
         </div>
@@ -189,18 +104,18 @@ const syncedContent = ref<string>('')
                 <EditorWrapper v-model="content" :initial-content="content" />
             </div>
 
-            <div class="content">
-                <h4>Content:</h4>
-                <textarea
-                    class="title"
-                    style="font-size: 13px; font-family: monospace"
-                    name="te"
-                    id="te"
-                    cols="30"
-                    rows="10"
-                    >{{ JSON.stringify(content, null, 2) }}</textarea
-                >
-            </div>
+            <!--            <div class="content">-->
+            <!--                <h4>Content:</h4>-->
+            <!--                <textarea-->
+            <!--                    class="title"-->
+            <!--                    style="font-size: 13px; font-family: monospace"-->
+            <!--                    name="te"-->
+            <!--                    id="te"-->
+            <!--                    cols="30"-->
+            <!--                    rows="10"-->
+            <!--                    >{{ JSON.stringify(content, null, 2) }}</textarea-->
+            <!--                >-->
+            <!--            </div>-->
 
             <div class="downloadables">
                 <div class="download" v-for="asset of downloadables">
@@ -309,6 +224,35 @@ h2 {
             height: 14rem;
             aspect-ratio: 1;
             border-radius: var(--border-radius-s);
+            position: relative;
+
+            #image-upload {
+                display: none;
+            }
+
+            .delete-button {
+                position: absolute;
+                top: var(--gap-8);
+                right: var(--gap-8);
+                color: color-mix(in srgb, var(--col-error) 70%, transparent);
+                aspect-ratio: 1;
+                height: 10%;
+
+                transition:
+                    color 0.1s,
+                    transform 0.1s;
+
+                cursor: pointer;
+
+                svg {
+                    height: 100%;
+                }
+
+                &:hover {
+                    color: var(--col-error);
+                    transform: scale(1.1);
+                }
+            }
 
             &:first-child {
                 margin-left: var(--container-images-gap);
@@ -318,7 +262,7 @@ h2 {
                 margin-right: var(--container-images-gap);
             }
 
-            img {
+            .thumbnail {
                 border-radius: var(--border-radius-s);
                 height: 100%;
                 width: 100%;
