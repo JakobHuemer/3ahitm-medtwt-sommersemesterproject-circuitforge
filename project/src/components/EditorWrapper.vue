@@ -52,7 +52,6 @@ const editor = useEditor({
         }
 
         model.value = editor.value.getJSON()
-        console.log('updade', model.value)
     },
 })
 
@@ -108,7 +107,7 @@ onBeforeUnmount(() => {
     h4,
     h5,
     h6 {
-        font-family: var(--font-title);
+        font-family: var(--font-body);
         color: var(--col-text-primary);
         margin-top: var(--gap-24);
         margin-bottom: var(--gap-16);
@@ -171,10 +170,6 @@ onBeforeUnmount(() => {
         font-style: italic;
         padding: var(--gap-4);
         padding-left: var(--gap-8);
-
-        p {
-            margin: 0;
-        }
     }
 
     /* Code */
@@ -198,9 +193,10 @@ onBeforeUnmount(() => {
         border-radius: var(--border-radius-s);
 
         code {
+            min-height: 2rem;
             font-size: calc(var(--font-size-body) * 0.9);
-            display: grid;
             line-height: 1.5;
+            place-items: center;
         }
     }
 

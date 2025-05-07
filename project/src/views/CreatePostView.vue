@@ -41,169 +41,74 @@ const content = ref<JSONContent>({
     type: 'doc',
     content: [
         {
-            type: 'paragraph',
-            content: [
-                {
-                    type: 'text',
-                    text: 'hello this is my post',
-                },
-            ],
-        },
-        {
-            type: 'paragraph',
-        },
-        {
-            type: 'blockquote',
-            content: [
-                {
-                    type: 'paragraph',
-                    content: [
-                        {
-                            type: 'text',
-                            text: 'this is a nice quote',
-                        },
-                    ],
-                },
-                {
-                    type: 'paragraph',
-                    content: [
-                        {
-                            type: 'text',
-                            text: 'another line asin the quote',
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            type: 'paragraph',
-        },
-        {
-            type: 'codeBlock',
+            type: 'heading',
             attrs: {
-                language: 'shell',
+                level: 1,
             },
             content: [
                 {
                     type: 'text',
-                    text: 'some codeblock here\nand there\netc.',
+                    text: 'H1 title',
                 },
             ],
         },
         {
-            type: 'paragraph',
-        },
-        {
-            type: 'paragraph',
-            content: [
-                {
-                    type: 'text',
-                    text: 'this is ',
-                },
-                {
-                    type: 'text',
-                    marks: [
-                        {
-                            type: 'code',
-                        },
-                    ],
-                    text: 'marked',
-                },
-                {
-                    type: 'text',
-                    text: ' and ',
-                },
-                {
-                    type: 'text',
-                    marks: [
-                        {
-                            type: 'bold',
-                        },
-                    ],
-                    text: 'this is bold',
-                },
-                {
-                    type: 'text',
-                    text: ' and ',
-                },
-                {
-                    type: 'text',
-                    marks: [
-                        {
-                            type: 'italic',
-                        },
-                    ],
-                    text: 'this is italic',
-                },
-                {
-                    type: 'text',
-                    text: ' and ',
-                },
-                {
-                    type: 'text',
-                    marks: [
-                        {
-                            type: 'underline',
-                        },
-                    ],
-                    text: 'this is underlined',
-                },
-            ],
-        },
-        {
-            type: 'paragraph',
-            content: [
-                {
-                    type: 'text',
-                    text: 'this is paragraph',
-                },
-            ],
-        },
-        {
-            type: 'paragraph',
-            content: [
-                {
-                    type: 'text',
-                    text: 'anotehr paragrap',
-                },
-            ],
-        },
-        {
-            type: 'paragraph',
-            content: [
-                {
-                    type: 'text',
-                    text: 'this is a paragraph',
-                },
-            ],
-        },
-        {
-            type: 'codeBlock',
+            type: 'heading',
             attrs: {
-                language: 'shell',
+                level: 2,
             },
             content: [
                 {
                     type: 'text',
-                    text: 'this is a code block\nthis also\nand this also',
+                    text: 'H2 TItle',
                 },
             ],
         },
         {
-            type: 'paragraph',
+            type: 'heading',
+            attrs: {
+                level: 3,
+            },
             content: [
                 {
                     type: 'text',
-                    text: 'this is the lower end',
+                    text: 'H3 TItle',
                 },
             ],
         },
         {
-            type: 'paragraph',
+            type: 'heading',
+            attrs: {
+                level: 4,
+            },
             content: [
                 {
                     type: 'text',
-                    text: 'new paragraph',
+                    text: 'H4 Title',
+                },
+            ],
+        },
+        {
+            type: 'heading',
+            attrs: {
+                level: 5,
+            },
+            content: [
+                {
+                    type: 'text',
+                    text: 'H5 Title',
+                },
+            ],
+        },
+        {
+            type: 'heading',
+            attrs: {
+                level: 6,
+            },
+            content: [
+                {
+                    type: 'text',
+                    text: 'h& TItle',
                 },
             ],
         },
