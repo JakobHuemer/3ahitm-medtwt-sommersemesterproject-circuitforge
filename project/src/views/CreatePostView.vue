@@ -4,6 +4,8 @@ import { faCloudArrowUp, faImage, faPlus } from '@fortawesome/free-solid-svg-ico
 import { ref, watch } from 'vue'
 import TagsContainer from '@/components/TagsContainer.vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
+import EditorWrapper from '@/components/EditorWrapper.vue'
+import type { JSONContent } from '@tiptap/vue-3'
 
 const hashtags = ref<string[]>(['hello', 'thisIsTag', 'memo'])
 const versions = ref<string[]>(['1.21+', '1.8.9'])
@@ -35,14 +37,180 @@ function adjustHeight() {
     textarea.style.height = `${textarea.scrollHeight}px`
 }
 
-const article = ref<string>('')
-// function setFromJson() {
-//     console.log('Setting json', outputJson.value)
-//
-//     var json = JSON.parse(outputJson.value)
-//
-//     componentRef.value?.setJson(json)
-// }
+const content = ref<JSONContent>({
+    type: 'doc',
+    content: [
+        {
+            type: 'paragraph',
+            content: [
+                {
+                    type: 'text',
+                    text: 'hello this is my post',
+                },
+            ],
+        },
+        {
+            type: 'paragraph',
+        },
+        {
+            type: 'blockquote',
+            content: [
+                {
+                    type: 'paragraph',
+                    content: [
+                        {
+                            type: 'text',
+                            text: 'this is a nice quote',
+                        },
+                    ],
+                },
+                {
+                    type: 'paragraph',
+                    content: [
+                        {
+                            type: 'text',
+                            text: 'another line asin the quote',
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            type: 'paragraph',
+        },
+        {
+            type: 'codeBlock',
+            attrs: {
+                language: 'shell',
+            },
+            content: [
+                {
+                    type: 'text',
+                    text: 'some codeblock here\nand there\netc.',
+                },
+            ],
+        },
+        {
+            type: 'paragraph',
+        },
+        {
+            type: 'paragraph',
+            content: [
+                {
+                    type: 'text',
+                    text: 'this is ',
+                },
+                {
+                    type: 'text',
+                    marks: [
+                        {
+                            type: 'code',
+                        },
+                    ],
+                    text: 'marked',
+                },
+                {
+                    type: 'text',
+                    text: ' and ',
+                },
+                {
+                    type: 'text',
+                    marks: [
+                        {
+                            type: 'bold',
+                        },
+                    ],
+                    text: 'this is bold',
+                },
+                {
+                    type: 'text',
+                    text: ' and ',
+                },
+                {
+                    type: 'text',
+                    marks: [
+                        {
+                            type: 'italic',
+                        },
+                    ],
+                    text: 'this is italic',
+                },
+                {
+                    type: 'text',
+                    text: ' and ',
+                },
+                {
+                    type: 'text',
+                    marks: [
+                        {
+                            type: 'underline',
+                        },
+                    ],
+                    text: 'this is underlined',
+                },
+            ],
+        },
+        {
+            type: 'paragraph',
+            content: [
+                {
+                    type: 'text',
+                    text: 'this is paragraph',
+                },
+            ],
+        },
+        {
+            type: 'paragraph',
+            content: [
+                {
+                    type: 'text',
+                    text: 'anotehr paragrap',
+                },
+            ],
+        },
+        {
+            type: 'paragraph',
+            content: [
+                {
+                    type: 'text',
+                    text: 'this is a paragraph',
+                },
+            ],
+        },
+        {
+            type: 'codeBlock',
+            attrs: {
+                language: 'shell',
+            },
+            content: [
+                {
+                    type: 'text',
+                    text: 'this is a code block\nthis also\nand this also',
+                },
+            ],
+        },
+        {
+            type: 'paragraph',
+            content: [
+                {
+                    type: 'text',
+                    text: 'this is the lower end',
+                },
+            ],
+        },
+        {
+            type: 'paragraph',
+            content: [
+                {
+                    type: 'text',
+                    text: 'new paragraph',
+                },
+            ],
+        },
+    ],
+})
+
+const syncedContent = ref<string>('')
 </script>
 
 <template>
@@ -112,7 +280,22 @@ const article = ref<string>('')
 
             <TagsContainer :versions="versions" :hashtags="hashtags" />
 
-            <div class="editor-wrapper">COMMING</div>
+            <div class="editor-wrapper">
+                <EditorWrapper v-model="content" :initial-content="content" />
+            </div>
+
+            <div class="content">
+                <h4>Content:</h4>
+                <textarea
+                    class="title"
+                    style="font-size: 13px; font-family: monospace"
+                    name="te"
+                    id="te"
+                    cols="30"
+                    rows="10"
+                    >{{ JSON.stringify(content, null, 2) }}</textarea
+                >
+            </div>
 
             <div class="downloadables">
                 <div class="download" v-for="asset of downloadables">
@@ -292,5 +475,11 @@ h2 {
         resize: none;
         overflow-y: hidden;
     }
+}
+
+.editor-wrapper {
+    padding: var(--gap-8);
+    border-radius: var(--border-radius);
+    background: var(--col-content);
 }
 </style>
