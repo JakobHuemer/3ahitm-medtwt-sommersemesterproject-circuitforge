@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCloudArrowUp, faImage, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import TagsContainer from '@/components/TagsContainer.vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 
@@ -9,6 +9,33 @@ const hashtags = ref<string[]>(['hello', 'thisIsTag', 'memo'])
 const versions = ref<string[]>(['1.21+', '1.8.9'])
 const downloadables = ref<string[]>(['world.zip', 'door.litematic', 'door.schematic'])
 
+const title = ref<string>('asdf')
+const titleElement = ref<null | HTMLTextAreaElement>(null)
+const maxlength = ref(255)
+
+window.addEventListener('resize', () => resizeTextarea())
+
+const resizeTextarea = () => {
+    const textarea = titleElement.value
+    console.log(textarea)
+    if (textarea) {
+        console.log('UPDATING')
+        textarea.style.height = 'auto'
+        textarea.style.height = `${textarea.scrollHeight}px`
+    }
+}
+
+watch(title, () => {
+    title.value = title.value?.replace(/\n/g, '') ?? ''
+})
+
+function adjustHeight() {
+    const textarea = this.$refs.textarea
+    textarea.style.height = 'auto'
+    textarea.style.height = `${textarea.scrollHeight}px`
+}
+
+const article = ref<string>('')
 // function setFromJson() {
 //     console.log('Setting json', outputJson.value)
 //
@@ -71,8 +98,17 @@ const downloadables = ref<string[]>(['world.zip', 'door.litematic', 'door.schema
                 </div>
             </div>
         </div>
+
         <div class="container container-post">
-            <input type="text" name="title" id="title" class="input-title" />
+            <textarea
+                ref="titleElement"
+                v-model="title"
+                rows="1"
+                class="title title-input"
+                @input="resizeTextarea()"
+                placeholder="Title..."
+                :maxlength="maxlength"
+            ></textarea>
 
             <TagsContainer :versions="versions" :hashtags="hashtags" />
 
@@ -147,13 +183,42 @@ h2 {
         overflow-x: scroll;
         overflow-y: hidden;
 
+        padding-bottom: 4px;
+        margin-bottom: -4px;
+
         width: auto;
         gap: var(--gap-8);
         display: flex;
 
+        /* Scrollbar */
+
+        /* Chrome etc. */
+
+        &::-webkit-scrollbar {
+            height: 3px;
+            padding: 10px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
+            margin: var(--container-images-gap);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: color-mix(in srgb, var(--col-surface-active) 60%, white);
+            border-radius: 10px;
+        }
+
+        /* Firefox scrollbar styling */
+
+        & {
+            scrollbar-width: thin; /* "auto", "thin", or "none" */
+            scrollbar-color: color-mix(in srgb, var(--col-surface-active) 60%, white) transparent;
+        }
+
         .post-image {
             display: inline;
-            height: 10rem;
+            height: 14rem;
             aspect-ratio: 1;
             border-radius: var(--border-radius-s);
 
@@ -206,5 +271,26 @@ h2 {
 
 .container-post {
     padding: var(--gap-16);
+
+    display: grid;
+    gap: var(--gap-16);
+
+    .title {
+        font-size: var(--font-size-title);
+        font-family: var(--font-body);
+
+        border-radius: var(--border-radius);
+        background: var(--col-content);
+
+        outline: none;
+        border: none;
+
+        padding: var(--gap-8) var(--gap-12);
+
+        width: 100%;
+
+        resize: none;
+        overflow-y: hidden;
+    }
 }
 </style>
