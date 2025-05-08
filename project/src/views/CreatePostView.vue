@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faCloudArrowUp, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { ref, shallowRef, watch } from 'vue'
+import { faCloudArrowUp, faPlus, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { reactive, ref, shallowRef, watch } from 'vue'
 import TagsContainer from '@/components/TagsContainer.vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import EditorWrapper from '@/components/EditorWrapper.vue'
 import type { JSONContent } from '@tiptap/vue-3'
-import FilePreview from '@/components/FilePreview.vue'
+import FilePreview from '@/components/ImagePreview.vue'
 
 const hashtags = ref<string[]>(['hello', 'thisIsTag', 'memo'])
 const versions = ref<string[]>(['1.21+', '1.8.9'])
-const downloadables = ref<string[]>(['world.zip', 'door.litematic', 'door.schematic'])
 
-const title = ref<string>('asdf')
+const title = ref<string>('')
 const titleElement = ref<null | HTMLTextAreaElement>(null)
-const maxlength = ref(255)
+const maxlength = ref(100)
 
 window.addEventListener('resize', () => resizeTextarea())
 
@@ -40,23 +39,48 @@ function adjustHeight() {
 
 const content = ref<JSONContent>({})
 
-const fileInput = ref<HTMLInputElement>()
+type IndexedFileMap = Map<number, File>
 
-const fileList = ref<Map<number, File>>(new Map())
+const imageInput = ref<HTMLInputElement>()
+const imageList = ref<IndexedFileMap>(new Map())
 
-let prevNum = Math.max(...fileList.value.keys(), 1)
+const assetInput = ref<HTMLInputElement>()
+const assetList = ref<IndexedFileMap>(new Map())
 
-function handleFile(event: Event) {
-    const target = event.target as HTMLInputElement
-    if (!fileInput.value?.files || fileInput.value.files.length == 0) return
+let prevImageNum = 1
+let prevAssetNum = 1
 
-    console.log('prevnum:', prevNum)
+function handleFile(
+    input: HTMLInputElement | undefined,
+    list: IndexedFileMap,
+    countRef: 'img' | 'asset',
+) {
+    if (!input?.files || input.files.length == 0) return
+
     // add files
-    for (let file of fileInput.value.files) {
-        fileList.value.set(++prevNum, file)
-        console.log('putting: ', prevNum + ' as ' + file.name)
+    for (let file of input.files) {
+        let num = countRef == 'img' ? prevImageNum++ : prevAssetNum++
+        if (
+            countRef == 'asset' &&
+            Array.from(assetList.value.values()).some((e) => e.name == file.name)
+        ) {
+            // check if file is already in list and then continue
+            continue
+        }
+        list.set(num, file)
+        console.log('putting (' + countRef + ' ): ', num + ' as ' + file.name)
     }
 }
+
+function getHandleImage(event: Event) {
+    handleFile(imageInput.value, imageList.value, 'img')
+}
+
+function getHandleAsset(event: Event) {
+    handleFile(assetInput.value, assetList.value, 'asset')
+}
+
+let prevFileNumber = 1
 </script>
 
 <template>
@@ -70,17 +94,17 @@ function handleFile(event: Event) {
                     <input
                         multiple
                         accept="image/*"
-                        ref="fileInput"
+                        ref="imageInput"
                         type="file"
-                        @change="handleFile"
+                        @change="getHandleImage"
                         name="image-upload"
                         id="image-upload"
                     />
                 </label>
 
-                <div class="post-image" v-for="[key, file] in fileList" :key="key.toString()">
+                <div class="post-image" v-for="[key, file] in imageList" :key="key.toString()">
                     <div class="delete-button">
-                        <FontAwesomeIcon :icon="faTrash" @click="fileList.delete(key)" />
+                        <FontAwesomeIcon :icon="faTrash" @click="imageList.delete(key)" />
                     </div>
                     <FilePreview :file="file" />
                 </div>
@@ -104,27 +128,43 @@ function handleFile(event: Event) {
                 <EditorWrapper v-model="content" :initial-content="content" />
             </div>
 
-            <!--            <div class="content">-->
-            <!--                <h4>Content:</h4>-->
-            <!--                <textarea-->
-            <!--                    class="title"-->
-            <!--                    style="font-size: 13px; font-family: monospace"-->
-            <!--                    name="te"-->
-            <!--                    id="te"-->
-            <!--                    cols="30"-->
-            <!--                    rows="10"-->
-            <!--                    >{{ JSON.stringify(content, null, 2) }}</textarea-->
-            <!--                >-->
-            <!--            </div>-->
-
             <div class="downloadables">
-                <div class="download" v-for="asset of downloadables">
-                    <div class="thumbnail">
-                        <img src="../assets/img/icons/shulker-white.png" alt="download" />
+                <h3 class="downloads-title">Downloads</h3>
+                <div class="downloads-container">
+                    <span v-if="assetList.size == 0" style="color: var(--col-text-secondary)"
+                        >No Files uploaded yet...</span
+                    >
+                    <div
+                        @click="assetList.delete(key)"
+                        class="download"
+                        v-for="[key, asset] of assetList"
+                        :key="key"
+                    >
+                        <div class="thumbnail">
+                            <img src="../assets/img/icons/shulker-white.png" alt="download" />
+                        </div>
+                        <span class="asset-file-name">{{ asset.name }}</span>
+                        <FontAwesomeIcon :icon="faXmark" class="delete-asset" />
                     </div>
-                    <span>{{ asset }}</span>
                 </div>
-                <ButtonComponent :icon="faPlus">Add File</ButtonComponent>
+
+                <ButtonComponent @click="assetInput?.click()" :icon="faPlus"
+                    >Add File
+                </ButtonComponent>
+                <input
+                    style="display: none"
+                    multiple
+                    ref="assetInput"
+                    type="file"
+                    @change="getHandleAsset"
+                    name="asset-upload"
+                    id="asset-upload"
+                />
+            </div>
+
+            <div class="final-section">
+                <ButtonComponent>Cancel</ButtonComponent>
+                <ButtonComponent button-type="primary">Create Post</ButtonComponent>
             </div>
         </div>
     </div>
@@ -252,6 +292,10 @@ h2 {
                     color: var(--col-error);
                     transform: scale(1.1);
                 }
+
+                &:active {
+                    transform: scale(0.8);
+                }
             }
 
             &:first-child {
@@ -310,6 +354,7 @@ h2 {
     .title {
         font-size: var(--font-size-title);
         font-family: var(--font-body);
+        font-weight: bold;
 
         border-radius: var(--border-radius);
         background: var(--col-content);
@@ -330,5 +375,68 @@ h2 {
     padding: var(--gap-8);
     border-radius: var(--border-radius);
     background: var(--col-content);
+}
+
+.downloads-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.downloadables {
+    display: grid;
+    gap: var(--gap-12);
+
+    .downloads-container {
+        padding-left: var(--gap-16);
+        display: grid;
+        gap: var(--gap-8);
+
+        .download {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-4);
+            justify-self: start;
+            color: var(--col-accent);
+            user-select: none;
+
+            span {
+                color: inherit;
+            }
+
+            .thumbnail {
+                height: 16px;
+            }
+
+            &:hover {
+                cursor: pointer;
+                text-decoration: line-through;
+                text-decoration-color: var(--col-error);
+                color: var(--col-error);
+            }
+
+            .delete-asset {
+                display: none;
+            }
+
+            &:hover .delete-asset {
+                display: block;
+                margin-left: 0.2rem;
+                color: color-mix(in srgb, var(--col-error) 70%, transparent);
+                aspect-ratio: 1;
+            }
+        }
+    }
+
+    button {
+        justify-self: start;
+        margin-left: var(--gap-16);
+        cursor: pointer;
+    }
+}
+
+.final-section {
+    display: flex;
+    justify-content: end;
+    gap: var(--gap-8);
 }
 </style>

@@ -38,6 +38,7 @@ const props = defineProps<{
         flex-wrap: wrap;
 
         .tag {
+            user-select: none;
             padding: 6px 8px;
             border-radius: var(--border-radius-s);
             transition: background-color 0.1s;
