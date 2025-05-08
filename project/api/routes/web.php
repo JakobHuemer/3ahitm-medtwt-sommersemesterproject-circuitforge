@@ -1,7 +1,9 @@
 <?php
 
+use App\Enums\VersionType;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OAuthController;
+use App\Models\Version;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -48,3 +50,20 @@ Route::get("/socials", [OAuthController::class, "getOAuthProviders"])
 // delete socials
 Route::delete("/socials/{id}", [OAuthController::class, "removeSocialConnection"])
     ->middleware("auth:sanctum");
+
+
+Route::get("/versions/{versionQuery}/{versionTypes?}",
+    function (string $versionQuery,
+              Request $request,
+              ?string $versionTypes = null) {
+        $versionTypesArray = $versionTypes
+            ? explode(",", $versionTypes)
+            : VersionType::values();
+
+        $versions = Version::where("version", "LIKE", "%${versionQuery}%")
+            ->whereIn("type", $versionTypesArray)
+            ->take(20)
+            ->get();
+
+        return $versions;
+    });
