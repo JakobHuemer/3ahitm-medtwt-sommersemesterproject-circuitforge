@@ -8,7 +8,7 @@ import EditorWrapper from '@/components/EditorWrapper.vue'
 import type { JSONContent } from '@tiptap/vue-3'
 import FilePreview from '@/components/ImagePreview.vue'
 
-const hashtags = ref<string[]>(['hello', 'thisIsTag', 'memo'])
+const hashtags = ref<string[]>([])
 const versions = ref<string[]>(['1.21+', '1.8.9'])
 
 const title = ref<string>('')
@@ -37,7 +37,79 @@ function adjustHeight() {
     textarea.style.height = `${textarea.scrollHeight}px`
 }
 
-const content = ref<JSONContent>({})
+const content = ref<JSONContent>({
+    type: 'doc',
+    content: [
+        {
+            type: 'paragraph',
+            content: [
+                {
+                    type: 'text',
+                    text: '#some_tag thi sis ',
+                },
+            ],
+        },
+        {
+            type: 'paragraph',
+        },
+        {
+            type: 'paragraph',
+            content: [
+                {
+                    type: 'text',
+                    text: 'tag this',
+                },
+            ],
+        },
+        {
+            type: 'paragraph',
+        },
+        {
+            type: 'paragraph',
+            content: [
+                {
+                    type: 'text',
+                    text: 'ther is #tag_this0',
+                },
+            ],
+        },
+        {
+            type: 'paragraph',
+        },
+        {
+            type: 'blockquote',
+            content: [
+                {
+                    type: 'paragraph',
+                    content: [
+                        {
+                            type: 'text',
+                            text: 'here #tag also it #this-is-tag',
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            type: 'paragraph',
+        },
+        {
+            type: 'paragraph',
+            content: [
+                {
+                    type: 'text',
+                    text: '#this-tag-is-too-long-for-tag',
+                },
+            ],
+        },
+    ],
+})
+
+watch(content, () => {
+    hashtags.value = []
+
+    updateHashTagsFromObj(content.value)
+})
 
 type IndexedFileMap = Map<number, File>
 
@@ -80,7 +152,31 @@ function getHandleAsset(event: Event) {
     handleFile(assetInput.value, assetList.value, 'asset')
 }
 
-let prevFileNumber = 1
+function updateHashTagsFromObj(obj: any) {
+    if (obj['content'] && Array.isArray(obj['content'])) {
+        for (const c of obj['content']) {
+            console.log('DEEP')
+            updateHashTagsFromObj(c)
+        }
+    } else if (obj['text']) {
+        console.log()
+        let text = obj['text']
+
+        const regex = /(?<=#)[A-Za-z0-9_-]{1,20}(?=([^A-Za-z0-9_-]|$))/g
+
+        const matches = text
+            .matchAll(regex)
+            .toArray()
+            .map((a) => a[0])
+
+        if (matches.length > 0) {
+            console.log(matches)
+            hashtags.value.push(...matches)
+        }
+    }
+}
+
+updateHashTagsFromObj(content.value)
 </script>
 
 <template>
@@ -126,6 +222,19 @@ let prevFileNumber = 1
 
             <div class="editor-wrapper">
                 <EditorWrapper v-model="content" :initial-content="content" />
+            </div>
+
+            <div class="content">
+                <h4>Content:</h4>
+                <textarea
+                    class="title"
+                    style="font-size: 13px; font-family: monospace"
+                    name="te"
+                    id="te"
+                    cols="30"
+                    rows="10"
+                    >{{ JSON.stringify(content, null, 2) }}</textarea
+                >
             </div>
 
             <div class="downloadables">

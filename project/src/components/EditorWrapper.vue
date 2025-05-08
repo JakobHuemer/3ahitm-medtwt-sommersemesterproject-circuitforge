@@ -17,6 +17,7 @@ import BulletList from '@tiptap/extension-bullet-list'
 import OrderedList from '@tiptap/extension-ordered-list'
 import ListItem from '@tiptap/extension-list-item'
 import { Placeholder } from '@tiptap/extension-placeholder'
+import { Highlight } from '@tiptap/extension-highlight'
 
 const model = defineModel<JSONContent>()
 
@@ -41,6 +42,7 @@ const editor = useEditor({
         BulletList,
         OrderedList,
         ListItem,
+        Highlight,
         Placeholder.configure({
             placeholder: 'Write your Post...',
         }),
@@ -143,6 +145,13 @@ onBeforeUnmount(() => {
     strong,
     b {
         font-weight: bold;
+        mark {
+            font-weight: inherit;
+        }
+    }
+
+    mark {
+        background: var(--col-accent);
     }
 
     em,
