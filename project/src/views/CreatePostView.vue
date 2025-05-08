@@ -9,7 +9,7 @@ import type { JSONContent } from '@tiptap/vue-3'
 import FilePreview from '@/components/ImagePreview.vue'
 
 const hashtags = ref<string[]>([])
-const versions = ref<string[]>(['1.21+', '1.8.9'])
+const versions = ref<string[]>([])
 
 const title = ref<string>('')
 const titleElement = ref<null | HTMLTextAreaElement>(null)
