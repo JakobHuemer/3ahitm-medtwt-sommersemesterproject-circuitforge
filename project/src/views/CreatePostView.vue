@@ -31,73 +31,7 @@ watch(title, () => {
     title.value = title.value?.replace(/\n/g, '') ?? ''
 })
 
-const content = ref<JSONContent>({
-    type: 'doc',
-    content: [
-        {
-            type: 'paragraph',
-            content: [
-                {
-                    type: 'text',
-                    text: '#some_tag thi sis ',
-                },
-            ],
-        },
-        {
-            type: 'paragraph',
-        },
-        {
-            type: 'paragraph',
-            content: [
-                {
-                    type: 'text',
-                    text: 'tag this',
-                },
-            ],
-        },
-        {
-            type: 'paragraph',
-        },
-        {
-            type: 'paragraph',
-            content: [
-                {
-                    type: 'text',
-                    text: 'ther is #tag_this0',
-                },
-            ],
-        },
-        {
-            type: 'paragraph',
-        },
-        {
-            type: 'blockquote',
-            content: [
-                {
-                    type: 'paragraph',
-                    content: [
-                        {
-                            type: 'text',
-                            text: 'here #tag also it #this-is-tag',
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            type: 'paragraph',
-        },
-        {
-            type: 'paragraph',
-            content: [
-                {
-                    type: 'text',
-                    text: '#this-tag-is-too-long-for-tag',
-                },
-            ],
-        },
-    ],
-})
+const content = ref<JSONContent>({})
 
 watch(content, () => {
     hashtags.value = []
@@ -168,6 +102,10 @@ function updateHashTagsFromObj(obj: any) {
 }
 
 updateHashTagsFromObj(content.value)
+
+// versions
+
+const versionOptions = reactive(['release', 'snapshot', 'old_beta', 'old_alpha'])
 </script>
 
 <template>
@@ -208,6 +146,36 @@ updateHashTagsFromObj(content.value)
                 placeholder="Title..."
                 :maxlength="maxlength"
             ></textarea>
+
+            <!-- Version Finder selector -->
+            <div class="version-finder">
+                <div class="version-finder-input">
+                    <input
+                        placeholder="add version"
+                        type="text"
+                        name="version-finder"
+                        id="version-finder"
+                    />
+                </div>
+                <div class="version-finder-selected">
+                    <div v-for="opt in versionOptions" :key="opt" class="selected">
+                        <label :for="opt" class="checkbox-repr">
+                            <input type="checkbox" :name="opt" :id="opt" />
+                        </label>
+                        <label :for="opt" class="checkbox-label">{{
+                            opt.replace(/_/g, ' ')
+                        }}</label>
+                    </div>
+                </div>
+                <div class="version-results-container">
+                    <div class="version-result-item">
+                        <span class="version-content">1.21.4</span>
+                    </div>
+                    <div class="version-result-item">
+                        <span class="version-content">1.21.4-rc2</span>
+                    </div>
+                </div>
+            </div>
 
             <TagsContainer :versions="versions" :hashtags="hashtags" />
 
@@ -538,5 +506,82 @@ h2 {
     display: flex;
     justify-content: end;
     gap: var(--gap-8);
+}
+
+.version-finder {
+    position: relative;
+    display: flex;
+    gap: var(--gap-32);
+    align-items: center;
+    font-family: var(--font-special);
+
+    input {
+        background: var(--col-content);
+        border-radius: var(--border-radius-s);
+        padding: var(--gap-8) var(--gap-12);
+        outline: none;
+        border: none;
+    }
+
+    .version-finder-selected {
+        display: flex;
+        gap: var(--gap-32);
+
+        .selected {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-8);
+            cursor: pointer;
+            transition: color 0.2s;
+            user-select: none;
+
+            &:hover {
+                color: var(--col-accent);
+            }
+        }
+
+        input {
+            display: none;
+        }
+
+        label.checkbox-repr {
+            cursor: inherit;
+            aspect-ratio: 1;
+            height: 100%;
+            background: var(--col-content-hover);
+            border-radius: var(--border-radius-s);
+            transition: background-color 0.2s;
+
+            &:has(input:checked) {
+                background: var(--col-primary);
+            }
+        }
+
+        label.checkbox-label {
+            cursor: inherit;
+            padding-bottom: 0.2rem;
+            white-space: nowrap;
+        }
+    }
+
+    .version-results-container {
+        z-index: 10;
+        position: absolute;
+        min-width: 235px;
+        top: 120%;
+        left: 0;
+        background-color: var(--col-container);
+        box-shadow: 0 0 20px black;
+        padding: var(--gap-8);
+        border-radius: var(--border-radius);
+        display: grid;
+        gap: var(--gap-8);
+
+        .version-result-item {
+            padding: var(--gap-4) var(--gap-8);
+            background-color: var(--col-surface);
+            border-radius: var(--border-radius-s);
+        }
+    }
 }
 </style>
