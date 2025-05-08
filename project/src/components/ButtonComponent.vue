@@ -49,6 +49,7 @@ button {
     border: none;
     border-radius: var(--border-radius-s);
     color: white;
+    cursor: pointer;
 
     display: flex;
     gap: var(--gap-4);
