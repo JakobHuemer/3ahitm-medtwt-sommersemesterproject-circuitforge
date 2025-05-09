@@ -36,6 +36,10 @@ class VersionSeeder extends Seeder {
 
             $versionArr = $data->versions;
 
+            // release: {latest release}
+            // snapshot: {latest snapshot}
+            $latestVersions = $data->latest;
+
             DB::table('versions')->truncate();
 
             foreach ($versionArr as $value) {
