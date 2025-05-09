@@ -7,6 +7,9 @@ import ButtonComponent from '@/components/ButtonComponent.vue'
 import EditorWrapper from '@/components/EditorWrapper.vue'
 import type { JSONContent } from '@tiptap/vue-3'
 import FilePreview from '@/components/ImagePreview.vue'
+import levenshtein from '@/util/levenshtein.ts'
+import { useApi } from '@/store/useApi.ts'
+import { watchDebounced } from '@vueuse/core'
 
 const hashtags = ref<string[]>([])
 const versions = ref<string[]>([])
@@ -105,7 +108,68 @@ updateHashTagsFromObj(content.value)
 
 // versions
 
-const versionOptions = reactive(['release', 'snapshot', 'old_beta', 'old_alpha'])
+const versionOptions = ref(['release', 'snapshot', 'old_alpha', 'old_beta'])
+
+type VersionType = (typeof versionOptions.value)[number]
+
+interface Version {
+    version: string
+    type: VersionType
+    released: Date
+}
+
+const fetchedVersionsList = ref<Version[]>([])
+const displayFilteredVersionsList = ref<Version[]>([])
+
+const versionQuery = ref<string>('')
+const versionTypeQuery = shallowRef<Set<VersionType>>(new Set(versionOptions.value))
+
+function toggleVersionType(item: VersionType) {
+    if (versionTypeQuery.value.has(item)) {
+        versionTypeQuery.value.delete(item)
+    } else {
+        versionTypeQuery.value.add(item)
+    }
+    console.log(Array.from(versionTypeQuery.value.values()).join(','))
+}
+
+watch([fetchedVersionsList, versionQuery, versionTypeQuery], () => {
+    displayFilteredVersionsList.value = fetchedVersionsList.value.filter((item) => {
+        return item.version.toLowerCase().includes(versionQuery.value.toLowerCase())
+    })
+
+    // sort by levenshtein
+    displayFilteredVersionsList.value = displayFilteredVersionsList.value.sort((a, b) => {
+        return (
+            levenshtein(a.version, versionQuery.value) - levenshtein(b.version, versionQuery.value)
+        )
+    })
+})
+
+const api = useApi()
+
+watchDebounced(
+    [versionQuery, versionTypeQuery],
+    async () => {
+        if (versionQuery.value == '') {
+            return
+        }
+
+        try {
+            const response = await api.api.get<Version[]>(
+                `/versions/${versionQuery.value}${'/' + Array.from(versionTypeQuery.value.values()).join(',')}`,
+            )
+
+            fetchedVersionsList.value = response.data
+        } catch (e) {
+            console.error('Failed to fetch versions')
+        }
+    },
+    {
+        debounce: 100,
+        maxWait: 300,
+    },
+)
 </script>
 
 <template>
@@ -124,6 +188,7 @@ const versionOptions = reactive(['release', 'snapshot', 'old_beta', 'old_alpha']
                         @change="getHandleImage"
                         name="image-upload"
                         id="image-upload"
+                        checked
                     />
                 </label>
 
@@ -153,6 +218,7 @@ const versionOptions = reactive(['release', 'snapshot', 'old_beta', 'old_alpha']
                     <input
                         placeholder="add version"
                         type="text"
+                        v-model="versionQuery"
                         name="version-finder"
                         id="version-finder"
                     />
@@ -160,20 +226,32 @@ const versionOptions = reactive(['release', 'snapshot', 'old_beta', 'old_alpha']
                 <div class="version-finder-selected">
                     <div v-for="opt in versionOptions" :key="opt" class="selected">
                         <label :for="opt" class="checkbox-repr">
-                            <input type="checkbox" :name="opt" :id="opt" />
+                            <input
+                                type="checkbox"
+                                :name="opt"
+                                :id="opt"
+                                @change="toggleVersionType(opt)"
+                                :checked="versionTypeQuery.has(opt)"
+                            />
                         </label>
                         <label :for="opt" class="checkbox-label">{{
                             opt.replace(/_/g, ' ')
                         }}</label>
                     </div>
                 </div>
-                <div class="version-results-container">
-                    <div class="version-result-item">
-                        <span class="version-content">1.21.4</span>
+                <div v-if="versionQuery != ''" class="version-results-container">
+                    <div
+                        v-for="version in displayFilteredVersionsList"
+                        :key="version.version"
+                        class="version-result-item"
+                    >
+                        <span class="version-content" :data-version-type="version.type">{{
+                            version.version
+                        }}</span>
                     </div>
-                    <div class="version-result-item">
-                        <span class="version-content">1.21.4-rc2</span>
-                    </div>
+                    <!--                    <div class="version-result-item">-->
+                    <!--                        <span class="version-content">1.21.4-rc2</span>-->
+                    <!--                    </div>-->
                 </div>
             </div>
 
@@ -521,6 +599,7 @@ h2 {
         padding: var(--gap-8) var(--gap-12);
         outline: none;
         border: none;
+        z-index: 30;
     }
 
     .version-finder-selected {
@@ -565,6 +644,11 @@ h2 {
     }
 
     .version-results-container {
+        display: none;
+    }
+
+    .version-finder-input:has(input:focus) ~ .version-results-container,
+    .version-finder-input:has(input:focus) + .version-results-container {
         z-index: 10;
         position: absolute;
         min-width: 235px;

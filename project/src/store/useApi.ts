@@ -12,9 +12,9 @@ const BACKEND_URL = import.meta.env.BASE_URL.replace(/frontend.*/g, 'api/public/
 export const useApi = defineStore('api', () => {
     const api = shallowRef(
         axios.create({
-            baseURL: BACKEND_URL,
-            // baseURL:
-            //     'http://localhost:8080/2425-sommerprojekt-3ahitm-JakobHuemer/project/api/public/',
+            // baseURL: BACKEND_URL,
+            baseURL:
+                'http://localhost:8080/2425-sommerprojekt-3ahitm-JakobHuemer/project/api/public/',
             withCredentials: true,
             withXSRFToken: true,
         }),
