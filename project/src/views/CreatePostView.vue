@@ -228,6 +228,7 @@ watchDebounced(
                         - show fetching status minimally like pulsing animation
                         - show 'No version found' notice when nothing was found
                         - show all tags inside of scrollable container
+                        - by prefixing a version with !, the version will be marked as incompatible
                     Implementation idea through a simple index integer
              -->
             <div class="version-finder">

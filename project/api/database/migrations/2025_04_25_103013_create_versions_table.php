@@ -40,6 +40,9 @@ return new class extends Migration {
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
+            $table->boolean("incompatible")
+                ->default(false);
+
             // PKs
 
             $table->primary(["post_id", "version_id"]);
