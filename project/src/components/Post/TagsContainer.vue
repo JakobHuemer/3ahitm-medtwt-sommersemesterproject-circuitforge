@@ -10,7 +10,7 @@ const props = defineProps<{
         <div class="tags-list versions">
             <div class="tag tag-version" v-for="version of versions">
                 <div class="tag-version-icon">
-                    <img src="../assets/img/tags/name_tag.png" alt="v" />
+                    <img src="../../assets/img/tags/name_tag.png" alt="v" />
                 </div>
                 <span>{{ version }}</span>
             </div>

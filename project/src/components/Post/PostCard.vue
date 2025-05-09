@@ -1,6 +1,6 @@
 <script async setup lang="ts">
 import { ref } from 'vue'
-import TagsContainer from '@/components/TagsContainer.vue'
+import TagsContainer from '@/components/Post/TagsContainer.vue'
 
 const props = defineProps<{
     postId: number
@@ -54,7 +54,7 @@ const post = await loadPost(123)
 <template>
     <div class="post-card content">
         <div class="img-header">
-            <img src="../assets/img/temp/post-thumbnail-tall.png" alt="thumbnail tall" />
+            <img src="../../assets/img/temp/post-thumbnail-tall.png" alt="thumbnail tall" />
         </div>
         <div class="post-content">
             <span class="post-title">{{ post.title }}</span>
@@ -72,25 +72,25 @@ const post = await loadPost(123)
             <div class="post-stats-container">
                 <div class="post-stat post-stat-views">
                     <div class="post-stat-icon">
-                        <img src="../assets/img/stats/ender_eye.png" alt="ender_eye" />
+                        <img src="../../assets/img/stats/ender_eye.png" alt="ender_eye" />
                     </div>
                     <span class="post-stat-text">{{ post.views }}</span>
                 </div>
                 <div class="post-stat post-stat-likes">
                     <div class="post-stat-icon">
-                        <img src="../assets/img/stats/redstone.png" alt="redstone" />
+                        <img src="../../assets/img/stats/redstone.png" alt="redstone" />
                     </div>
                     <span class="post-stat-text">{{ post.likes }}</span>
                 </div>
                 <div class="post-stat post-stat-comments">
                     <div class="post-stat-icon">
-                        <img src="../assets/img/stats/book.png" alt="paper" />
+                        <img src="../../assets/img/stats/book.png" alt="paper" />
                     </div>
                     <span class="post-stat-text">{{ post.comments }}</span>
                 </div>
                 <div class="post-stat post-stat-downloads">
                     <div class="post-stat-icon">
-                        <img src="../assets/img/stats/paper.png" alt="paper" />
+                        <img src="../../assets/img/stats/paper.png" alt="paper" />
                     </div>
                     <span class="post-stat-text">{{ post.downloads }}</span>
                 </div>

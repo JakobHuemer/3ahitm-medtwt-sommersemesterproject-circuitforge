@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PostCard from '@/components/PostCard.vue'
+import PostCard from '@/components/Post/PostCard.vue'
 </script>
 
 <template>

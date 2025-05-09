@@ -2,14 +2,16 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCloudArrowUp, faPlus, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { reactive, ref, shallowRef, watch } from 'vue'
-import TagsContainer from '@/components/TagsContainer.vue'
+import TagsContainer from '@/components/Post/TagsContainer.vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
-import EditorWrapper from '@/components/EditorWrapper.vue'
+import EditorWrapper from '@/components/Post/EditorWrapper.vue'
 import type { JSONContent } from '@tiptap/vue-3'
 import FilePreview from '@/components/ImagePreview.vue'
 import levenshtein from '@/util/levenshtein.ts'
 import { useApi } from '@/store/useApi.ts'
 import { watchDebounced } from '@vueuse/core'
+import { type Version, versionOptions, type VersionType } from '@/types/version-types'
+import VersionListItem from '@/components/Post/VersionListItem.vue'
 
 const hashtags = ref<string[]>([])
 const versions = ref<string[]>([])
@@ -108,34 +110,33 @@ updateHashTagsFromObj(content.value)
 
 // versions
 
-const versionOptions = ref(['release', 'snapshot', 'old_alpha', 'old_beta'])
-
-type VersionType = (typeof versionOptions.value)[number]
-
-interface Version {
-    version: string
-    type: VersionType
-    released: Date
-}
-
 const fetchedVersionsList = ref<Version[]>([])
 const displayFilteredVersionsList = ref<Version[]>([])
 
 const versionQuery = ref<string>('')
-const versionTypeQuery = shallowRef<Set<VersionType>>(new Set(versionOptions.value))
+const versionTypeQuery = reactive<Set<VersionType>>(new Set(['release']))
 
 function toggleVersionType(item: VersionType) {
-    if (versionTypeQuery.value.has(item)) {
-        versionTypeQuery.value.delete(item)
+    if (versionTypeQuery.has(item)) {
+        versionTypeQuery.delete(item)
     } else {
-        versionTypeQuery.value.add(item)
+        versionTypeQuery.add(item)
     }
-    console.log(Array.from(versionTypeQuery.value.values()).join(','))
+    console.log(Array.from(versionTypeQuery.values()).join(','))
 }
 
+// displayFilteredVersionsList updater
 watch([fetchedVersionsList, versionQuery, versionTypeQuery], () => {
+    console.log('CHANGE')
+
+    // filter by query
     displayFilteredVersionsList.value = fetchedVersionsList.value.filter((item) => {
         return item.version.toLowerCase().includes(versionQuery.value.toLowerCase())
+    })
+
+    // filter by type
+    displayFilteredVersionsList.value = fetchedVersionsList.value.filter((item) => {
+        return versionTypeQuery.has(item.type)
     })
 
     // sort by levenshtein
@@ -144,6 +145,12 @@ watch([fetchedVersionsList, versionQuery, versionTypeQuery], () => {
             levenshtein(a.version, versionQuery.value) - levenshtein(b.version, versionQuery.value)
         )
     })
+
+    // limit list to max 10 items
+    const maxItems = 7
+    if (displayFilteredVersionsList.value.length > maxItems) {
+        displayFilteredVersionsList.value = displayFilteredVersionsList.value.slice(0, maxItems)
+    }
 })
 
 const api = useApi()
@@ -157,7 +164,7 @@ watchDebounced(
 
         try {
             const response = await api.api.get<Version[]>(
-                `/versions/${versionQuery.value}${'/' + Array.from(versionTypeQuery.value.values()).join(',')}`,
+                `/versions/${versionQuery.value}${'/' + Array.from(versionTypeQuery.values()).join(',')}`,
             )
 
             fetchedVersionsList.value = response.data
@@ -188,7 +195,6 @@ watchDebounced(
                         @change="getHandleImage"
                         name="image-upload"
                         id="image-upload"
-                        checked
                     />
                 </label>
 
@@ -213,6 +219,17 @@ watchDebounced(
             ></textarea>
 
             <!-- Version Finder selector -->
+            <!-- TODO:
+                        - autoselect the first suggestion
+                        - arrow keys go up and down
+                            when updating the list the selected item is the top again
+                        - on enter will the selected version be added to the versions array
+                            and the state will be cleared
+                        - show fetching status minimally like pulsing animation
+                        - show 'No version found' notice when nothing was found
+                        - show all tags inside of scrollable container
+                    Implementation idea through a simple index integer
+             -->
             <div class="version-finder">
                 <div class="version-finder-input">
                     <input
@@ -240,18 +257,13 @@ watchDebounced(
                     </div>
                 </div>
                 <div v-if="versionQuery != ''" class="version-results-container">
-                    <div
-                        v-for="version in displayFilteredVersionsList"
-                        :key="version.version"
-                        class="version-result-item"
-                    >
-                        <span class="version-content" :data-version-type="version.type">{{
-                            version.version
-                        }}</span>
+                    <div class="version-results-list">
+                        <VersionListItem
+                            v-for="version in displayFilteredVersionsList"
+                            :key="version.version"
+                            :version="version"
+                        />
                     </div>
-                    <!--                    <div class="version-result-item">-->
-                    <!--                        <span class="version-content">1.21.4-rc2</span>-->
-                    <!--                    </div>-->
                 </div>
             </div>
 
@@ -659,12 +671,10 @@ h2 {
         padding: var(--gap-8);
         border-radius: var(--border-radius);
         display: grid;
-        gap: var(--gap-8);
 
-        .version-result-item {
-            padding: var(--gap-4) var(--gap-8);
-            background-color: var(--col-surface);
-            border-radius: var(--border-radius-s);
+        .version-results-list {
+            display: grid;
+            gap: var(--gap-8);
         }
     }
 }
