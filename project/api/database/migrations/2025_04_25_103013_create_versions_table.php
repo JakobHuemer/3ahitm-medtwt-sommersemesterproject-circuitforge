@@ -16,6 +16,9 @@ return new class extends Migration {
             $table->primary("version");
 
             $table->enum("type", VersionType::values());
+            $table->boolean("is_latest")
+                ->nullable()
+                ->default(null);
 
             $table->timestamp("released")
                 ->nullable()

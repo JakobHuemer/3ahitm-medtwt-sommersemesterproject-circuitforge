@@ -38,8 +38,7 @@ class VersionSeeder extends Seeder {
 
             // release: {latest release}
             // snapshot: {latest snapshot}
-            $latestVersions = $data->latest;
-
+            $latestVersions = array_values((array)$data->latest);
             DB::table('versions')->truncate();
 
             foreach ($versionArr as $value) {
@@ -47,6 +46,7 @@ class VersionSeeder extends Seeder {
                     "version" => $value->id,
                     "released" => $value->releaseTime,
                     "type" => $value->type,
+                    ...(in_array($value->id, $latestVersions) ? ["is_latest" => true] : []),
                 ]);
             }
 

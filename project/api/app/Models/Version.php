@@ -16,6 +16,7 @@ class Version extends Model {
         "version",
         "type",
         "released",
+        "is_latest"
     ];
 
     public $timestamps = false;
@@ -23,7 +24,8 @@ class Version extends Model {
     protected function casts() {
         return [
             "type" => VersionType::class,
-            "released" => "datetime"
+            "released" => "datetime",
+            "is_latest" => "boolean"
         ];
     }
 
