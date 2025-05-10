@@ -163,9 +163,14 @@ watchDebounced(
         }
 
         try {
-            const response = await api.api.get<Version[]>(
-                `/versions/${versionQuery.value}${'/' + Array.from(versionTypeQuery.values()).join(',')}`,
-            )
+            const response = await api.api.get<Version[]>(`/versions`, {
+                params: {
+                    query: versionQuery.value,
+                    // array of types[]={0}&
+                    types: Array.from(versionTypeQuery.values()),
+                    limit: 20,
+                },
+            })
 
             fetchedVersionsList.value = response.data
         } catch (e) {
