@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCloudArrowUp, faPlus, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons'
-import { reactive, ref, shallowRef, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import TagsContainer from '@/components/Post/TagsContainer.vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import EditorWrapper from '@/components/Post/EditorWrapper.vue'
@@ -116,6 +116,9 @@ const displayFilteredVersionsList = ref<Version[]>([])
 const versionQuery = ref<string>('')
 const versionTypeQuery = reactive<Set<VersionType>>(new Set(['release']))
 
+const selectedVersionIndex = ref<number>(0)
+const selectedVersionElement = ref<null | HTMLElement>(null)
+
 function toggleVersionType(item: VersionType) {
     if (versionTypeQuery.has(item)) {
         versionTypeQuery.delete(item)
@@ -155,6 +158,7 @@ watch([fetchedVersionsList, versionQuery, versionTypeQuery], () => {
 
 const api = useApi()
 
+// fetch new versions
 watchDebounced(
     [versionQuery, versionTypeQuery],
     async () => {
@@ -182,6 +186,28 @@ watchDebounced(
         maxWait: 300,
     },
 )
+
+/**
+ * update selected index inside the available range of matching versions
+ * when the target index is outside the range it will be clamped
+ * @param newIndex target index
+ */
+function setSelectedVersionIndex(newIndex: number) {
+    selectedVersionIndex.value = Math.max(
+        0,
+        Math.min(newIndex, displayFilteredVersionsList.value.length - 1),
+    )
+}
+
+watch(selectedVersionIndex, () => {
+    if (selectedVersionElement.value) {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        selectedVersionElement.value.scrollIntoView({
+            behavior: prefersReducedMotion ? 'auto' : 'smooth',
+            block: 'center',
+        })
+    }
+})
 </script>
 
 <template>
@@ -244,6 +270,18 @@ watchDebounced(
                         v-model="versionQuery"
                         name="version-finder"
                         id="version-finder"
+                        @keydown="
+                            (event) => {
+                                console.log('CAPTURING KEYDOWN')
+                                if (['ArrowDown', 'ArrowUp'].includes(event.key))
+                                    event.preventDefault()
+                                if (event.key == 'ArrowDown')
+                                    setSelectedVersionIndex(selectedVersionIndex + 1)
+                                else if (event.key == 'ArrowUp')
+                                    setSelectedVersionIndex(selectedVersionIndex - 1)
+                                else if (event.key == 'Enter') console.log('TODO: implement')
+                            }
+                        "
                     />
                 </div>
                 <div class="version-finder-selected">
@@ -253,8 +291,8 @@ watchDebounced(
                                 type="checkbox"
                                 :name="opt"
                                 :id="opt"
-                                @change="toggleVersionType(opt)"
                                 :checked="versionTypeQuery.has(opt)"
+                                @change="toggleVersionType(opt)"
                             />
                         </label>
                         <label :for="opt" class="checkbox-label">{{
@@ -262,12 +300,27 @@ watchDebounced(
                         }}</label>
                     </div>
                 </div>
-                <div v-if="versionQuery != ''" class="version-results-container">
+                <div class="version-results-container">
                     <div class="version-results-list">
                         <VersionListItem
-                            v-for="version in displayFilteredVersionsList"
+                            v-for="(version, index) in displayFilteredVersionsList"
+                            :data-selected="index == selectedVersionIndex"
                             :key="version.version"
                             :version="version"
+                            class="version-results-item"
+                            :ref="
+                                (el) => {
+                                    if (index === selectedVersionIndex) {
+                                        console.log('LOGGIN THIS ELEMENT:', el)
+                                        // converting proxy to actual element
+                                        selectedVersionElement = el.$el
+                                        console.log(
+                                            'LOGGIN THE SELECTED ONE:',
+                                            selectedVersionElement,
+                                        )
+                                    }
+                                }
+                            "
                         />
                     </div>
                 </div>
@@ -663,6 +716,8 @@ h2 {
 
     .version-results-container {
         display: none;
+        overflow-y: auto;
+        max-height: 12rem;
     }
 
     .version-finder-input:has(input:focus) ~ .version-results-container,
@@ -680,7 +735,21 @@ h2 {
 
         .version-results-list {
             display: grid;
-            gap: var(--gap-8);
+            gap: var(--gap-4);
+            flex-direction: column;
+
+            .version-results-item {
+                height: min-content;
+                transition:
+                    outline 0.2s,
+                    background-color 0.2s;
+                outline: 1px solid var(--col-container);
+
+                &[data-selected='true'] {
+                    background: var(--col-surface-hover);
+                    outline: 1px solid var(--col-accent);
+                }
+            }
         }
     }
 }
