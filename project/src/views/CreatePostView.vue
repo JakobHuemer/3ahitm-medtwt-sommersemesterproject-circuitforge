@@ -328,7 +328,15 @@ function submitSelectedVersion() {
                 </div>
                 <div v-if="versionQuery !== ''" class="version-results-container">
                     <div class="version-results-list">
+                        <div
+                            class="version-results-info"
+                            v-if="displayFilteredVersionsList.length === 0"
+                        >
+                            <span v-if="isFetching">searching...</span>
+                            <span v-else>nothing found!</span>
+                        </div>
                         <VersionListItem
+                            v-if="displayFilteredVersionsList.length > 0"
                             v-for="(version, index) in displayFilteredVersionsList"
                             :data-selected="index == selectedVersionIndex"
                             :key="version.version"
@@ -777,6 +785,12 @@ h2 {
         padding: var(--gap-8);
         border-radius: var(--border-radius);
         display: grid;
+
+        .version-results-info {
+            color: var(--col-text-secondary);
+            margin-top: -0.2em;
+            font-size: 90%;
+        }
 
         .version-results-list {
             display: grid;
