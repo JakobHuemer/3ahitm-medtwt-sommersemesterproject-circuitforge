@@ -1,19 +1,39 @@
 <script setup lang="ts">
+import type { Version } from '@/types/version-types.ts'
+
 const props = defineProps<{
-    versions: string[]
+    versions: Version[]
     hashtags: string[]
+    deletionMode?: boolean
+}>()
+
+defineEmits<{
+    (e: 'delete', version: Version): void
 }>()
 </script>
 
 <template>
     <div class="tags-container">
         <div class="tags-list versions">
-            <div class="tag tag-version" v-for="version of versions">
+            <div
+                :data-deletion-mode="deletionMode"
+                class="tag tag-version"
+                v-for="version of versions"
+                :key="version.version"
+                @click="
+                    (ev) => {
+                        $emit('delete', version)
+                    }
+                "
+            >
                 <div class="tag-version-icon">
                     <img src="../../assets/img/tags/name_tag.png" alt="v" />
                 </div>
-                <span>{{ version }}</span>
+                <span>{{ version.version }}</span>
             </div>
+        </div>
+        <div class="no-versions-warning" v-if="versions.length === 0">
+            <span>no versions...</span>
         </div>
 
         <div class="tags-list hashtags">
@@ -50,6 +70,11 @@ const props = defineProps<{
                 gap: var(--gap-4);
                 align-items: center;
 
+                &[data-deletion-mode='true']:hover {
+                    color: var(--col-error);
+                    text-decoration: line-through;
+                }
+
                 &:hover {
                     background: var(--col-secondary-hover);
                 }
@@ -68,5 +93,10 @@ const props = defineProps<{
             }
         }
     }
+}
+
+.no-versions-warning {
+    color: var(--col-text-secondary);
+    margin-left: var(--gap-8);
 }
 </style>

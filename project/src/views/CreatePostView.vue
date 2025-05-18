@@ -14,7 +14,7 @@ import { type Version, versionOptions, type VersionType } from '@/types/version-
 import VersionListItem from '@/components/Post/VersionListItem.vue'
 
 const hashtags = ref<string[]>([])
-const versions = ref<string[]>([])
+const versions = ref<Version[]>([])
 
 const title = ref<string>('')
 const titleElement = ref<null | HTMLTextAreaElement>(null)
@@ -119,6 +119,8 @@ const versionTypeQuery = reactive<Set<VersionType>>(new Set(['release']))
 const selectedVersionIndex = ref<number>(0)
 const selectedVersionElement = ref<null | HTMLElement>(null)
 
+const isFetching = ref<boolean>(false)
+
 function toggleVersionType(item: VersionType) {
     if (versionTypeQuery.has(item)) {
         versionTypeQuery.delete(item)
@@ -156,6 +158,11 @@ watch([fetchedVersionsList, versionQuery, versionTypeQuery], () => {
     }
 })
 
+watch(displayFilteredVersionsList, () => {
+    // handle selected item
+    setSelectedVersionIndex(0)
+})
+
 const api = useApi()
 
 // fetch new versions
@@ -167,6 +174,7 @@ watchDebounced(
         }
 
         try {
+            isFetching.value = true
             const response = await api.api.get<Version[]>(`/versions`, {
                 params: {
                     query: versionQuery.value,
@@ -177,6 +185,8 @@ watchDebounced(
             })
 
             fetchedVersionsList.value = response.data
+
+            isFetching.value = false
         } catch (e) {
             console.error('Failed to fetch versions')
         }
@@ -191,23 +201,39 @@ watchDebounced(
  * update selected index inside the available range of matching versions
  * when the target index is outside the range it will be clamped
  * @param newIndex target index
+ * @param doScroll
  */
-function setSelectedVersionIndex(newIndex: number) {
+function setSelectedVersionIndex(newIndex: number, doScroll: boolean = true) {
     selectedVersionIndex.value = Math.max(
         0,
         Math.min(newIndex, displayFilteredVersionsList.value.length - 1),
     )
-}
 
-watch(selectedVersionIndex, () => {
-    if (selectedVersionElement.value) {
+    if (doScroll && selectedVersionElement.value) {
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
         selectedVersionElement.value.scrollIntoView({
             behavior: prefersReducedMotion ? 'auto' : 'smooth',
             block: 'center',
         })
     }
-})
+}
+
+function submitSelectedVersion() {
+    const submittedVersion = displayFilteredVersionsList.value[selectedVersionIndex.value]
+
+    if (submittedVersion) {
+        versionQuery.value = ''
+
+        // add version
+        if (!versions.value.find((e) => e.version === submittedVersion.version)) {
+            versions.value.push(submittedVersion)
+            // sort by date
+            versions.value.sort((a, b) => {
+                return new Date(b.released).getTime() - new Date(a.released).getTime()
+            })
+        }
+    }
+}
 </script>
 
 <template>
@@ -251,10 +277,10 @@ watch(selectedVersionIndex, () => {
 
             <!-- Version Finder selector -->
             <!-- TODO:
-                        - autoselect the first suggestion
-                        - arrow keys go up and down
+                        ✅ autoselect the first suggestion
+                        ✅ arrow keys go up and down
                             when updating the list the selected item is the top again
-                        - on enter will the selected version be added to the versions array
+                        ✅ on enter will the selected version be added to the versions array
                             and the state will be cleared
                         - show fetching status minimally like pulsing animation
                         - show 'No version found' notice when nothing was found
@@ -279,7 +305,7 @@ watch(selectedVersionIndex, () => {
                                     setSelectedVersionIndex(selectedVersionIndex + 1)
                                 else if (event.key == 'ArrowUp')
                                     setSelectedVersionIndex(selectedVersionIndex - 1)
-                                else if (event.key == 'Enter') console.log('TODO: implement')
+                                else if (event.key == 'Enter') submitSelectedVersion()
                             }
                         "
                     />
@@ -300,7 +326,7 @@ watch(selectedVersionIndex, () => {
                         }}</label>
                     </div>
                 </div>
-                <div class="version-results-container">
+                <div v-if="versionQuery !== ''" class="version-results-container">
                     <div class="version-results-list">
                         <VersionListItem
                             v-for="(version, index) in displayFilteredVersionsList"
@@ -308,16 +334,22 @@ watch(selectedVersionIndex, () => {
                             :key="version.version"
                             :version="version"
                             class="version-results-item"
+                            @mouseenter="
+                                (ev) => {
+                                    setSelectedVersionIndex(index, false)
+                                }
+                            "
+                            @click="
+                                (ev) => {
+                                    setSelectedVersionIndex(index, false)
+                                    submitSelectedVersion()
+                                }
+                            "
                             :ref="
                                 (el) => {
                                     if (index === selectedVersionIndex) {
-                                        console.log('LOGGIN THIS ELEMENT:', el)
                                         // converting proxy to actual element
                                         selectedVersionElement = el.$el
-                                        console.log(
-                                            'LOGGIN THE SELECTED ONE:',
-                                            selectedVersionElement,
-                                        )
                                     }
                                 }
                             "
@@ -326,7 +358,16 @@ watch(selectedVersionIndex, () => {
                 </div>
             </div>
 
-            <TagsContainer :versions="versions" :hashtags="hashtags" />
+            <TagsContainer
+                :versions="versions"
+                :hashtags="hashtags"
+                :deletion-mode="true"
+                @delete="
+                    (version) => {
+                        versions = versions.filter((v) => v.version !== version.version)
+                    }
+                "
+            />
 
             <div class="editor-wrapper">
                 <EditorWrapper v-model="content" :initial-content="content" />
@@ -673,6 +714,8 @@ h2 {
         z-index: 30;
     }
 
+    /* popup visibility */
+
     .version-finder-selected {
         display: flex;
         gap: var(--gap-32);
@@ -700,7 +743,6 @@ h2 {
             height: 100%;
             background: var(--col-content-hover);
             border-radius: var(--border-radius-s);
-            transition: background-color 0.2s;
 
             &:has(input:checked) {
                 background: var(--col-primary);
@@ -720,8 +762,11 @@ h2 {
         max-height: 12rem;
     }
 
+    /*
     .version-finder-input:has(input:focus) ~ .version-results-container,
-    .version-finder-input:has(input:focus) + .version-results-container {
+    .version-finder-input:has(input:focus) + .version-results-container*/
+
+    .version-results-container {
         z-index: 10;
         position: absolute;
         min-width: 235px;

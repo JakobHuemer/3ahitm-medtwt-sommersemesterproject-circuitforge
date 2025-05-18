@@ -21,7 +21,7 @@ class VersionSearchRequest extends FormRequest {
      */
     public function rules(): array {
         return [
-            "query" => ["required", "alpha_dash"],
+            "query" => ["required"],
             "types" => [ "required", "array" ],
             "types.*" => [ Rule::enum(VersionType::class) ],
             "limit" => "integer"
