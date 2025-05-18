@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCloudArrowUp, faPlus, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons'
-import { reactive, ref, watch } from 'vue'
+import { onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import TagsContainer from '@/components/Post/TagsContainer.vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import EditorWrapper from '@/components/Post/EditorWrapper.vue'
@@ -9,7 +9,7 @@ import type { JSONContent } from '@tiptap/vue-3'
 import FilePreview from '@/components/ImagePreview.vue'
 import levenshtein from '@/util/levenshtein.ts'
 import { useApi } from '@/store/useApi.ts'
-import { watchDebounced } from '@vueuse/core'
+import { useEventListener, watchDebounced } from '@vueuse/core'
 import { type Version, versionOptions, type VersionType } from '@/types/version-types'
 import VersionListItem from '@/components/Post/VersionListItem.vue'
 
@@ -121,6 +121,9 @@ const selectedVersionElement = ref<null | HTMLElement>(null)
 
 const isFetching = ref<boolean>(false)
 
+const showVersionsList = ref<boolean>(false)
+const versionsContainerRef = ref<null | HTMLElement>(null)
+
 function toggleVersionType(item: VersionType) {
     if (versionTypeQuery.has(item)) {
         versionTypeQuery.delete(item)
@@ -152,7 +155,7 @@ watch([fetchedVersionsList, versionQuery, versionTypeQuery], () => {
     })
 
     // limit list to max 10 items
-    const maxItems = 7
+    const maxItems = 100
     if (displayFilteredVersionsList.value.length > maxItems) {
         displayFilteredVersionsList.value = displayFilteredVersionsList.value.slice(0, maxItems)
     }
@@ -160,7 +163,7 @@ watch([fetchedVersionsList, versionQuery, versionTypeQuery], () => {
 
 watch(displayFilteredVersionsList, () => {
     // handle selected item
-    setSelectedVersionIndex(0)
+    setSelectedVersionIndex(selectedVersionIndex.value)
 })
 
 const api = useApi()
@@ -180,7 +183,7 @@ watchDebounced(
                     query: versionQuery.value,
                     // array of types[]={0}&
                     types: Array.from(versionTypeQuery.values()),
-                    limit: 20,
+                    limit: 100,
                 },
             })
 
@@ -234,6 +237,24 @@ function submitSelectedVersion() {
         }
     }
 }
+
+function handleClickOutside(event: MouseEvent) {
+    console.log('HANDLE CLICK OUTSIDE')
+    if (versionsContainerRef.value && !versionsContainerRef.value.contains(event.target as Node)) {
+        console.log('CLICK OUTSITE IS VALID!!!!!')
+        showVersionsList.value = false
+    }
+}
+
+useEventListener(document, 'mousedown', handleClickOutside)
+useEventListener(document, 'keydown', (event) => {
+    if (!showVersionsList.value) return
+
+    if (['ArrowDown', 'ArrowUp', 'Enter'].includes(event.key)) event.preventDefault()
+    if (event.key == 'ArrowDown') setSelectedVersionIndex(selectedVersionIndex.value + 1)
+    else if (event.key == 'ArrowUp') setSelectedVersionIndex(selectedVersionIndex.value - 1)
+    else if (event.key == 'Enter') submitSelectedVersion()
+})
 </script>
 
 <template>
@@ -282,13 +303,21 @@ function submitSelectedVersion() {
                             when updating the list the selected item is the top again
                         ✅ on enter will the selected version be added to the versions array
                             and the state will be cleared
-                        - show fetching status minimally like pulsing animation
-                        - show 'No version found' notice when nothing was found
-                        - show all tags inside of scrollable container
-                        - by prefixing a version with !, the version will be marked as incompatible
+                        ✅ show fetching status minimally like pulsing animation
+                        ✅ show 'No version found' notice when nothing was found
+                        ✅ show all tags inside of scrollable container
+                        ❌ by prefixing a version with !, the version will be marked as incompatible
                     Implementation idea through a simple index integer
              -->
-            <div class="version-finder">
+            <div
+                class="version-finder"
+                @focusin="
+                    () => {
+                        showVersionsList = true
+                    }
+                "
+                ref="versionsContainerRef"
+            >
                 <div class="version-finder-input">
                     <input
                         placeholder="add version"
@@ -296,22 +325,10 @@ function submitSelectedVersion() {
                         v-model="versionQuery"
                         name="version-finder"
                         id="version-finder"
-                        @keydown="
-                            (event) => {
-                                console.log('CAPTURING KEYDOWN')
-                                if (['ArrowDown', 'ArrowUp'].includes(event.key))
-                                    event.preventDefault()
-                                if (event.key == 'ArrowDown')
-                                    setSelectedVersionIndex(selectedVersionIndex + 1)
-                                else if (event.key == 'ArrowUp')
-                                    setSelectedVersionIndex(selectedVersionIndex - 1)
-                                else if (event.key == 'Enter') submitSelectedVersion()
-                            }
-                        "
                     />
                 </div>
                 <div class="version-finder-selected">
-                    <div v-for="opt in versionOptions" :key="opt" class="selected">
+                    <label :for="opt" v-for="opt in versionOptions" :key="opt" class="selected">
                         <label :for="opt" class="checkbox-repr">
                             <input
                                 type="checkbox"
@@ -324,9 +341,12 @@ function submitSelectedVersion() {
                         <label :for="opt" class="checkbox-label">{{
                             opt.replace(/_/g, ' ')
                         }}</label>
-                    </div>
+                    </label>
                 </div>
-                <div v-if="versionQuery !== ''" class="version-results-container">
+                <div
+                    v-if="versionQuery !== '' && showVersionsList"
+                    class="version-results-container"
+                >
                     <div class="version-results-list">
                         <div
                             class="version-results-info"
@@ -726,7 +746,7 @@ h2 {
 
     .version-finder-selected {
         display: flex;
-        gap: var(--gap-32);
+        gap: var(--gap-16);
 
         .selected {
             display: flex;
@@ -735,14 +755,23 @@ h2 {
             cursor: pointer;
             transition: color 0.2s;
             user-select: none;
+            background: var(--col-content);
+            padding: var(--gap-4);
+            padding-right: calc(var(--font-size-nav-item) + var(--gap-4));
+            border-radius: var(--border-radius);
 
             &:hover {
                 color: var(--col-accent);
+                background: var(--col-content-hover);
             }
         }
 
         input {
             display: none;
+        }
+
+        .selected:hover label.checkbox-repr:not(:has(input:checked)) {
+            background: var(--col-surface-hover);
         }
 
         label.checkbox-repr {
@@ -769,10 +798,6 @@ h2 {
         overflow-y: auto;
         max-height: 12rem;
     }
-
-    /*
-    .version-finder-input:has(input:focus) ~ .version-results-container,
-    .version-finder-input:has(input:focus) + .version-results-container*/
 
     .version-results-container {
         z-index: 10;
