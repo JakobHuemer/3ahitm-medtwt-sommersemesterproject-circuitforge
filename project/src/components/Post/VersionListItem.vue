@@ -51,6 +51,8 @@ const translations = ref<Map<VersionType, string>>(
     position: relative;
     overflow: hidden;
 
+    cursor: pointer;
+
     &[data-version-type='release'] {
         --version-tag-color: var(--color-release);
     }

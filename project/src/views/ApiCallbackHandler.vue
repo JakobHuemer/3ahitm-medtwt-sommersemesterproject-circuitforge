@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { type ApiResponse, ApiResponseType } from '@/types/ApiResponse.ts'
+import { type ApiResponse, ApiResponseType } from '@/types/api-response.d'
 import { ref } from 'vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import { faHome } from '@fortawesome/free-solid-svg-icons'

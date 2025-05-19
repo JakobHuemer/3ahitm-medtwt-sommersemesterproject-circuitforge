@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCloudArrowUp, faPlus, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons'
-import { onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import TagsContainer from '@/components/Post/TagsContainer.vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import EditorWrapper from '@/components/Post/EditorWrapper.vue'
@@ -10,7 +10,7 @@ import FilePreview from '@/components/ImagePreview.vue'
 import levenshtein from '@/util/levenshtein.ts'
 import { useApi } from '@/store/useApi.ts'
 import { useEventListener, watchDebounced } from '@vueuse/core'
-import { type Version, versionOptions, type VersionType } from '@/types/version-types'
+import { type Version, versionOptions, type VersionType } from '@/types/version-types.d'
 import VersionListItem from '@/components/Post/VersionListItem.vue'
 
 const hashtags = ref<string[]>([])
@@ -95,6 +95,8 @@ function updateHashTagsFromObj(obj: any) {
         console.log()
         let text = obj['text']
 
+        // TODO: fix mismatch of "#this#that" as two hashtags
+        //  but should be not matching
         const regex = /(?<=#)[A-Za-z0-9_-]{1,20}(?=([^A-Za-z0-9_-]|$))/g
 
         const matches = (text.matchAll(regex).toArray() as string[][]).map((a) => a[0])
@@ -377,6 +379,7 @@ useEventListener(document, 'keydown', (event) => {
                                 (el) => {
                                     if (index === selectedVersionIndex) {
                                         // converting proxy to actual element
+                                        // @ts-ignore
                                         selectedVersionElement = el.$el
                                     }
                                 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Color } from '@/types/Util'
+import type { Color } from '@/types/util'
 
 interface Props {
     label: string

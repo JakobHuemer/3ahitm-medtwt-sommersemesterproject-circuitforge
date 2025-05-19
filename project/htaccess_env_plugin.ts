@@ -1,6 +1,4 @@
 import type { Plugin } from 'vite'
-import fs from 'fs'
-import path from 'path'
 
 import { setup } from './setup'
 
@@ -10,6 +8,6 @@ export function generateHtaccessPlugin(): Plugin {
         apply: 'build',
         generateBundle(options, bundle) {
             setup()
-        }
+        },
     }
 }

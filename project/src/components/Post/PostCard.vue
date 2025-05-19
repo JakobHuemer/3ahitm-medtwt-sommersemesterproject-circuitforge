@@ -1,6 +1,7 @@
 <script async setup lang="ts">
 import { ref } from 'vue'
 import TagsContainer from '@/components/Post/TagsContainer.vue'
+import { type Version } from '@/types/version-types.d'
 
 const props = defineProps<{
     postId: number
@@ -22,7 +23,7 @@ const loadPost = async (
     comments: number
     downloads: number
     hashtags: string[]
-    versions: string[]
+    versions: Version[]
 }> => {
     return new Promise((resolve) => {
         setTimeout(() => {
@@ -41,7 +42,26 @@ const loadPost = async (
                 likes: 123,
                 comments: 54,
                 downloads: 23,
-                versions: ['1.20.2', '1.20.1', '1.19.4'],
+                versions: [
+                    {
+                        is_latest: true,
+                        version: '1.20.2',
+                        released: new Date('2024-05-01'),
+                        type: 'release',
+                    },
+                    {
+                        is_latest: false,
+                        version: '1.20.1',
+                        released: new Date('2024-03-15'),
+                        type: 'release',
+                    },
+                    {
+                        is_latest: false,
+                        version: '1.19.4',
+                        released: new Date('2023-12-10'),
+                        type: 'release',
+                    },
+                ],
                 hashtags: ['piston', 'door', 'redstone', 'tutorial'],
             })
         }, Math.random() * 1000)
