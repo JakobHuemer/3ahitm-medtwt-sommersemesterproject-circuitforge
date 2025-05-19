@@ -396,6 +396,7 @@ useEventListener(document, 'keydown', (event) => {
                     v-model="content"
                     :initial-content="content"
                     :hashtag-length="hashtagMaxLength"
+                    :character-limit="4096"
                     @mounted="updateHashTagsFromObj"
                 />
             </div>
@@ -651,6 +652,8 @@ h2 {
 }
 
 .editor-wrapper {
+    width: 100%;
+    overflow-x: visible;
     padding: var(--gap-8);
     border-radius: var(--border-radius);
     background: var(--col-content);
