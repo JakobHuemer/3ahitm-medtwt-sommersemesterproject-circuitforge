@@ -24,9 +24,7 @@ window.addEventListener('resize', () => resizeTextarea())
 
 const resizeTextarea = () => {
     const textarea = titleElement.value
-    console.log(textarea)
     if (textarea) {
-        console.log('UPDATING')
         textarea.style.height = 'auto'
         textarea.style.height = `${textarea.scrollHeight}px`
     }
@@ -66,14 +64,13 @@ function handleFile(
     for (let file of input.files) {
         let num = countRef == 'img' ? prevImageNum++ : prevAssetNum++
         if (
-            countRef == 'asset' &&
-            Array.from(assetList.value.values()).some((e) => e.name == file.name)
+            !(
+                countRef == 'asset' &&
+                Array.from(assetList.value.values()).some((e) => e.name == file.name)
+            )
         ) {
-            // check if file is already in list and then continue
-            continue
+            list.set(num, file)
         }
-        list.set(num, file)
-        console.log('putting (' + countRef + ' ): ', num + ' as ' + file.name)
     }
 }
 
@@ -85,14 +82,14 @@ function getHandleAsset(event: Event) {
     handleFile(assetInput.value, assetList.value, 'asset')
 }
 
+const hashtagMaxLength = ref(40)
+
 function updateHashTagsFromObj(obj: any) {
     if (obj['content'] && Array.isArray(obj['content'])) {
         for (const c of obj['content']) {
-            console.log('DEEP')
             updateHashTagsFromObj(c)
         }
     } else if (obj['text']) {
-        console.log()
         let text = obj['text']
 
         // TODO: fix mismatch of "#this#that" as two hashtags
@@ -102,7 +99,6 @@ function updateHashTagsFromObj(obj: any) {
         const matches = (text.matchAll(regex).toArray() as string[][]).map((a) => a[0])
 
         if (matches.length > 0) {
-            console.log(matches)
             hashtags.value.push(...matches)
         }
     }
@@ -132,13 +128,10 @@ function toggleVersionType(item: VersionType) {
     } else {
         versionTypeQuery.add(item)
     }
-    console.log(Array.from(versionTypeQuery.values()).join(','))
 }
 
 // displayFilteredVersionsList updater
 watch([fetchedVersionsList, versionQuery, versionTypeQuery], () => {
-    console.log('CHANGE')
-
     // filter by query
     displayFilteredVersionsList.value = fetchedVersionsList.value.filter((item) => {
         return item.version.toLowerCase().includes(versionQuery.value.toLowerCase())
@@ -241,9 +234,7 @@ function submitSelectedVersion() {
 }
 
 function handleClickOutside(event: MouseEvent) {
-    console.log('HANDLE CLICK OUTSIDE')
     if (versionsContainerRef.value && !versionsContainerRef.value.contains(event.target as Node)) {
-        console.log('CLICK OUTSITE IS VALID!!!!!')
         showVersionsList.value = false
     }
 }
@@ -401,21 +392,19 @@ useEventListener(document, 'keydown', (event) => {
             />
 
             <div class="editor-wrapper">
-                <EditorWrapper v-model="content" :initial-content="content" />
+                <EditorWrapper
+                    v-model="content"
+                    :initial-content="content"
+                    :hashtag-length="hashtagMaxLength"
+                />
             </div>
 
-            <!--            <div class="content">-->
-            <!--                <h4>Content:</h4>-->
-            <!--                <textarea-->
-            <!--                    class="title"-->
-            <!--                    style="font-size: 13px; font-family: monospace"-->
-            <!--                    name="te"-->
-            <!--                    id="te"-->
-            <!--                    cols="30"-->
-            <!--                    rows="10"-->
-            <!--                    >{{ JSON.stringify(content, null, 2) }}</textarea-->
-            <!--                >-->
-            <!--            </div>-->
+            <div class="content">
+                <h4>Content:</h4>
+                <pre class="title" style="font-size: 13px; font-family: monospace" id="te">{{
+                    JSON.stringify(content, null, 2)
+                }}</pre>
+            </div>
 
             <div class="downloadables">
                 <h3 class="downloads-title">Downloads</h3>
@@ -827,9 +816,6 @@ h2 {
 
             .version-results-item {
                 height: min-content;
-                transition:
-                    outline 0.2s,
-                    background-color 0.2s;
                 outline: 1px solid var(--col-container);
 
                 &[data-selected='true'] {

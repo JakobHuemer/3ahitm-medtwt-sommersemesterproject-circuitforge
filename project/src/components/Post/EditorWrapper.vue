@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { type Content, Editor, EditorContent, type JSONContent, useEditor } from '@tiptap/vue-3'
-import { onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
+import { EditorContent, type JSONContent, useEditor } from '@tiptap/vue-3'
+import { onBeforeUnmount } from 'vue'
 
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
@@ -18,15 +18,18 @@ import OrderedList from '@tiptap/extension-ordered-list'
 import ListItem from '@tiptap/extension-list-item'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { Highlight } from '@tiptap/extension-highlight'
+import { Hashtag } from '@/tiptap-extensions/HashtagExtension.ts'
 
 const model = defineModel<JSONContent>()
 
 const props = defineProps<{
     initialContent?: JSONContent
+    hashtagLength: number
 }>()
 
 const editor = useEditor({
-    content: props.initialContent,
+    // content: props.initialContent,
+    content: '<p>Try typing some #hashtags in this editor!</p>',
     extensions: [
         Document,
         Paragraph,
@@ -45,6 +48,12 @@ const editor = useEditor({
         Highlight,
         Placeholder.configure({
             placeholder: 'Write your Post...',
+        }),
+        Hashtag.configure({
+            HTMLAttributes: {
+                class: 'hashtag-mark',
+            },
+            hashtagLength: props.hashtagLength,
         }),
     ],
 
@@ -145,6 +154,7 @@ onBeforeUnmount(() => {
     strong,
     b {
         font-weight: bold;
+
         mark {
             font-weight: inherit;
         }
@@ -170,6 +180,11 @@ onBeforeUnmount(() => {
         color: var(--col-text-secondary);
     }
 
+    .hashtag-mark {
+        color: var(--col-accent);
+        border-radius: var(--border-radius-s);
+    }
+
     /* Blockquote */
 
     blockquote {
@@ -185,6 +200,7 @@ onBeforeUnmount(() => {
     /* Code */
 
     /* inline */
+
     *:not(pre) > code {
         font-family: 'JetBrains Mono', monospace;
         font-size: calc(var(--font-size-body) * 0.9);
