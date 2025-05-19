@@ -117,7 +117,9 @@ const versionTypeQuery = reactive<Set<VersionType>>(new Set(['release']))
 const selectedVersionIndex = ref<number>(0)
 const selectedVersionElement = ref<null | HTMLElement>(null)
 
+// statuses
 const isFetching = ref<boolean>(false)
+const isErrorAfterFetching = ref<boolean>(false)
 
 const showVersionsList = ref<boolean>(false)
 const versionsContainerRef = ref<null | HTMLElement>(null)
@@ -167,6 +169,8 @@ const api = useApi()
 watchDebounced(
     [versionQuery, versionTypeQuery],
     async () => {
+        isErrorAfterFetching.value = false
+
         if (versionQuery.value == '') {
             return
         }
@@ -187,6 +191,8 @@ watchDebounced(
             isFetching.value = false
         } catch (e) {
             console.error('Failed to fetch versions')
+            isErrorAfterFetching.value = true
+            isFetching.value = false
         }
     },
     {
@@ -346,6 +352,9 @@ useEventListener(document, 'keydown', (event) => {
                             v-if="displayFilteredVersionsList.length === 0"
                         >
                             <span v-if="isFetching">searching...</span>
+                            <span v-else-if="isErrorAfterFetching" style="color: var(--col-error)"
+                                >could not get versions!</span
+                            >
                             <span v-else>nothing found!</span>
                         </div>
                         <VersionListItem

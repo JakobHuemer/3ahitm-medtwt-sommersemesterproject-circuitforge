@@ -20,7 +20,6 @@ import { Placeholder } from '@tiptap/extension-placeholder'
 import { Highlight } from '@tiptap/extension-highlight'
 import { Hashtag } from '@/tiptap-extensions/HashtagExtension.ts'
 import { CharacterCount } from '@tiptap/extension-character-count'
-import { lerpColor } from '@/util/lerp.ts'
 
 const COLOR_SUCCESS = '#57c287'
 const COLOR_WARN = '#f5b64b'
@@ -39,11 +38,7 @@ const wordCountPercentage = ref(0)
 const bgBarBackground = ref<string>('')
 
 const editor = useEditor({
-    // content: props.initialContent,
-    content:
-        '<p>\n' +
-        '<p><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /></p>' +
-        'asdfffffffffffffffffffffffffffffddddddwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww</p>',
+    content: props.initialContent,
     extensions: [
         Document,
         Paragraph,
