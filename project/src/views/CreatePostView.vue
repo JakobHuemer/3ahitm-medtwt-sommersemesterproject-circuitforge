@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCloudArrowUp, faPlus, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons'
-import { reactive, ref, watch } from 'vue'
+import { onMounted, reactive, ref, toRaw, watch } from 'vue'
 import TagsContainer from '@/components/Post/TagsContainer.vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import EditorWrapper from '@/components/Post/EditorWrapper.vue'
@@ -85,26 +85,26 @@ function getHandleAsset(event: Event) {
 const hashtagMaxLength = ref(40)
 
 function updateHashTagsFromObj(obj: any) {
+    if (!obj) return
     if (obj['content'] && Array.isArray(obj['content'])) {
         for (const c of obj['content']) {
             updateHashTagsFromObj(c)
         }
     } else if (obj['text']) {
-        let text = obj['text']
+        // check if it is a mark?
+        if (
+            obj['marks'] &&
+            (obj['marks'] as { type: string }[]).some((obj) => obj['type'] === 'hashtag')
+        ) {
+            //  but should be not matching
+            let text: string = obj['text']
 
-        // TODO: fix mismatch of "#this#that" as two hashtags
-        //  but should be not matching
-        const regex = /(?<=#)[A-Za-z0-9_-]{1,20}(?=([^A-Za-z0-9_-]|$))/g
+            let hashtag = text.slice(1)
 
-        const matches = (text.matchAll(regex).toArray() as string[][]).map((a) => a[0])
-
-        if (matches.length > 0) {
-            hashtags.value.push(...matches)
+            hashtags.value.push(hashtag)
         }
     }
 }
-
-updateHashTagsFromObj(content.value)
 
 // versions
 
@@ -396,15 +396,16 @@ useEventListener(document, 'keydown', (event) => {
                     v-model="content"
                     :initial-content="content"
                     :hashtag-length="hashtagMaxLength"
+                    @mounted="updateHashTagsFromObj"
                 />
             </div>
 
-            <div class="content">
-                <h4>Content:</h4>
-                <pre class="title" style="font-size: 13px; font-family: monospace" id="te">{{
-                    JSON.stringify(content, null, 2)
-                }}</pre>
-            </div>
+            <!--            <div class="content">-->
+            <!--                <h4>Content:</h4>-->
+            <!--                <pre class="title" style="font-size: 13px; font-family: monospace" id="te">{{-->
+            <!--                    JSON.stringify(content, null, 2)-->
+            <!--                }}</pre>-->
+            <!--            </div>-->
 
             <div class="downloadables">
                 <h3 class="downloads-title">Downloads</h3>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { EditorContent, type JSONContent, useEditor } from '@tiptap/vue-3'
-import { onBeforeUnmount } from 'vue'
+import { onBeforeUnmount, onMounted } from 'vue'
 
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
@@ -28,8 +28,7 @@ const props = defineProps<{
 }>()
 
 const editor = useEditor({
-    // content: props.initialContent,
-    content: '<p>Try typing some #hashtags in this editor!</p>',
+    content: props.initialContent,
     extensions: [
         Document,
         Paragraph,
@@ -73,6 +72,13 @@ const editor = useEditor({
 //
 //     editor.value.commands.setContent(model.value)
 // })
+
+const emit = defineEmits(['mounted'])
+
+onMounted(() => {
+    model.value = editor.value?.getJSON()
+    emit('mounted')
+})
 
 onBeforeUnmount(() => {
     editor.value?.destroy()
