@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AssetType;
 use App\Enums\EntityType;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -53,6 +54,15 @@ class Post extends Entity {
 
     // custom creators
 
+    /**
+     * Create a new post.
+     *
+     * @param int $authorId
+     * @param string $title
+     * @param string $content
+     * @param Asset[] $assets
+     * @return Post
+     */
     public static function createPost(int $authorId, string $title, string $content, array $assets = []): Post {
         // create entity
 
@@ -71,6 +81,30 @@ class Post extends Entity {
 
         $post->save();
 
-        return $post;
+        // add assets
+        foreach ($assets as $asset) {
+            $post->assets()->save($asset);
+        }
+
+        return $post->load("assets");
+    }
+
+    public static function fromDataToAssets($data): array {
+        $images = $data["images"] ?? null;
+        $assets = [];
+        if ($images) {
+            foreach ($images as $image) {
+                $assets[] = Asset::makeAssetFromFile($image, AssetType::IMAGE);
+            }
+        }
+
+        $files = $data["assets"] ?? null;
+        if ($files) {
+            foreach ($files as $file) {
+                $assets[] = Asset::makeAssetFromFile($file, AssetType::ASSET);
+            }
+        }
+
+        return $assets;
     }
 }

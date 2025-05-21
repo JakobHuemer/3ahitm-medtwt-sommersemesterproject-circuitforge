@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\AssetType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,9 +11,8 @@ return new class extends Migration {
      */
     public function up(): void {
         Schema::create('assets', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
 
-            $table->string("path");
             $table->foreignId("post_id")
                 ->nullable()
                 ->references("id")
@@ -20,9 +20,8 @@ return new class extends Migration {
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->string("name");
-            $table->string("filetype");
-            $table->string("asset_type");
+            $table->string("file_name");
+            $table->enum("asset_type", AssetType::values());
 
             $table->bigInteger("downloads")->default(0);
 

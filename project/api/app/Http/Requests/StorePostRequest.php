@@ -34,7 +34,16 @@ class StorePostRequest extends FormRequest {
     public function rules(): array {
         return [
             "title" => ["required", "min:2", "max:255", "string"],
-            "content" => ["required", "json", $this->tiptapContent]
+            "content" => ["required", "json", $this->tiptapContent],
+            'images' => ["array"],
+            'images.*' => ["required", "image", "max:2048"], // max 2MB
+            'assets' => ["array"],
+            'assets.*' => [
+                "required",
+                "file",
+                "mimes:zip,tar,tar.gz,tar.xz,schem,schematic,litematica",
+                "max:8192" // max 8MB
+            ],
         ];
     }
 }
