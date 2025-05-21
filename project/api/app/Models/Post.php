@@ -16,11 +16,13 @@ class Post extends Entity {
         "id",
         "title",
         "content",
+        "archived"
     ];
 
 
     protected $hidden = [
         "entity",
+        "pivot"
     ];
 
 
@@ -38,6 +40,12 @@ class Post extends Entity {
             );
     }
 
+    public function casts(): array {
+        return [
+            "archived" => "boolean",
+            "content" => "array"
+        ];
+    }
 
     public function assets(): HasMany {
         return $this->hasMany(Asset::class);
@@ -76,7 +84,7 @@ class Post extends Entity {
         $post = new Post([
             "id" => $entity->id,
             "title" => $title,
-            "content" => $content,
+            "content" => json_decode($content),
         ]);
 
         $post->save();

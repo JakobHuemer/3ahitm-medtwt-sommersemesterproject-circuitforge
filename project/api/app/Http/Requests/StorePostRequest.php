@@ -40,8 +40,8 @@ class StorePostRequest extends FormRequest {
             'assets.*' => [
                 "required",
                 "file",
-                "mimes:zip,tar,tar.gz,tar.xz,schem,schematic,litematica",
-                "max:8192" // max 8MB
+                "mimes:zip,tar,tar.gz,tar.xz,schem,schematic,litematica,nbt",
+                "max:8192" // max 8MiB
             ],
             "versions" => ["required", "array"],
             "versions.*" => ["required", "string"],

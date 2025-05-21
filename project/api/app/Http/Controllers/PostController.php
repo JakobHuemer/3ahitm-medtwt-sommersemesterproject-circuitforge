@@ -23,6 +23,7 @@ class PostController extends Controller {
     public function store(StorePostRequest $request): Post {
         $data = $request->validated();
 
+        // TODO: uncomment
 //        $authorId = Auth::id();
         $authorId = 1;
         $content = $data["content"];
@@ -33,10 +34,7 @@ class PostController extends Controller {
 
         $post = Post::createPost($authorId, $title, $content, $assets);
 
-        $post->versions()->attach($versions[0]);
-
-//        var_dump($post->versions()->get());
-//        echo "</pre>";
+        $post->versions()->attach($versions);
 
         $post->load("versions");
         $post->load("assets");
@@ -49,7 +47,10 @@ class PostController extends Controller {
      */
     public function show(Post $post) {
         // return post with assets
-        return $post->assets()->get();
+        $post->load("versions");
+        $post->load("assets");
+
+        return $post;
     }
 
     /**
