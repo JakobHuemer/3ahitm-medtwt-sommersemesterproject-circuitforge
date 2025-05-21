@@ -286,7 +286,7 @@ async function createPost() {
         },
     })
 
-    router.push('/posts/' + res.data.id)
+    router.push('/post/' + res.data.id)
 }
 </script>
 
@@ -426,6 +426,7 @@ async function createPost() {
                     v-model="content"
                     :initial-content="content"
                     :hashtag-length="hashtagMaxLength"
+                    :editable="true"
                     :character-limit="4096"
                     @mounted="updateHashTagsFromObj"
                 />

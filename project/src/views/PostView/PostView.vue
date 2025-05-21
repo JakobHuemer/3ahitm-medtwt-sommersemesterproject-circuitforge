@@ -77,12 +77,30 @@ function updateHashTagsFromObj(obj: any) {
     }
 }
 
-function downloadAsset(asset: Asset) {
-    const link = document.createElement('a')
-    link.href = import.meta.env.BASE_URL + '/assets/' + asset.id
-    link.download = asset.file_name
+async function downloadAsset(asset: Asset) {
+    try {
+        const res = await api.api.get('/assets/' + asset.id, {
+            headers: {
+                Accept: asset.mime_type || '*/*',
+            },
+            responseType: 'blob',
+        })
 
-    link.click()
+        const blob = res.data
+        const objectUrl = URL.createObjectURL(blob)
+
+        const link = document.createElement('a')
+        link.href = objectUrl
+        link.download = asset.file_name
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        URL.revokeObjectURL(objectUrl)
+    } catch (error) {
+        console.error('Failed to auto download asset')
+        window.open(import.meta.env.BASE_URL + '../api/public/assets/' + asset.id, '_blank')
+    }
 }
 
 async function fileFromAsset(asset: Asset): Promise<File> {
