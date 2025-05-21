@@ -21,7 +21,8 @@ class Asset extends Model {
         "id",
         "file_name",
         "asset_type",
-        "downloads"
+        "downloads",
+        "mime_type",
     ];
 
 
@@ -49,7 +50,8 @@ class Asset extends Model {
         $savedAsset = Asset::create([
             "file_name" => $file->getClientOriginalName(),
             "asset_type" => $type,
-            "downloads" => 0
+            "downloads" => 0,
+            "mime_type" => $file->getMimeType(),
         ]);
 
         $savedAsset->save();

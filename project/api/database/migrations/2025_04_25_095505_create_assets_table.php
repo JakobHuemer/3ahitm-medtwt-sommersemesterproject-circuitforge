@@ -20,6 +20,7 @@ return new class extends Migration {
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
+            $table->string("mime_type");
             $table->string("file_name");
             $table->enum("asset_type", AssetType::values());
 

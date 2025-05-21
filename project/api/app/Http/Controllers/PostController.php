@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\AssetType;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Asset;
@@ -23,17 +22,10 @@ class PostController extends Controller {
     public function store(StorePostRequest $request): Post {
         $data = $request->validated();
 
-//        $authorId = Auth::id();
-        // TODO: Use actual user id
-//        echo "<pre>";
-//        var_dump($data);
-//        echo "</pre>";
-
-        $authorId = 1;
+        $authorId = Auth::id();
         $content = $data["content"];
         $title = $data["title"];
 
-        // loop over $data->images as UploadedFile s
         $assets = Post::fromDataToAssets($data);
 
         $post = Post::createPost($authorId, $title, $content, $assets);
@@ -60,5 +52,25 @@ class PostController extends Controller {
      */
     public function destroy(Post $post) {
         //
+    }
+
+    public static function getAsset(string $assetId) {
+        $asset = Asset::find($assetId);
+
+        if ($asset) {
+            // return asset static file
+            $file = $asset->getFile();
+            $asset->downloads++;
+            $asset->save();
+            return response($file, 200)
+                ->header("Content-Type", $asset->mime_type)
+                ->header("Content-Disposition", "inline; filename=\"" . $asset->file_name . "\"")
+                ->header("Content-Length", strlen($file));
+
+        } else {
+            return response()->json([
+                "error" => "Asset not found"
+            ], 404);
+        }
     }
 }

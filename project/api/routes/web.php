@@ -56,3 +56,5 @@ Route::get("/versions", VersionController::class);
 Route::apiResource("/post", PostController::class)
 //    ->middleware("auth:sanctum")
 ;
+
+Route::get("/assets/{assetId}", [PostController::class, 'getAsset']);
