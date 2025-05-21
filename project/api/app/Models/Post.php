@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Enums\AssetType;
 use App\Enums\EntityType;
+use App\Enums\Rating;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 
 class Post extends Entity {
 
@@ -60,6 +62,26 @@ class Post extends Entity {
         return $this->entity->author_id;
     }
 
+    public function rate(Rating $rating) {
+
+        $this->ratings()->syncWithoutDetaching([
+            // TODO: uncomment
+//            Auth::id() => [
+//                "rating" => $rating
+//            ]
+            1 => [
+                "rating" => $rating
+            ]
+        ]);
+
+    }
+
+    public function unrate() {
+        // TODO: uncomment
+//        $this->ratings()->detach(Auth::id());
+        $this->ratings()->detach(1);
+    }
+
     // custom creators
 
     /**
@@ -71,7 +93,7 @@ class Post extends Entity {
      * @param Asset[] $assets
      * @return Post
      */
-    public static function createPost(int $authorId, string $title, string $content, array $assets = []): Post {
+    public static function createPost(int $authorId, string $title, string $content, array $assets = [], array $versions = []): Post {
         // create entity
 
         $entity = new Entity([
@@ -90,11 +112,28 @@ class Post extends Entity {
         $post->save();
 
         // add assets
-        foreach ($assets as $asset) {
-            $post->assets()->save($asset);
-        }
+        $post->assets()->saveMany($assets);
+
+        // add versions
+        $post->versions()->attach($versions);
 
         return $post;
+    }
+
+    public function updatePost(string $title, string $content, array $assets = [], array $versions = []) {
+        $this->title = $title;
+        $this->content = json_decode($content);
+        $this->save();
+
+        // add assets
+        $this->assets()->delete();
+        $this->assets()->saveMany($assets);
+
+        // overwrite versions
+        $this->versions()->detach();
+        $this->versions()->attach($versions);
+
+        $this->refresh();
     }
 
     public static function fromDataToAssets($data): array {

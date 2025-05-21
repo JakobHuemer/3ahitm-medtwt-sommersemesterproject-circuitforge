@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Rating;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Asset;
@@ -32,12 +33,12 @@ class PostController extends Controller {
         $assets = Post::fromDataToAssets($data);
         $versions = Version::fromVersionString($data["versions"]);
 
-        $post = Post::createPost($authorId, $title, $content, $assets);
-
-        $post->versions()->attach($versions);
+        $post = Post::createPost($authorId, $title, $content, $assets, $versions);
 
         $post->load("versions");
         $post->load("assets");
+        $post->load("author");
+        $post->makeHidden("author_id");
 
         return $post;
     }
@@ -49,6 +50,8 @@ class PostController extends Controller {
         // return post with assets
         $post->load("versions");
         $post->load("assets");
+        $post->load("author");
+        $post->makeHidden("author_id");
 
         return $post;
     }
@@ -56,8 +59,23 @@ class PostController extends Controller {
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePostRequest $request, Post $post) {
-        //
+    public function update(UpdatePostRequest $request, Post $post): Post {
+
+        $data = $request->validated();
+
+        // TODO: uncomment
+//        $authorId = Auth::id();
+        $authorId = 1;
+        $content = $data["content"];
+        $title = $data["title"];
+
+
+        $assets = Post::fromDataToAssets($data);
+        $versions = Version::fromVersionString($data["versions"]);
+
+        $post->updatePost($title, $content, $assets, $versions);
+
+        return $post;
     }
 
     /**

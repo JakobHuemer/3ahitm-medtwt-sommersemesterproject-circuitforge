@@ -1,13 +1,16 @@
 <?php
 
+use App\Enums\Rating;
 use App\Enums\VersionType;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\VersionController;
+use App\Models\Post;
 use App\Models\Version;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -53,8 +56,21 @@ Route::get("/versions", VersionController::class);
 
 
 // Post Resource
-Route::apiResource("/post", PostController::class)
+Route::apiResource("/posts", PostController::class)
 //    ->middleware("auth:sanctum")
 ;
 
 Route::get("/assets/{assetId}", [PostController::class, 'getAsset']);
+
+Route::get("/posts/{post}/ratings", function (Post $post) {
+    return $post->ratings()->where("rating", 1)->count()
+        - $post->ratings()->where("rating", -1)->count();
+});
+
+Route::get("/posts/{post}/ratings/{rating}", function (Post $post, Rating $rating) {
+    $post->rate($rating);
+});
+
+Route::delete("/posts/{post}/ratings", function (Post $post) {
+    $post->unrate();
+});

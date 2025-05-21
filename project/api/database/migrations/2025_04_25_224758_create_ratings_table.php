@@ -25,9 +25,7 @@ return new class extends Migration {
 
             $table->primary(["user_id", "entity_id"]);
 
-            $table->boolean("rating");
-
-            $table->timestamps();
+            $table->integer("rating");
         });
     }
 

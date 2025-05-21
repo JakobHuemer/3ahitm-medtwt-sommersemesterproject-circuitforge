@@ -37,7 +37,7 @@ class Version extends Model {
         return $this->belongsToMany(Post::class, "version_post", "version_id", "post_id");
     }
 
-    public static function fromVersionString(array $versionsList): array {
+    public static function fromVersionString(array $versionsList = []): array {
         $versions = [];
         foreach ($versionsList as $version) {
             $foundVersion = Version::where("version", $version)->first();
