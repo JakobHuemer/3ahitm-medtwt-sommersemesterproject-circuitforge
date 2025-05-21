@@ -30,6 +30,7 @@ class Post extends Entity {
 
     protected $appends = [
         "author_id",
+        "rating"
     ];
 
     public function versions(): BelongsToMany {
@@ -47,6 +48,10 @@ class Post extends Entity {
             "archived" => "boolean",
             "content" => "array"
         ];
+    }
+
+    public function getRatingAttribute(): int {
+        return $this->getRating();
     }
 
     public function assets(): HasMany {
@@ -80,6 +85,12 @@ class Post extends Entity {
         // TODO: uncomment
 //        $this->ratings()->detach(Auth::id());
         $this->ratings()->detach(1);
+    }
+
+    public function getRating(): int {
+        return $this->ratings()->where("rating", 1)->count()
+            - $this->ratings()->where("rating", -1)->count();
+
     }
 
     // custom creators

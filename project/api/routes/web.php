@@ -62,9 +62,8 @@ Route::apiResource("/posts", PostController::class)
 
 Route::get("/assets/{assetId}", [PostController::class, 'getAsset']);
 
-Route::get("/posts/{post}/ratings", function (Post $post) {
-    return $post->ratings()->where("rating", 1)->count()
-        - $post->ratings()->where("rating", -1)->count();
+Route::get("/posts/{post}/ratings", function (Post $post): int {
+    return $post->getRating();
 });
 
 Route::get("/posts/{post}/ratings/{rating}", function (Post $post, Rating $rating) {
