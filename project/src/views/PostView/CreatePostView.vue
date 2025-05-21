@@ -12,7 +12,8 @@ import { useApi } from '@/store/useApi.ts'
 import { useEventListener, watchDebounced } from '@vueuse/core'
 import { type Version, versionOptions, type VersionType } from '@/types/version-types.d'
 import VersionListItem from '@/components/Post/VersionListItem.vue'
-import type { Post } from '@/types/post'
+import type { Post } from '@/types/post.d'
+import router from '@/router'
 
 const hashtags = ref<string[]>([])
 const versions = ref<Version[]>([])
@@ -285,7 +286,7 @@ async function createPost() {
         },
     })
 
-    console.log(res.data)
+    router.push('/posts/' + res.data.id)
 }
 </script>
 
@@ -450,7 +451,7 @@ async function createPost() {
                         :key="key"
                     >
                         <div class="thumbnail">
-                            <img src="../assets/img/icons/shulker-white.png" alt="download" />
+                            <img src="../../assets/img/icons/shulker-white.png" alt="download" />
                         </div>
                         <span class="asset-file-name">{{ asset.name }}</span>
                         <FontAwesomeIcon :icon="faXmark" class="delete-asset" />

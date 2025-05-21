@@ -4,11 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons'
 
 const props = defineProps<{
-    file: File
+    file: File | Promise<File>
 }>()
 
 const reader = new FileReader()
 const preview = ref<string | null>(null)
+const actualFile = ref<File | null>(null)
 
 reader.onload = (e: ProgressEvent<FileReader>) => {
     if (e.target && typeof e.target.result === 'string') {
@@ -16,12 +17,17 @@ reader.onload = (e: ProgressEvent<FileReader>) => {
     }
 }
 
-reader.readAsDataURL(props.file)
+async function load() {
+    actualFile.value = await props.file
+    reader.readAsDataURL(actualFile.value)
+}
+
+load()
 </script>
 
 <template>
     <!--        show loading until image is loaded-->
-    <img v-if="preview" class="thumbnail" :src="preview" :alt="file.name" />
+    <img v-if="preview" class="thumbnail" :src="preview" :alt="actualFile?.name" />
     <div v-else class="loading thumbnail">
         <FontAwesomeIcon :icon="faGear" />
     </div>

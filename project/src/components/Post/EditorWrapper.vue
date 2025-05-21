@@ -21,17 +21,20 @@ import { Highlight } from '@tiptap/extension-highlight'
 import { Hashtag } from '@/tiptap-extensions/HashtagExtension.ts'
 import { CharacterCount } from '@tiptap/extension-character-count'
 
-const COLOR_SUCCESS = '#57c287'
-const COLOR_WARN = '#f5b64b'
-const COLOR_ERROR = '#f04747'
-
 const model = defineModel<JSONContent>()
 
 const props = defineProps<{
     initialContent?: JSONContent
     hashtagLength: number
     characterLimit: number
+    editable?: boolean
 }>()
+
+console.log(props.initialContent)
+console.log(props.initialContent)
+console.log(props.initialContent)
+
+const varEditable = ref(props.editable === undefined || props.editable)
 
 const wordCountPercentage = ref(0)
 
@@ -39,6 +42,7 @@ const bgBarBackground = ref<string>('')
 
 const editor = useEditor({
     content: props.initialContent,
+    editable: varEditable.value,
     extensions: [
         Document,
         Paragraph,
@@ -91,6 +95,10 @@ onMounted(() => {
     emit('mounted')
 })
 
+watch(model, () => {
+    editor.value?.commands.setContent(model.value || {})
+})
+
 onBeforeUnmount(() => {
     editor.value?.destroy()
 })
@@ -100,7 +108,7 @@ onBeforeUnmount(() => {
     <div class="editor-container">
         <EditorContent :editor="editor" />
         <div class="word-count-wrapper">
-            <div class="word-count-container">
+            <div class="word-count-container" v-if="varEditable">
                 <span class="count count-actual">{{
                     editor?.storage.characterCount.characters()
                 }}</span

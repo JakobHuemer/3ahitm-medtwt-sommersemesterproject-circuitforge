@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import SettingsView from '@/views/SettingsView.vue'
-import CreatePostView from '@/views/CreatePostView.vue'
+import CreatePostView from '@/views/PostView/CreatePostView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import UserView from '@/views/UserView.vue'
@@ -8,6 +8,7 @@ import Account from '@/views/SettingsView/Account.vue'
 import HomeView from '@/views/HomeView.vue'
 import Preferences from '@/views/SettingsView/Preferences.vue'
 import ApiCallbackHandler from '@/views/ApiCallbackHandler.vue'
+import PostView from '@/views/PostView/PostView.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,6 +23,11 @@ const router = createRouter({
             path: '/post/create',
             name: 'Create Post',
             component: CreatePostView,
+        },
+        {
+            path: '/post/:id',
+            name: 'View Post',
+            component: PostView,
         },
         {
             path: '/login',

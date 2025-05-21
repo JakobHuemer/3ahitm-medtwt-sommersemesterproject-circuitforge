@@ -1,5 +1,5 @@
 export interface Asset {
-    id: number
+    id: string
     post_id: number
     mime_type: string
     file_name: string
