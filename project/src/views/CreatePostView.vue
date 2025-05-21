@@ -328,19 +328,6 @@ async function createPost() {
                 :maxlength="maxlength"
             ></textarea>
 
-            <!-- Version Finder selector -->
-            <!-- TODO:
-                        ✅ autoselect the first suggestion
-                        ✅ arrow keys go up and down
-                            when updating the list the selected item is the top again
-                        ✅ on enter will the selected version be added to the versions array
-                            and the state will be cleared
-                        ✅ show fetching status minimally like pulsing animation
-                        ✅ show 'No version found' notice when nothing was found
-                        ✅ show all tags inside of scrollable container
-                        ❌ by prefixing a version with !, the version will be marked as incompatible
-                    Implementation idea through a simple index integer
-             -->
             <div
                 class="version-finder"
                 @focusin="
@@ -443,12 +430,12 @@ async function createPost() {
                 />
             </div>
 
-            <div class="content">
-                <h4>Content:</h4>
-                <pre class="title" style="font-size: 13px; font-family: monospace" id="te">{{
-                    JSON.stringify(content, null, 2)
-                }}</pre>
-            </div>
+            <!--<div class="content">-->
+            <!--    <h4>Content:</h4>-->
+            <!--    <pre class="title" style="font-size: 13px; font-family: monospace" id="te">{{-->
+            <!--        JSON.stringify(content, null, 2)-->
+            <!--    }}</pre>-->
+            <!--</div>-->
 
             <div class="downloadables">
                 <h3 class="downloads-title">Downloads</h3>

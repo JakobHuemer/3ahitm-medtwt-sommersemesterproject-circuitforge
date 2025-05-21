@@ -102,8 +102,6 @@ export const useApi = defineStore('api', () => {
         password: string,
         remember: boolean = false,
     ): Promise<boolean> {
-        // TODO: Implement remember me!
-
         try {
             const res = await api.value.post<User>('/login', {
                 login,
