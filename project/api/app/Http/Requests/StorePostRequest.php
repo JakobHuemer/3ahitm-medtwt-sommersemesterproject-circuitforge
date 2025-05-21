@@ -18,7 +18,6 @@ class StorePostRequest extends FormRequest {
             ->marks("bold", "italic", "underline", "strike", "code");
     }
 
-
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -44,6 +43,8 @@ class StorePostRequest extends FormRequest {
                 "mimes:zip,tar,tar.gz,tar.xz,schem,schematic,litematica",
                 "max:8192" // max 8MB
             ],
+            "versions" => ["required", "array"],
+            "versions.*" => ["required", "string"],
         ];
     }
 }

@@ -19,6 +19,10 @@ class Version extends Model {
         "is_latest"
     ];
 
+    protected $hidden = [
+        "pivot",
+    ];
+
     public $timestamps = false;
 
     protected function casts() {
@@ -31,6 +35,17 @@ class Version extends Model {
 
     public function posts(): BelongsToMany {
         return $this->belongsToMany(Post::class, "version_post", "version_id", "post_id");
+    }
+
+    public static function fromVersionString(array $versionsList): array {
+        $versions = [];
+        foreach ($versionsList as $version) {
+            $foundVersion = Version::where("version", $version)->first();
+            if ($foundVersion) {
+                $versions[] = $foundVersion;
+            }
+        }
+        return $versions;
     }
 
 }

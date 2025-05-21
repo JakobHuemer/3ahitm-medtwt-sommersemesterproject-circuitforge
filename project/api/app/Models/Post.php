@@ -86,7 +86,7 @@ class Post extends Entity {
             $post->assets()->save($asset);
         }
 
-        return $post->load("assets");
+        return $post;
     }
 
     public static function fromDataToAssets($data): array {

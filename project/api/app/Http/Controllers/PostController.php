@@ -6,6 +6,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Asset;
 use App\Models\Post;
+use App\Models\Version;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller {
@@ -22,13 +23,23 @@ class PostController extends Controller {
     public function store(StorePostRequest $request): Post {
         $data = $request->validated();
 
-        $authorId = Auth::id();
+//        $authorId = Auth::id();
+        $authorId = 1;
         $content = $data["content"];
         $title = $data["title"];
 
         $assets = Post::fromDataToAssets($data);
+        $versions = Version::fromVersionString($data["versions"]);
 
         $post = Post::createPost($authorId, $title, $content, $assets);
+
+        $post->versions()->attach($versions[0]);
+
+//        var_dump($post->versions()->get());
+//        echo "</pre>";
+
+        $post->load("versions");
+        $post->load("assets");
 
         return $post;
     }
@@ -37,7 +48,8 @@ class PostController extends Controller {
      * Display the specified resource.
      */
     public function show(Post $post) {
-        //
+        // return post with assets
+        return $post->assets()->get();
     }
 
     /**

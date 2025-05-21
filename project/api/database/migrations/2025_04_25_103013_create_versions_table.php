@@ -28,7 +28,7 @@ return new class extends Migration {
 
         Schema::create("version_post", function (Blueprint $table) {
             $table->string("version_id");
-            $table->primary("version_id")
+            $table->foreign("version_id")
                 ->references("version")
                 ->on("versions")
                 ->noActionOnDelete()
@@ -39,13 +39,9 @@ return new class extends Migration {
                 ->on("posts")
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-
-            $table->boolean("incompatible")
-                ->default(false);
-
             // PKs
 
-            $table->primary(["post_id", "version_id"]);
+            $table->primary(["version_id", "post_id"]);
         });
     }
 
