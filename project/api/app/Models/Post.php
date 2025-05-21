@@ -70,11 +70,7 @@ class Post extends Entity {
     public function rate(Rating $rating) {
 
         $this->ratings()->syncWithoutDetaching([
-            // TODO: uncomment
-//            Auth::id() => [
-//                "rating" => $rating
-//            ]
-            1 => [
+            Auth::id() => [
                 "rating" => $rating
             ]
         ]);
@@ -82,9 +78,7 @@ class Post extends Entity {
     }
 
     public function unrate() {
-        // TODO: uncomment
-//        $this->ratings()->detach(Auth::id());
-        $this->ratings()->detach(1);
+        $this->ratings()->detach(Auth::id());
     }
 
     public function getRating(): int {

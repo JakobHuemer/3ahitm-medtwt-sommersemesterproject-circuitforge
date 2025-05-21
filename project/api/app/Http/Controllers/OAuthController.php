@@ -13,10 +13,6 @@ use phpseclib3\Math\PrimeField\Integer;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-/* TODO: correctly redirect to the frontend after handling
-        the social logins and passing on information
-*/
-
 class OAuthController extends Controller {
 
     public function oauthRedirectHandler(OAuthProviderType $providerType) {

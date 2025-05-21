@@ -24,9 +24,8 @@ class PostController extends Controller {
     public function store(StorePostRequest $request): Post {
         $data = $request->validated();
 
-        // TODO: uncomment
-//        $authorId = Auth::id();
-        $authorId = 1;
+        $authorId = Auth::id();
+//        $authorId = 1;
         $content = $data["content"];
         $title = $data["title"];
 
@@ -63,9 +62,7 @@ class PostController extends Controller {
 
         $data = $request->validated();
 
-        // TODO: uncomment
-//        $authorId = Auth::id();
-        $authorId = 1;
+        $authorId = Auth::id();
         $content = $data["content"];
         $title = $data["title"];
 

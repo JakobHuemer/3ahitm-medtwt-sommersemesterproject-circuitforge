@@ -12,6 +12,7 @@ import { useApi } from '@/store/useApi.ts'
 import { useEventListener, watchDebounced } from '@vueuse/core'
 import { type Version, versionOptions, type VersionType } from '@/types/version-types.d'
 import VersionListItem from '@/components/Post/VersionListItem.vue'
+import type { Post } from '@/types/post'
 
 const hashtags = ref<string[]>([])
 const versions = ref<Version[]>([])
@@ -254,6 +255,38 @@ useEventListener(document, 'keydown', (event) => {
     else if (event.key == 'ArrowUp') setSelectedVersionIndex(selectedVersionIndex.value - 1)
     else if (event.key == 'Enter') submitSelectedVersion()
 })
+
+async function createPost() {
+    const formData = new FormData()
+
+    // title
+    // content
+    // versions
+    // images
+    // assets
+
+    formData.append('title', title.value)
+    formData.append('content', JSON.stringify(content.value))
+
+    versions.value.forEach((v) => formData.append('versions[]', v.version))
+
+    // iterate over imageList Map
+    for (const [key, file] of imageList.value) {
+        formData.append(`images[]`, file)
+    }
+
+    for (const [key, file] of assetList.value) {
+        formData.append(`assets[]`, file)
+    }
+
+    const res = await api.api.post<Post>('/posts', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+
+    console.log(res.data)
+}
 </script>
 
 <template>
@@ -410,12 +443,12 @@ useEventListener(document, 'keydown', (event) => {
                 />
             </div>
 
-            <!--            <div class="content">-->
-            <!--                <h4>Content:</h4>-->
-            <!--                <pre class="title" style="font-size: 13px; font-family: monospace" id="te">{{-->
-            <!--                    JSON.stringify(content, null, 2)-->
-            <!--                }}</pre>-->
-            <!--            </div>-->
+            <div class="content">
+                <h4>Content:</h4>
+                <pre class="title" style="font-size: 13px; font-family: monospace" id="te">{{
+                    JSON.stringify(content, null, 2)
+                }}</pre>
+            </div>
 
             <div class="downloadables">
                 <h3 class="downloads-title">Downloads</h3>
@@ -453,7 +486,9 @@ useEventListener(document, 'keydown', (event) => {
 
             <div class="final-section">
                 <ButtonComponent>Cancel</ButtonComponent>
-                <ButtonComponent button-type="primary">Create Post</ButtonComponent>
+                <ButtonComponent button-type="primary" @click="createPost"
+                    >Create Post</ButtonComponent
+                >
             </div>
         </div>
     </div>
