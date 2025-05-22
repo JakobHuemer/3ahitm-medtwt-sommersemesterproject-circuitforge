@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faTrash, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faArrowDown, faArrowUp, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { ref, watch } from 'vue'
 import TagsContainer from '@/components/Post/TagsContainer.vue'
 import EditorWrapper from '@/components/Post/EditorWrapper.vue'
@@ -15,6 +15,7 @@ import type { Post } from '@/types/post.d'
 
 const hashtags = ref<string[]>([])
 
+const postId = ref<number | null>(null)
 const title = ref<string | null>(null)
 const content = ref<JSONContent>({})
 const imagesList = ref<Asset[] | null>(null)
@@ -31,6 +32,7 @@ const route = useRoute()
 api.api.get<Post>(`/posts/${route.params.id}`).then((res) => {
     const post: Post = res.data
 
+    postId.value = post.id
     title.value = post.title
     content.value = post.content
     assetsList.value = post.assets.filter((a) => a.asset_type == 'asset')
@@ -116,6 +118,56 @@ async function fileFromAsset(asset: Asset): Promise<File> {
 watch(content, () => {
     updateHashTagsFromObj(content.value)
 })
+
+const isUpdatingRating = ref<boolean>(false)
+
+watch(rating, async () => {
+    if (isUpdatingRating.value) return
+
+    isUpdatingRating.value = true
+
+    try {
+        const res = await api.api.get<number>('/posts/' + postId.value + '/ratings')
+
+        rating.value = res.data
+        visualRating.value = rating.value
+    } catch (error) {
+        console.warn('Failed to fetch post rating!')
+    } finally {
+        isUpdatingRating.value = false
+    }
+})
+
+const myRating = ref<number>(0)
+const visualRating = ref<number>(0)
+
+function rate(newRating: number) {
+    if (rating.value == null || newRating < -1 || newRating > 1) return
+
+    // detect rating deletion
+
+    if (myRating.value == newRating) {
+        visualRating.value -= newRating
+        myRating.value = 0
+
+        api.api.delete('/posts/' + postId + '/ratings').then(() => {
+            if (rating.value == null) return
+            rating.value -= newRating
+        })
+
+        return
+    }
+
+    let multiplier = myRating.value == 0 ? 1 : 2
+
+    visualRating.value += newRating * multiplier
+    myRating.value = newRating
+
+    api.api.get('/posts/' + postId.value + '/ratings/' + newRating).then(() => {
+        if (rating.value == null) return
+        rating.value += newRating * multiplier
+    })
+}
 </script>
 
 <template>
@@ -172,7 +224,23 @@ watch(content, () => {
                 </div>
             </div>
 
-            <div class="final-section"></div>
+            <div class="final-section">
+                <div class="rating-container">
+                    <div
+                        :class="'rating-button rating-up' + (myRating == 1 ? ' selected' : '')"
+                        @click="rate(1)"
+                    >
+                        <FontAwesomeIcon :icon="faArrowUp" />
+                    </div>
+                    <span class="rating-number">{{ visualRating }}</span>
+                    <div
+                        :class="'rating-button rating-down' + (myRating == -1 ? ' selected' : '')"
+                        @click="rate(-1)"
+                    >
+                        <FontAwesomeIcon :icon="faArrowDown" />
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -367,7 +435,44 @@ h2 {
 
 .final-section {
     display: flex;
-    justify-content: end;
-    gap: var(--gap-8);
+
+    .rating-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: var(--gap-8);
+        padding: var(--gap-4) var(--gap-4);
+
+        font-weight: bold;
+        background: var(--col-content);
+
+        border-radius: var(--border-radius);
+
+        cursor: pointer;
+
+        &:hover {
+            background: var(--col-content-hover);
+        }
+
+        &:has(.selected) {
+            background: var(--col-surface);
+        }
+
+        .rating-button {
+            padding: var(--gap-4) var(--gap-4);
+            background: var(--col-surface);
+            border-radius: var(--border-radius-s);
+
+            transition: background 0.1s;
+
+            &:hover {
+                background: var(--col-surface-hover);
+            }
+
+            &.selected {
+                background: var(--col-accent);
+            }
+        }
+    }
 }
 </style>
