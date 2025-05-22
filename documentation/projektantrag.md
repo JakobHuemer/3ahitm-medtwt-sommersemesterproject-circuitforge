@@ -165,7 +165,7 @@ oder ähnlichem implementiert.
 ## 3D-Rendering Schematic
 
 **SchematicWebViewer:**
-[GitHub](https://github.com/EngineHub/SchematicWebViewer?utm_source=chatgpt.com)
+[GitHub](https://github.com/EngineHub/SchematicWebViewer)
 
 Kann mithilfe einer Client-Jar folgende Files in 3D Rendern:
 

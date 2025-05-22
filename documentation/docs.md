@@ -87,5 +87,17 @@ Farben/Fonts: [Design.md](sysspec/frontend/design.md)
 
 ## Sprint 3: create/view Post
 
-In Progress...
+**Posts**
+
+- **Post erstellen**
+  - Titel
+  - Versionssuche
+  - hashtags
+  - images
+  - assets
+- **Posts ansehen**
+  - post liken
+  - assets herunterladen
+
+
 
