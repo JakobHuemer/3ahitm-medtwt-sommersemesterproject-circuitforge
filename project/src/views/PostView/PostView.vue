@@ -150,7 +150,7 @@ function rate(newRating: number) {
         visualRating.value -= newRating
         myRating.value = 0
 
-        api.api.delete('/posts/' + postId + '/ratings').then(() => {
+        api.api.delete('/posts/' + postId.value + '/ratings').then(() => {
             if (rating.value == null) return
             rating.value -= newRating
         })
