@@ -67,26 +67,6 @@ class Post extends Entity {
         return $this->entity->author_id;
     }
 
-    public function rate(Rating $rating) {
-
-        $this->ratings()->syncWithoutDetaching([
-            Auth::id() => [
-                "rating" => $rating
-            ]
-        ]);
-
-    }
-
-    public function unrate() {
-        $this->ratings()->detach(Auth::id());
-    }
-
-    public function getRating(): int {
-        return $this->ratings()->where("rating", 1)->count()
-            - $this->ratings()->where("rating", -1)->count();
-
-    }
-
     // custom creators
 
     /**

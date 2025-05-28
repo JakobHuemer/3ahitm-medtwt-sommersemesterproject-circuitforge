@@ -4,10 +4,14 @@ use App\Enums\Rating;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\VersionController;
+use App\Models\Entity;
 use App\Models\Post;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -53,19 +57,14 @@ Route::get("/versions", VersionController::class);
 
 
 // Post Resource
-Route::apiResource("/posts", PostController::class)
-    ->middleware("auth:sanctum");
+Route::apiResource("/posts", PostController::class);
 
 Route::get("/assets/{assetId}", [PostController::class, 'getAsset']);
 
-Route::get("/posts/{post}/ratings", function (Post $post): int {
-    return $post->getRating();
-})->middleware("auth:sanctum");
+Route::get("/entities/{entity}/ratings", [RatingController::class, "get"]);
 
-Route::get("/posts/{post}/ratings/{rating}", function (Post $post, Rating $rating) {
-    $post->rate($rating);
-})->middleware("auth:sanctum");
+Route::get("/entities/{entity}/ratings/{rating}", [RatingController::class, "set"])
+    ->middleware("auth:sanctum");
 
-Route::delete("/posts/{post}/ratings", function (Post $post) {
-    $post->unrate();
-})->middleware("auth:sanctum");
+Route::delete("/entities/{post}/ratings", [RatingController::class, "unrate"])
+    ->middleware("auth:sanctum");

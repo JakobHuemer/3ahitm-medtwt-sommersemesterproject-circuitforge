@@ -12,6 +12,7 @@ import type User from '@/types/user.d'
 import { useApi } from '@/store/useApi.ts'
 import { useRoute } from 'vue-router'
 import type { Post } from '@/types/post.d'
+import Rating from '@/components/Post/Rating.vue'
 
 const hashtags = ref<string[]>([])
 
@@ -21,7 +22,6 @@ const content = ref<JSONContent>({})
 const imagesList = ref<Asset[] | null>(null)
 const assetsList = ref<Asset[] | null>(null)
 const versionsList = ref<Version[] | null>(null)
-const rating = ref<number | null>(null)
 const author = ref<User | null>(null)
 const created_at = ref<string | null>(null)
 const updated_at = ref<string | null>(null)
@@ -38,7 +38,6 @@ api.api.get<Post>(`/posts/${route.params.id}`).then((res) => {
     assetsList.value = post.assets.filter((a) => a.asset_type == 'asset')
     imagesList.value = post.assets.filter((a) => a.asset_type == 'image')
     versionsList.value = post.versions
-    rating.value = post.rating
     author.value = post.author
     created_at.value = post.created_at
     updated_at.value = post.updated_at
@@ -115,59 +114,10 @@ async function fileFromAsset(asset: Asset): Promise<File> {
     })
 }
 
+api.api.get('/entities/3/ratings')
 watch(content, () => {
     updateHashTagsFromObj(content.value)
 })
-
-const isUpdatingRating = ref<boolean>(false)
-
-watch(rating, async () => {
-    if (isUpdatingRating.value) return
-
-    isUpdatingRating.value = true
-
-    try {
-        const res = await api.api.get<number>('/posts/' + postId.value + '/ratings')
-
-        rating.value = res.data
-        visualRating.value = rating.value
-    } catch (error) {
-        console.warn('Failed to fetch post rating!')
-    } finally {
-        isUpdatingRating.value = false
-    }
-})
-
-const myRating = ref<number>(0)
-const visualRating = ref<number>(0)
-
-function rate(newRating: number) {
-    if (rating.value == null || newRating < -1 || newRating > 1) return
-
-    // detect rating deletion
-
-    if (myRating.value == newRating) {
-        visualRating.value -= newRating
-        myRating.value = 0
-
-        api.api.delete('/posts/' + postId.value + '/ratings').then(() => {
-            if (rating.value == null) return
-            rating.value -= newRating
-        })
-
-        return
-    }
-
-    let multiplier = myRating.value == 0 ? 1 : 2
-
-    visualRating.value += newRating * multiplier
-    myRating.value = newRating
-
-    api.api.get('/posts/' + postId.value + '/ratings/' + newRating).then(() => {
-        if (rating.value == null) return
-        rating.value += newRating * multiplier
-    })
-}
 </script>
 
 <template>
@@ -225,21 +175,7 @@ function rate(newRating: number) {
             </div>
 
             <div class="final-section">
-                <div class="rating-container">
-                    <div
-                        :class="'rating-button rating-up' + (myRating == 1 ? ' selected' : '')"
-                        @click="rate(1)"
-                    >
-                        <FontAwesomeIcon :icon="faArrowUp" />
-                    </div>
-                    <span class="rating-number">{{ visualRating }}</span>
-                    <div
-                        :class="'rating-button rating-down' + (myRating == -1 ? ' selected' : '')"
-                        @click="rate(-1)"
-                    >
-                        <FontAwesomeIcon :icon="faArrowDown" />
-                    </div>
-                </div>
+                <Rating :entity-id="3" />
             </div>
         </div>
     </div>
@@ -435,44 +371,5 @@ h2 {
 
 .final-section {
     display: flex;
-
-    .rating-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: var(--gap-8);
-        padding: var(--gap-4) var(--gap-4);
-
-        font-weight: bold;
-        background: var(--col-content);
-
-        border-radius: var(--border-radius);
-
-        cursor: pointer;
-
-        &:hover {
-            background: var(--col-content-hover);
-        }
-
-        &:has(.selected) {
-            background: var(--col-surface);
-        }
-
-        .rating-button {
-            padding: var(--gap-4) var(--gap-4);
-            background: var(--col-surface);
-            border-radius: var(--border-radius-s);
-
-            transition: background 0.1s;
-
-            &:hover {
-                background: var(--col-surface-hover);
-            }
-
-            &.selected {
-                background: var(--col-accent);
-            }
-        }
-    }
 }
 </style>

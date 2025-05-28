@@ -41,7 +41,7 @@ class User extends Authenticatable
             Entity::class,
             "ratings",
             "user_id",
-            "entity_id");
+            "entity_id")->withPivot("rating");
     }
 
     /**
