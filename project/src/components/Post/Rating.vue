@@ -35,6 +35,10 @@ const ratingState = reactive<RatingState>({
     error: null,
 })
 
+const currentUserRating = computed(() => {
+    return ratingState.optimisticState?.userRating ?? ratingState.serverState?.userRating ?? 0
+})
+
 api.api
     .get<RatingResponse>(`/entities/${props.entityId}/ratings`)
     .then((res) => {
@@ -44,11 +48,21 @@ api.api
         ratingState.error = err.message
     })
 
-async function rate(newRating: Rating) {
-    // switching opt
-    const currentRating = getDisplayRating()
+let abortController: AbortController | null = null
 
-    if (newRating == currentRating) {
+// TODO: rework this whole system and make a polished experience like reddit has it
+
+async function rate(newRating: Rating) {
+    // cancel update rating promise controlled
+    if (abortController) {
+        abortController.abort()
+    }
+
+    abortController = new AbortController()
+
+    // switching opt
+
+    if (currentUserRating.value == newRating) {
         newRating = 0
     }
 
@@ -59,15 +73,20 @@ async function rate(newRating: Rating) {
         // TODO: Backend, return new ratings
         const res = await api.api.get<RatingResponse>(
             `/entities/${props.entityId}/ratings/${newRating}`,
+            { signal: abortController.signal }, // Add abort signal
         )
+
+        abortController = null
 
         ratingState.serverState = res.data
         ratingState.state = 'idle'
         ratingState.optimisticState = null
     } catch (error: any) {
+        if (error.name == 'AbortError') return
+
         ratingState.error = error.message ?? 'failed to fetch likes'
         // TODO: find out different error cases and inform the user about them
-        ratingState.optimisticState == null
+        ratingState.optimisticState = null
         ratingState.state = 'error'
     }
 }
@@ -76,7 +95,7 @@ function getOptimistic(newUserRating: Rating): RatingResponse {
     const serverRating = ratingState.serverState
     if (serverRating == null) throw new Error('Server state is null when trying to get optimistic')
     const oldUserRating = serverRating.userRating
-    const currentRating = serverRating.rating
+    const currentRating = currentUserRating.value
 
     let ratingDelta = -oldUserRating
 
@@ -95,7 +114,8 @@ function getDisplayRating(): number | null {
 </script>
 
 <template>
-    <div class="rating-container">
+    <div class="rating-container" :data-rating="currentUserRating">
+        <!--        <p>Current: "{{ currentUserRating }}"</p>-->
         <div class="rating-button rating-up" @click="rate(1)">
             <FontAwesomeIcon :icon="faArrowUp" />
         </div>
@@ -123,28 +143,45 @@ function getDisplayRating(): number | null {
 
     cursor: pointer;
 
-    &:hover {
-        background: var(--col-content-hover);
-    }
-
     &:has(.selected) {
         background: var(--col-surface);
     }
 
     .rating-button {
         padding: var(--gap-4) var(--gap-4);
-        background: var(--col-surface);
+        background: color-mix(in srgb, var(--col-surface) 10%, transparent);
         border-radius: var(--border-radius-s);
 
         transition: background 0.1s;
 
         &:hover {
-            background: var(--col-surface-hover);
+            background: color-mix(in srgb, var(--col-surface-hover) 40%, transparent);
         }
 
-        &.selected {
-            background: var(--col-accent);
+        &:active {
+            background: color-mix(in srgb, var(--col-surface-active) 60%, transparent);
         }
+    }
+
+    &[data-rating='1'] {
+        background: var(--col-primary);
+
+        .rating-up {
+            color: var(--col-accent);
+        }
+    }
+
+    &[data-rating='-1'] {
+        background: var(--col-secondary);
+
+        .rating-down {
+            color: var(--col-accent);
+        }
+    }
+
+    .rating-number {
+        min-width: 1rem;
+        text-align: center;
     }
 }
 </style>
