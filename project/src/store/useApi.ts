@@ -87,12 +87,9 @@ export const useApi = defineStore('api', () => {
         state.hasSession = false
 
         try {
-            console.log('MOMOE')
             const res = await api.value.get('/sanctum/csrf-cookie')
 
-            if (res.status == 200) {
-                state.hasSession = true
-            }
+            state.hasSession = true
         } catch (e) {
             console.error('Failed to create sessions')
         }
