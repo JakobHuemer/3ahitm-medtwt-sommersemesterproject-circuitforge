@@ -5,7 +5,7 @@ import { ref, watch } from 'vue'
 import TagsContainer from '@/components/Post/TagsContainer.vue'
 import EditorWrapper from '@/components/Post/EditorWrapper.vue'
 import type { JSONContent } from '@tiptap/vue-3'
-import FilePreview from '@/components/ImagePreview.vue'
+import ImagePreview from '@/components/ImagePreview.vue'
 import { type Version } from '@/types/version-types.d'
 import type { Asset } from '@/types/asset'
 import type User from '@/types/user.d'
@@ -13,6 +13,8 @@ import { useApi } from '@/store/useApi.ts'
 import { useRoute } from 'vue-router'
 import type { Post } from '@/types/post.d'
 import Rating from '@/components/Post/Rating.vue'
+import getHashtags from '@/util/get-hashtags.ts'
+import fileFromAsset from '@/util/file-from-asset.ts'
 
 const hashtags = ref<string[]>([])
 
@@ -56,28 +58,6 @@ const resizeTextarea = () => {
     }
 }
 
-function updateHashTagsFromObj(obj: any) {
-    if (!obj) return
-    if (obj['content'] && Array.isArray(obj['content'])) {
-        for (const c of obj['content']) {
-            updateHashTagsFromObj(c)
-        }
-    } else if (obj['text']) {
-        // check if it is a mark?
-        if (
-            obj['marks'] &&
-            (obj['marks'] as { type: string }[]).some((obj) => obj['type'] === 'hashtag')
-        ) {
-            //  but should be not matching
-            let text: string = obj['text']
-
-            let hashtag = text.slice(1)
-
-            hashtags.value.push(hashtag)
-        }
-    }
-}
-
 async function downloadAsset(asset: Asset) {
     try {
         const res = await api.api.get('/assets/' + asset.id, {
@@ -104,19 +84,9 @@ async function downloadAsset(asset: Asset) {
     }
 }
 
-async function fileFromAsset(asset: Asset): Promise<File> {
-    const res = await api.api.get('/assets/' + asset.id, {
-        responseType: 'blob',
-    })
-
-    return new File([res.data], asset.file_name, {
-        type: res.data.type || asset.mime_type,
-    })
-}
-
 api.api.get('/entities/3/ratings')
 watch(content, () => {
-    updateHashTagsFromObj(content.value)
+    hashtags.value = getHashtags(content.value)
 })
 </script>
 
@@ -129,7 +99,7 @@ watch(content, () => {
                     <div class="delete-button">
                         <FontAwesomeIcon :icon="faTrash" />
                     </div>
-                    <FilePreview :file="fileFromAsset(image)" />
+                    <ImagePreview :file="fileFromAsset(image)" />
                 </div>
             </div>
         </div>
@@ -153,7 +123,7 @@ watch(content, () => {
                     v-model="content"
                     :hashtag-length="40"
                     :character-limit="4096"
-                    @mounted="updateHashTagsFromObj"
+                    @mounted="hashtags = getHashtags(content)"
                 />
             </div>
 
@@ -174,8 +144,8 @@ watch(content, () => {
                 </div>
             </div>
 
-            <div class="final-section">
-                <Rating :entity-id="3" />
+            <div class="final-section" v-if="postId != null && api.state.isAuthenticated">
+                <Rating :entity-id="postId" />
             </div>
         </div>
     </div>

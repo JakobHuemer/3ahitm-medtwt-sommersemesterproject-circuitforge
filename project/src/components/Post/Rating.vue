@@ -4,6 +4,7 @@ import { computed, reactive } from 'vue'
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Rating from '@/components/Post/Rating.vue'
+import { Skeleton } from '@brayamvalero/vue3-skeleton'
 
 const props = defineProps<{
     entityId: number
@@ -105,7 +106,6 @@ function getOptimistic(newUserRating: Rating): RatingResponse {
         rating: currentRating + ratingDelta,
         userRating: newUserRating,
     }
-    //
 }
 
 function getDisplayRating(): number | null {

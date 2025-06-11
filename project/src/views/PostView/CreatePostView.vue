@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCloudArrowUp, faPlus, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons'
-import { onMounted, reactive, ref, toRaw, watch } from 'vue'
+import { reactive, ref, toRaw, watch } from 'vue'
 import TagsContainer from '@/components/Post/TagsContainer.vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
 import EditorWrapper from '@/components/Post/EditorWrapper.vue'
@@ -14,6 +14,7 @@ import { type Version, versionOptions, type VersionType } from '@/types/version-
 import VersionListItem from '@/components/Post/VersionListItem.vue'
 import type { Post } from '@/types/post.d'
 import router from '@/router'
+import getHashtags from '@/util/get-hashtags.ts'
 
 const hashtags = ref<string[]>([])
 const versions = ref<Version[]>([])
@@ -41,7 +42,8 @@ const content = ref<JSONContent>({})
 watch(content, () => {
     hashtags.value = []
 
-    updateHashTagsFromObj(content.value)
+    // updateHashTagsFromObj(content.value)
+    hashtags.value = getHashtags(content.value)
 })
 
 type IndexedFileMap = Map<number, File>
@@ -85,28 +87,6 @@ function getHandleAsset(event: Event) {
 }
 
 const hashtagMaxLength = ref(40)
-
-function updateHashTagsFromObj(obj: any) {
-    if (!obj) return
-    if (obj['content'] && Array.isArray(obj['content'])) {
-        for (const c of obj['content']) {
-            updateHashTagsFromObj(c)
-        }
-    } else if (obj['text']) {
-        // check if it is a mark?
-        if (
-            obj['marks'] &&
-            (obj['marks'] as { type: string }[]).some((obj) => obj['type'] === 'hashtag')
-        ) {
-            //  but should be not matching
-            let text: string = obj['text']
-
-            let hashtag = text.slice(1)
-
-            hashtags.value.push(hashtag)
-        }
-    }
-}
 
 // versions
 
@@ -428,7 +408,7 @@ async function createPost() {
                     :hashtag-length="hashtagMaxLength"
                     :editable="true"
                     :character-limit="4096"
-                    @mounted="updateHashTagsFromObj"
+                    @mounted="hashtags = getHashtags(content)"
                 />
             </div>
 

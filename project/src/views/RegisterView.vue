@@ -46,7 +46,7 @@ function validate(validate: any) {
 
 <template>
     <div class="auth-container register-container full-height" role="form">
-        <h1 class="title">Register on CircuitForge</h1>
+        <h1 class="title">Register on <RouterLink to="/">CircuitForge</RouterLink></h1>
 
         <LoginProviders class="login-providers-container" />
 

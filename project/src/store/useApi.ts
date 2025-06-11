@@ -144,6 +144,8 @@ export const useApi = defineStore('api', () => {
 
             state.isAuthenticated = false
             state.user = null
+
+            router.push('/')
         } catch (e) {
             console.error('Failed to logout user:', state.user)
         }

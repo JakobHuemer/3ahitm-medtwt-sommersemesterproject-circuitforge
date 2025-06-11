@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faGear } from '@fortawesome/free-solid-svg-icons'
+import { faGear, faImage } from '@fortawesome/free-solid-svg-icons'
 
 const props = defineProps<{
     file: File | Promise<File>
@@ -29,7 +29,7 @@ load()
     <!--        show loading until image is loaded-->
     <img v-if="preview" class="thumbnail" :src="preview" :alt="actualFile?.name" />
     <div v-else class="loading thumbnail">
-        <FontAwesomeIcon :icon="faGear" />
+        <FontAwesomeIcon :icon="faImage" />
     </div>
 </template>
 
@@ -50,8 +50,8 @@ load()
     background: var(--col-content-active);
 
     svg {
-        animation: rotate 1.5s linear infinite;
         height: 18%;
+        fill: var(--col-text-secondary);
     }
 }
 </style>

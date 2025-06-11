@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useApi } from '@/store/useApi.ts'
+import { useRouter } from 'vue-router'
 
 const api = useApi()
 </script>
@@ -12,8 +13,6 @@ const api = useApi()
             </h1>
             <!--            <input type="text" name="search" id="search" class="search" placeholder="Search" />-->
             <div class="nav-items">
-                <RouterLink to="/posts">Posts</RouterLink>
-                <RouterLink to="/discussions">Discussions</RouterLink>
                 <template v-if="api.state.isAuthenticated">
                     <div class="nav-user">
                         <div class="nav-part">
@@ -31,7 +30,7 @@ const api = useApi()
                         <div class="nav-user-dropdown">
                             <div class="nav-user-dropdown-container">
                                 <button @click="api.logout()">Logout</button>
-                                <RouterLink to="/settings/preferences">Preferences</RouterLink>
+                                <RouterLink to="/settings">Settings</RouterLink>
                             </div>
                         </div>
                     </div>

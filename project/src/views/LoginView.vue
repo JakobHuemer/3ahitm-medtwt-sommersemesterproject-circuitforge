@@ -25,7 +25,7 @@ async function doLogin() {
 
 <template>
     <div class="auth-container login-container full-height" role="form">
-        <h1 class="title">Login to CircuitForge</h1>
+        <h1 class="title">Login to <RouterLink to="/">CircuitForge</RouterLink></h1>
 
         <LoginProviders class="login-providers-container" />
 
