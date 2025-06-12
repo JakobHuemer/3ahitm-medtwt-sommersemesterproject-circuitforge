@@ -20,20 +20,6 @@ class VersionSeeder extends Seeder {
         try {
             $data = $this->getJsonVersions();
 
-            /*
-            latest
-                release	"1.21.5"
-                snapshot	"25w17a"
-            versions
-                0
-                    id	"25w17a"
-                    type	"snapshot"
-                    url	"https://piston-meta.mojang.com/v1/packages/b0b639d40ca10ef21f714eb801222e033680e17d/25w17a.json"
-                    time	"2025-04-22T13:01:57+00:00"
-                    releaseTime	"2025-04-22T12:51:30+00:00"
-             *
-             * */
-
             $versionArr = $data->versions;
 
             // release: {latest release}

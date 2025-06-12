@@ -167,8 +167,6 @@ class OAuthController extends Controller {
         $encodedResponse = base64_encode(json_encode($response));
 
         return redirect()->away(env('FRONTEND_URL') . "api-handler#" . $encodedResponse);
-//        return redirect(env('FRONTEND_URL') . "api-handler#" . $encodedResponse);
-
     }
 
     private function sendAuthAddMessage(bool $success, string $message): RedirectResponse {
